@@ -14,11 +14,16 @@ import java.util.stream.Collectors;
 public class Mk54Compiler {
 
     private static final Pattern ADDRESS = Pattern.compile("^(\\d{2}\\.).*");
+    private final Opcodes opcodes;
 
     public static void main(final String[] args) {
         final Mk54Compiler compiler = new Mk54Compiler();
 
         //TODO: Parameter processing and I/O
+    }
+
+    Mk54Compiler() {
+        this.opcodes = new Opcodes();
     }
 
     private static String stripAddress(final String line) {
@@ -37,12 +42,10 @@ public class Mk54Compiler {
      * @return String containing hex codes of operations
      */
     public String compile(final String input) {
-        final Opcodes opcodes = new Opcodes();
-
         final String[] keys = input.split("\n");
         return Arrays.stream(keys)
                 .map(Mk54Compiler::stripAddress)
-                .map(key -> opcodes.findOpcode(key).orElseThrow(() -> new UnknownKeyException(key)))
+                .map(key -> this.opcodes.findOpcode(key).orElseThrow(() -> new UnknownKeyException(key)))
                 .collect(Collectors.joining(" "));
     }
 

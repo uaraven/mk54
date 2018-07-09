@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 public class Opcodes {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private static final int MAX_COMMANDS = 105;
 
     private final Map<String, String> keyToOpcodeMap;
@@ -33,10 +34,10 @@ public class Opcodes {
             this.keyToOpcodeMap = new HashMap<>();
             Streams.concat(
                     opcodes.stream()
-                            .flatMap(oc -> oc.keys.stream()
+                            .flatMap(oc -> oc.getKeys().stream()
                                     .map(Utils::normalizeKey)
                                     .distinct()
-                                    .map(k -> new StringPair(k, oc.code))),
+                                    .map(k -> new StringPair(k, oc.getCode()))),
                     addressCodes())
                     .forEach(sp -> this.keyToOpcodeMap.put(sp.getA(), sp.getB()));
 
@@ -83,17 +84,14 @@ public class Opcodes {
             this.desc = desc;
         }
 
-        public String getCode() {
+        String getCode() {
             return this.code;
         }
 
-        public List<String> getKeys() {
+        List<String> getKeys() {
             return this.keys;
         }
 
-        public String getDesc() {
-            return this.desc;
-        }
     }
 
     private static final class StringPair {

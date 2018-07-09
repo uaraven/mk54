@@ -13,7 +13,7 @@ public class OpcodesTest {
     private Opcodes opcodes;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.opcodes = new Opcodes();
     }
 
