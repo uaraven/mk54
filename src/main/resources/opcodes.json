@@ -1,1045 +1,1684 @@
 [
   {
     "code": "00",
-    "keys": ["0"]
+    "keys": [
+      "0"
+    ]
   },
-  { "code": "01",
-    "keys": ["1"]
+  {
+    "code": "01",
+    "keys": [
+      "1"
+    ]
   },
   {
     "code": "02",
-    "keys": ["2"]
+    "keys": [
+      "2"
+    ]
   },
   {
     "code": "03",
-    "keys": ["3"]
+    "keys": [
+      "3"
+    ]
   },
   {
     "code": "04",
-    "keys": ["4"]
+    "keys": [
+      "4"
+    ]
   },
-  { "code": "05",
-    "keys": ["5"]
+  {
+    "code": "05",
+    "keys": [
+      "5"
+    ]
   },
   {
     "code": "06",
-    "keys": ["6"]
+    "keys": [
+      "6"
+    ]
   },
   {
     "code": "07",
-    "keys": ["7"]
+    "keys": [
+      "7"
+    ]
   },
   {
     "code": "08",
-    "keys": ["8"]
+    "keys": [
+      "8"
+    ]
   },
-  { "code": "09",
-    "keys": ["9"]
+  {
+    "code": "09",
+    "keys": [
+      "9"
+    ]
   },
   {
     "code": "10",
-    "keys": ["+"]
+    "keys": [
+      "+"
+    ]
   },
   {
     "code": "0A",
-    "keys": ["."],
+    "keys": [
+      "."
+    ],
     "desc": "Decimal point"
   },
   {
     "code": "0B",
-    "keys": ["/-/"],
+    "keys": [
+      "/-/"
+    ],
     "desc": "Negation"
   },
   {
     "code": "0C",
-    "keys": ["вп", "ee"],
+    "keys": [
+      "вп",
+      "ee"
+    ],
     "desc": "Start entering exponent"
   },
   {
-    "code":"0D",
-    "keys": ["cx", "сх", "сх"],
+    "code": "0D",
+    "keys": [
+      "cx",
+      "сх",
+      "сх"
+    ],
     "desc": "Clear register X"
   },
   {
     "code": "0E",
-    "keys": ["↑", "b↑", "в↑", "enter"],
+    "keys": [
+      "↑",
+      "b↑",
+      "в↑",
+      "enter"
+    ],
     "desc": "Pushes current number up the stack"
   },
   {
     "code": "0F",
-    "keys": ["fbx", "fвх", "fвx"],
+    "keys": [
+      "fbx",
+      "fвх",
+      "fвx"
+    ],
     "desc": "Restore previous result"
   },
   {
     "code": "11",
-    "keys": ["-"]
+    "keys": [
+      "-"
+    ]
   },
   {
     "code": "12",
-    "keys": ["*", "x"],
+    "keys": [
+      "*",
+      "x"
+    ],
     "desc": "Multiplication"
   },
   {
     "code": "13",
-    "keys": ["+"]
+    "keys": [
+      "+"
+    ]
   },
   {
     "code": "14",
-    "keys": ["↔", "x<->y", "<->", "xy"],
+    "keys": [
+      "↔",
+      "x<->y",
+      "<->",
+      "xy"
+    ],
     "desc": "Swaps X and Y registers of main stack"
   },
   {
-    "code":"15",
-    "keys": ["f 10^x"],
+    "code": "15",
+    "keys": [
+      "f 10^x"
+    ],
     "desc": "Calculates 10 to power X"
   },
   {
     "code": "16",
-    "keys": ["f e^x"],
+    "keys": [
+      "f e^x"
+    ],
     "desc": "Calculates e to power X"
   },
   {
     "code": "17",
-    "keys": ["f lg"],
+    "keys": [
+      "f lg"
+    ],
     "desc": "Calculate decimal logarithm"
   },
   {
     "code": "18",
-    "keys": ["f ln"],
+    "keys": [
+      "f ln"
+    ],
     "desc": "Calculate natural logarithm"
   },
   {
     "code": "19",
-    "keys": ["f arcsin"]
-  }
-,
+    "keys": [
+      "f arcsin"
+    ]
+  },
   {
     "code": "1A",
-    "keys": ["f arccos"]
+    "keys": [
+      "f arccos"
+    ]
   },
   {
     "code": "1B",
-    "keys": ["f arctg", "f arctan"],
+    "keys": [
+      "f arctg",
+      "f arctan"
+    ],
     "desc": "Calculates inverse tangent function"
   },
   {
     "code": "1C",
-    "keys": ["f sin"]
+    "keys": [
+      "f sin"
+    ]
   },
   {
     "code": "1D",
-    "keys": ["f cos"],
+    "keys": [
+      "f cos"
+    ]
   },
   {
     "code": "1E",
-    "keys": ["f tg", "f tan"],
+    "keys": [
+      "f tg",
+      "f tan"
+    ],
     "desc": "Calculates tangent function"
   },
   {
     "code": "20",
-    "keys": ["f pi", "f π"],
+    "keys": [
+      "f pi",
+      "f π"
+    ],
     "desc": "Puts value of π in X register"
   },
   {
     "code": "21",
-    "keys": ["f √", "f sqrt"],
+    "keys": [
+      "f √",
+      "f sqrt"
+    ],
     "desc": "Calculates square root"
   },
   {
     "code": "22",
-    "keys": ["f x^2"],
+    "keys": [
+      "f x^2"
+    ],
     "desc": "Calculates square of the number in X register"
   },
   {
     "code": "23",
-    "keys": ["f 1/x"]
+    "keys": [
+      "f 1/x"
+    ]
   },
   {
     "code": "24",
-    "keys": ["f x^y"]
+    "keys": [
+      "f x^y"
+    ]
   },
   {
     "code": "25",
-    "keys": ["f ⟳", "f rot"],
+    "keys": [
+      "f ⟳",
+      "f rot"
+    ],
     "desc": "Rotate stack"
   },
   {
     "code": "26",
-    "keys": ["k m→g", "k м→г", "k m->g", "k м->г"],
+    "keys": [
+      "k m→g",
+      "k м→г",
+      "k m->g",
+      "k м->г"
+    ],
     "desc": "Convert minutes to degrees"
   },
   {
     "code": "2A",
-    "keys": ["k ms→g", "k мс→г", "k ms->g", "k мс->г"],
+    "keys": [
+      "k ms→g",
+      "k мс→г",
+      "k ms->g",
+      "k мс->г"
+    ],
     "desc": "Convert minutes and seconds to degrees"
   },
   {
     "code": "30",
-    "keys": ["k g→ms", "k г→мс", "k g->ms", "k г->мс"],
+    "keys": [
+      "k g→ms",
+      "k г→мс",
+      "k g->ms",
+      "k г->мс"
+    ],
     "desc": "Convert degrees to minutes and seconds"
   },
   {
     "code": "31",
-    "keys": ["k |x|", "k abs"],
+    "keys": [
+      "k |x|",
+      "k abs"
+    ],
     "desc": "Calculate absolute value of the number"
   },
   {
     "code": "32",
-    "keys": ["k зн", "k sign"],
+    "keys": [
+      "k зн",
+      "k sign"
+    ],
     "desc": "Evaluate numbers sign"
   },
   {
     "code": "33",
-    "keys": ["k g→m", "k г→м", "k g->m", "k г->м"],
+    "keys": [
+      "k g→m",
+      "k г→м",
+      "k g->m",
+      "k г->м"
+    ],
     "desc": "Convert degrees to minutes"
   },
   {
     "code": "34",
-    "keys": ["k [x]", "k trunc"],
+    "keys": [
+      "k [x]",
+      "k trunc"
+    ],
     "desc": "Calculate integer part of the number"
   },
   {
     "code": "35",
-    "keys": ["k {x}", "k frac"],
+    "keys": [
+      "k {x}",
+      "k frac"
+    ],
     "desc": "Calculate fractional part of the number"
   },
   {
     "code": "36",
-    "keys": ["k max"],
+    "keys": [
+      "k max"
+    ],
     "desc": "Calculate maximal of register X and Y"
   },
   {
     "code": "37",
-    "keys": ["k and", "k ∧"],
+    "keys": [
+      "k and",
+      "k ∧"
+    ],
     "desc": "Logical AND"
   },
   {
     "code": "38",
-    "keys": ["k or", "k ∨"],
+    "keys": [
+      "k or",
+      "k ∨"
+    ],
     "desc": "Logical OR"
   },
   {
     "code": "39",
-    "keys": ["k xor", "k ⊕"],
+    "keys": [
+      "k xor",
+      "k ⊕"
+    ],
     "desc": "Logical XOR"
   },
   {
     "code": "3A",
-    "keys": ["k not", "k инв"],
+    "keys": [
+      "k not",
+      "k инв"
+    ],
     "desc": "Logical NOT"
   },
   {
     "code": "3B",
-    "keys": ["k rand", "k сч"],
+    "keys": [
+      "k rand",
+      "k сч"
+    ],
     "desc": "Generate random number in 0..1 interval"
   },
   {
     "code": "40",
-    "keys": ["п0", "xп0", "sto0"],
+    "keys": [
+      "п0",
+      "xп0",
+      "sto0"
+    ],
     "desc": "Store value from X register to memory register 0"
   },
   {
     "code": "41",
-    "keys": ["п1", "xп1", "sto1"],
+    "keys": [
+      "п1",
+      "xп1",
+      "sto1"
+    ],
     "desc": "Store value from X register to memory register 1"
   },
   {
     "code": "42",
-    "keys": ["п2", "xп2", "sto2"],
+    "keys": [
+      "п2",
+      "xп2",
+      "sto2"
+    ],
     "desc": "Store value from X register to memory register 2"
   },
   {
     "code": "43",
-    "keys": ["п3", "xп3", "sto3"],
+    "keys": [
+      "п3",
+      "xп3",
+      "sto3"
+    ],
     "desc": "Store value from X register to memory register 3"
   },
   {
     "code": "44",
-    "keys": ["п4", "xп4", "sto4"],
+    "keys": [
+      "п4",
+      "xп4",
+      "sto4"
+    ],
     "desc": "Store value from X register to memory register 4"
   },
   {
     "code": "45",
-    "keys": ["п5", "xп5", "sto5"],
+    "keys": [
+      "п5",
+      "xп5",
+      "sto5"
+    ],
     "desc": "Store value from X register to memory register 5"
   },
   {
     "code": "46",
-    "keys": ["п6", "xп6", "sto6"],
+    "keys": [
+      "п6",
+      "xп6",
+      "sto6"
+    ],
     "desc": "Store value from X register to memory register 6"
   },
   {
     "code": "47",
-    "keys": ["п7", "xп7", "sto7"],
+    "keys": [
+      "п7",
+      "xп7",
+      "sto7"
+    ],
     "desc": "Store value from X register to memory register 7"
   },
   {
     "code": "48",
-    "keys": ["п8", "xп8", "sto8"],
+    "keys": [
+      "п8",
+      "xп8",
+      "sto8"
+    ],
     "desc": "Store value from X register to memory register 8"
   },
   {
     "code": "49",
-    "keys": ["п9", "xп9", "sto9"],
+    "keys": [
+      "п9",
+      "xп9",
+      "sto9"
+    ],
     "desc": "Store value from X register to memory register 9"
   },
   {
     "code": "4A",
-    "keys": ["пa", "xпa", "stoa"],
+    "keys": [
+      "пa",
+      "xпa",
+      "stoa"
+    ],
     "desc": "Store value from X register to memory register A"
   },
   {
     "code": "4B",
-    "keys": ["пb", "xпb", "stob"],
+    "keys": [
+      "пb",
+      "xпb",
+      "stob"
+    ],
     "desc": "Store value from X register to memory register B"
   },
   {
     "code": "4C",
-    "keys": ["пc", "xпc", "stoc"],
+    "keys": [
+      "пc",
+      "xпc",
+      "stoc"
+    ],
     "desc": "Store value from X register to memory register C"
   },
   {
     "code": "4D",
-    "keys": ["пd", "xпd", "stod"],
+    "keys": [
+      "пd",
+      "xпd",
+      "stod"
+    ],
     "desc": "Store value from X register to memory register D"
   },
   {
     "code": "4E",
-    "keys": ["пe", "xпe", "stoe"],
+    "keys": [
+      "пe",
+      "xпe",
+      "stoe"
+    ],
     "desc": "Store value from X register to memory register E"
   },
   {
     "code": "50",
-    "keys": ["с/п", "s/s"],
+    "keys": [
+      "с/п",
+      "s/s"
+    ],
     "desc": "Start/stop program"
   },
   {
     "code": "51",
-    "keys": ["бп", "goto"]
+    "keys": [
+      "бп",
+      "goto"
+    ]
   },
   {
     "code": "52",
-    "keys": ["в/о", "ret"],
+    "keys": [
+      "в/о",
+      "ret"
+    ],
     "desc": "Return from subroutine"
   },
   {
     "code": "53",
-    "keys": ["пп", "call"],
+    "keys": [
+      "пп",
+      "call"
+    ],
     "desc": "Call subroutine"
   },
   {
     "code": "57",
-    "keys": ["f x!=0", "f x≠0", "f x<>0"],
+    "keys": [
+      "f x!=0",
+      "f x≠0",
+      "f x<>0"
+    ],
     "desc": "Conditional goto when X is not equal to 0"
   },
   {
     "code": "58",
-    "keys": ["f l2"],
+    "keys": [
+      "f l2"
+    ],
     "desc": "Loop over value in memory register 2"
   },
   {
     "code": "59",
-    "keys": ["f x>=0", "f x≥0"],
+    "keys": [
+      "f x>=0",
+      "f x≥0"
+    ],
     "desc": "Conditional goto when X is greater or equal to 0"
   },
   {
     "code": "5A",
-    "keys": ["f l3"],
+    "keys": [
+      "f l3"
+    ],
     "desc": "Loop over value in memory register 3"
   },
   {
     "code": "5B",
-    "keys": ["f l1"],
+    "keys": [
+      "f l1"
+    ],
     "desc": "Loop over value in memory register 1"
   },
   {
     "code": "5C",
-    "keys": ["f x<0"],
+    "keys": [
+      "f x<0"
+    ],
     "desc": "Conditional goto when X is less than 0"
   },
   {
     "code": "5D",
-    "keys": ["f l0"],
+    "keys": [
+      "f l0"
+    ],
     "desc": "Loop over value in memory register 0"
   },
   {
     "code": "5E",
-    "keys": ["f x=0", "f x==0"],
+    "keys": [
+      "f x=0",
+      "f x==0"
+    ],
     "desc": "Conditional goto when X is equal to 0"
   },
   {
     "code": "60",
-    "keys": ["ип0", "пx0", "ld0"],
+    "keys": [
+      "ип0",
+      "пx0",
+      "ld0"
+    ],
     "desc": "Read value from memory register 0 to X register"
   },
   {
     "code": "61",
-    "keys": ["ип1", "пx1", "ld1"],
+    "keys": [
+      "ип1",
+      "пx1",
+      "ld1"
+    ],
     "desc": "Read value from memory register 1 to X register"
   },
   {
     "code": "62",
-    "keys": ["ип2", "пx2", "ld2"],
+    "keys": [
+      "ип2",
+      "пx2",
+      "ld2"
+    ],
     "desc": "Read value from memory register 2 to X register"
   },
   {
     "code": "63",
-    "keys": ["ип3", "пx3", "ld3"],
+    "keys": [
+      "ип3",
+      "пx3",
+      "ld3"
+    ],
     "desc": "Read value from memory register 3 to X register"
   },
   {
     "code": "64",
-    "keys": ["ип4", "пx4", "ld4"],
+    "keys": [
+      "ип4",
+      "пx4",
+      "ld4"
+    ],
     "desc": "Read value from memory register 4 to X register"
   },
   {
     "code": "65",
-    "keys": ["ип5", "пx5", "ld5"],
+    "keys": [
+      "ип5",
+      "пx5",
+      "ld5"
+    ],
     "desc": "Read value from memory register 5 to X register"
   },
   {
     "code": "66",
-    "keys": ["ип6", "пx6", "ld6"],
+    "keys": [
+      "ип6",
+      "пx6",
+      "ld6"
+    ],
     "desc": "Read value from memory register 6 to X register"
   },
   {
     "code": "67",
-    "keys": ["ип7", "пx7", "ld7"],
+    "keys": [
+      "ип7",
+      "пx7",
+      "ld7"
+    ],
     "desc": "Read value from memory register 7 to X register"
   },
   {
     "code": "68",
-    "keys": ["ип8", "пx8", "ld8"],
+    "keys": [
+      "ип8",
+      "пx8",
+      "ld8"
+    ],
     "desc": "Read value from memory register 8 to X register"
   },
   {
     "code": "69",
-    "keys": ["ип9", "пx9", "ld9"],
+    "keys": [
+      "ип9",
+      "пx9",
+      "ld9"
+    ],
     "desc": "Read value from memory register 9 to X register"
   },
   {
     "code": "6A",
-    "keys": ["ипa", "пxa", "lda"],
+    "keys": [
+      "ипa",
+      "пxa",
+      "lda"
+    ],
     "desc": "Read value from memory register A to X register"
   },
   {
     "code": "6B",
-    "keys": ["ипb", "пxb", "ldb"],
+    "keys": [
+      "ипb",
+      "пxb",
+      "ldb"
+    ],
     "desc": "Read value from memory register B to X register"
   },
   {
     "code": "6C",
-    "keys": ["ипc", "пxc", "ldc"],
+    "keys": [
+      "ипc",
+      "пxc",
+      "ldc"
+    ],
     "desc": "Read value from memory register C to X register"
   },
   {
     "code": "6D",
-    "keys": ["ипd", "пxd", "ldd"],
+    "keys": [
+      "ипd",
+      "пxd",
+      "ldd"
+    ],
     "desc": "Read value from memory register D to X register"
   },
   {
     "code": "6E",
-    "keys": ["ипe", "пxe", "lde"],
+    "keys": [
+      "ипe",
+      "пxe",
+      "lde"
+    ],
     "desc": "Read value from memory register E to X register"
   },
   {
     "code": "70",
-    "keys": ["k x!=0 0", "k x<>0 0", "k x≠0 0"],
+    "keys": [
+      "k x!=0 0",
+      "k x<>0 0",
+      "k x≠0 0"
+    ],
     "desc": "Conditional indirect jump to address in register 0 when x is not equal to 0"
   },
   {
     "code": "71",
-    "keys": ["k x!=0 1", "k x<>0 1", "k x≠0 1"],
+    "keys": [
+      "k x!=0 1",
+      "k x<>0 1",
+      "k x≠0 1"
+    ],
     "desc": "Conditional indirect jump to address in register 1 when x is not equal to 0"
   },
   {
     "code": "72",
-    "keys": ["k x!=0 2", "k x<>0 2", "k x≠0 2"],
+    "keys": [
+      "k x!=0 2",
+      "k x<>0 2",
+      "k x≠0 2"
+    ],
     "desc": "Conditional indirect jump to address in register 2 when x is not equal to 0"
   },
   {
     "code": "73",
-    "keys": ["k x!=0 3", "k x<>0 3", "k x≠0 3"],
+    "keys": [
+      "k x!=0 3",
+      "k x<>0 3",
+      "k x≠0 3"
+    ],
     "desc": "Conditional indirect jump to address in register 3 when x is not equal to 0"
   },
   {
     "code": "74",
-    "keys": ["k x!=0 4", "k x<>0 4", "k x≠0 4"],
+    "keys": [
+      "k x!=0 4",
+      "k x<>0 4",
+      "k x≠0 4"
+    ],
     "desc": "Conditional indirect jump to address in register 4 when x is not equal to 0"
   },
   {
     "code": "75",
-    "keys": ["k x!=0 5", "k x<>0 5", "k x≠0 5"],
+    "keys": [
+      "k x!=0 5",
+      "k x<>0 5",
+      "k x≠0 5"
+    ],
     "desc": "Conditional indirect jump to address in register 5 when x is not equal to 0"
   },
   {
     "code": "76",
-    "keys": ["k x!=0 6", "k x<>0 6", "k x≠0 6"],
+    "keys": [
+      "k x!=0 6",
+      "k x<>0 6",
+      "k x≠0 6"
+    ],
     "desc": "Conditional indirect jump to address in register 6 when x is not equal to 0"
   },
   {
     "code": "77",
-    "keys": ["k x!=0 7", "k x<>0 7", "k x≠0 7"],
+    "keys": [
+      "k x!=0 7",
+      "k x<>0 7",
+      "k x≠0 7"
+    ],
     "desc": "Conditional indirect jump to address in register 7 when x is not equal to 0"
   },
   {
     "code": "78",
-    "keys": ["k x!=0 8", "k x<>0 8", "k x≠0 8"],
+    "keys": [
+      "k x!=0 8",
+      "k x<>0 8",
+      "k x≠0 8"
+    ],
     "desc": "Conditional indirect jump to address in register 8 when x is not equal to 0"
   },
   {
     "code": "79",
-    "keys": ["k x!=0 9", "k x<>0 9", "k x≠0 9"],
+    "keys": [
+      "k x!=0 9",
+      "k x<>0 9",
+      "k x≠0 9"
+    ],
     "desc": "Conditional indirect jump to address in register 9 when x is not equal to 0"
   },
   {
     "code": "7A",
-    "keys": ["k x!=0 a", "k x<>0 a", "k x≠0 a"],
+    "keys": [
+      "k x!=0 a",
+      "k x<>0 a",
+      "k x≠0 a"
+    ],
     "desc": "Conditional indirect jump to address in register A when x is not equal to 0"
   },
   {
     "code": "7B",
-    "keys": ["k x!=0 b", "k x<>0 b", "k x≠0 b"],
+    "keys": [
+      "k x!=0 b",
+      "k x<>0 b",
+      "k x≠0 b"
+    ],
     "desc": "Conditional indirect jump to address in register B when x is not equal to 0"
   },
   {
     "code": "7C",
-    "keys": ["k x!=0 c", "k x<>0 c", "k x≠0 c"],
+    "keys": [
+      "k x!=0 c",
+      "k x<>0 c",
+      "k x≠0 c"
+    ],
     "desc": "Conditional indirect jump to address in register C when x is not equal to 0"
   },
   {
     "code": "7D",
-    "keys": ["k x!=0 d", "k x<>0 d", "k x≠0 d"],
+    "keys": [
+      "k x!=0 d",
+      "k x<>0 d",
+      "k x≠0 d"
+    ],
     "desc": "Conditional indirect jump to address in register D when x is not equal to 0"
   },
   {
     "code": "7E",
-    "keys": ["k x!=0 e", "k x<>0 e", "k x≠0 e"],
+    "keys": [
+      "k x!=0 e",
+      "k x<>0 e",
+      "k x≠0 e"
+    ],
     "desc": "Conditional indirect jump to address in register E when x is not equal to 0"
   },
   {
     "code": "80",
-    "keys": ["k goto 0", "k бп 0"],
+    "keys": [
+      "k goto 0",
+      "k бп 0"
+    ],
     "desc": "Goto address in register 0"
   },
   {
     "code": "81",
-    "keys": ["k goto 1", "k бп 1"],
+    "keys": [
+      "k goto 1",
+      "k бп 1"
+    ],
     "desc": "Goto address in register 1"
   },
   {
     "code": "82",
-    "keys": ["k goto 2", "k бп 2"],
+    "keys": [
+      "k goto 2",
+      "k бп 2"
+    ],
     "desc": "Goto address in register 2"
   },
   {
     "code": "83",
-    "keys": ["k goto 3", "k бп 3"],
+    "keys": [
+      "k goto 3",
+      "k бп 3"
+    ],
     "desc": "Goto address in register 3"
   },
   {
     "code": "84",
-    "keys": ["k goto 4", "k бп 4"],
+    "keys": [
+      "k goto 4",
+      "k бп 4"
+    ],
     "desc": "Goto address in register 4"
   },
   {
     "code": "85",
-    "keys": ["k goto 5", "k бп 5"],
+    "keys": [
+      "k goto 5",
+      "k бп 5"
+    ],
     "desc": "Goto address in register 5"
   },
   {
     "code": "86",
-    "keys": ["k goto 6", "k бп 6"],
+    "keys": [
+      "k goto 6",
+      "k бп 6"
+    ],
     "desc": "Goto address in register 6"
   },
   {
     "code": "87",
-    "keys": ["k goto 7", "k бп 7"],
+    "keys": [
+      "k goto 7",
+      "k бп 7"
+    ],
     "desc": "Goto address in register 7"
   },
   {
     "code": "88",
-    "keys": ["k goto 8", "k бп 8"],
+    "keys": [
+      "k goto 8",
+      "k бп 8"
+    ],
     "desc": "Goto address in register 8"
   },
   {
     "code": "89",
-    "keys": ["k goto 9", "k бп 9"],
+    "keys": [
+      "k goto 9",
+      "k бп 9"
+    ],
     "desc": "Goto address in register 9"
   },
   {
     "code": "8A",
-    "keys": ["k goto a", "k бп a"],
+    "keys": [
+      "k goto a",
+      "k бп a"
+    ],
     "desc": "Goto address in register A"
   },
   {
     "code": "8B",
-    "keys": ["k goto b", "k бп b"],
+    "keys": [
+      "k goto b",
+      "k бп b"
+    ],
     "desc": "Goto address in register B"
   },
   {
     "code": "8C",
-    "keys": ["k goto c", "k бп c"],
+    "keys": [
+      "k goto c",
+      "k бп c"
+    ],
     "desc": "Goto address in register C"
   },
   {
     "code": "8D",
-    "keys": ["k goto d", "k бп d"],
+    "keys": [
+      "k goto d",
+      "k бп d"
+    ],
     "desc": "Goto address in register D"
   },
   {
     "code": "8E",
-    "keys": ["k goto e", "k бп e"],
+    "keys": [
+      "k goto e",
+      "k бп e"
+    ],
     "desc": "Goto address in register E"
   },
   {
     "code": "90",
-    "keys": ["k x>=0 0", "k x≥0 0"],
+    "keys": [
+      "k x>=0 0",
+      "k x≥0 0"
+    ],
     "desc": "Conditional indirect jump to address in register 0 when x is greater than or equal to to 0"
   },
   {
     "code": "91",
-    "keys": ["k x>=0 1", "k x≥0 1"],
+    "keys": [
+      "k x>=0 1",
+      "k x≥0 1"
+    ],
     "desc": "Conditional indirect jump to address in register 1 when x is greater than or equal to to 0"
   },
   {
     "code": "92",
-    "keys": ["k x>=0 2", "k x≥0 2"],
+    "keys": [
+      "k x>=0 2",
+      "k x≥0 2"
+    ],
     "desc": "Conditional indirect jump to address in register 2 when x is greater than or equal to to 0"
   },
   {
     "code": "93",
-    "keys": ["k x>=0 3", "k x≥0 3"],
+    "keys": [
+      "k x>=0 3",
+      "k x≥0 3"
+    ],
     "desc": "Conditional indirect jump to address in register 3 when x is greater than or equal to to 0"
   },
   {
     "code": "94",
-    "keys": ["k x>=0 4", "k x≥0 4"],
+    "keys": [
+      "k x>=0 4",
+      "k x≥0 4"
+    ],
     "desc": "Conditional indirect jump to address in register 4 when x is greater than or equal to to 0"
   },
   {
     "code": "95",
-    "keys": ["k x>=0 5", "k x≥0 5"],
+    "keys": [
+      "k x>=0 5",
+      "k x≥0 5"
+    ],
     "desc": "Conditional indirect jump to address in register 5 when x is greater than or equal to to 0"
   },
   {
     "code": "96",
-    "keys": ["k x>=0 6", "k x≥0 6"],
+    "keys": [
+      "k x>=0 6",
+      "k x≥0 6"
+    ],
     "desc": "Conditional indirect jump to address in register 6 when x is greater than or equal to to 0"
   },
   {
     "code": "97",
-    "keys": ["k x>=0 7", "k x≥0 7"],
+    "keys": [
+      "k x>=0 7",
+      "k x≥0 7"
+    ],
     "desc": "Conditional indirect jump to address in register 7 when x is greater than or equal to to 0"
   },
   {
     "code": "98",
-    "keys": ["k x>=0 8", "k x≥0 8"],
+    "keys": [
+      "k x>=0 8",
+      "k x≥0 8"
+    ],
     "desc": "Conditional indirect jump to address in register 8 when x is greater than or equal to to 0"
   },
   {
     "code": "99",
-    "keys": ["k x>=0 9", "k x≥0 9"],
+    "keys": [
+      "k x>=0 9",
+      "k x≥0 9"
+    ],
     "desc": "Conditional indirect jump to address in register 9 when x is greater than or equal to to 0"
   },
   {
     "code": "9A",
-    "keys": ["k x>=0 a", "k x≥0 a"],
+    "keys": [
+      "k x>=0 a",
+      "k x≥0 a"
+    ],
     "desc": "Conditional indirect jump to address in register A when x is greater than or equal to to 0"
   },
   {
     "code": "9B",
-    "keys": ["k x>=0 b", "k x≥0 b"],
+    "keys": [
+      "k x>=0 b",
+      "k x≥0 b"
+    ],
     "desc": "Conditional indirect jump to address in register B when x is greater than or equal to to 0"
   },
   {
     "code": "9C",
-    "keys": ["k x>=0 c",  "k x≥0 c"],
+    "keys": [
+      "k x>=0 c",
+      "k x≥0 c"
+    ],
     "desc": "Conditional indirect jump to address in register C when x is greater than or equal to to 0"
   },
   {
     "code": "9D",
-    "keys": ["k x>=0 d", "k x≥0 d"],
+    "keys": [
+      "k x>=0 d",
+      "k x≥0 d"
+    ],
     "desc": "Conditional indirect jump to address in register D when x is greater than or equal to to 0"
   },
   {
     "code": "9E",
-    "keys": ["k x>=0 e", "k x≥0 e"],
+    "keys": [
+      "k x>=0 e",
+      "k x≥0 e"
+    ],
     "desc": "Conditional indirect jump to address in register E when x is greater than or equal to to 0"
   },
   {
     "code": "A0",
-    "keys": ["k call 0", "k пп 0"],
+    "keys": [
+      "k call 0",
+      "k пп 0"
+    ],
     "desc": "Call subroutine at address in register 0"
   },
   {
     "code": "A1",
-    "keys": ["k call 1", "k пп 1"],
+    "keys": [
+      "k call 1",
+      "k пп 1"
+    ],
     "desc": "Call subroutine at address in register 1"
   },
   {
     "code": "A2",
-    "keys": ["k call 2", "k пп 2"],
+    "keys": [
+      "k call 2",
+      "k пп 2"
+    ],
     "desc": "Call subroutine at address in register 2"
   },
   {
     "code": "A3",
-    "keys": ["k call 3", "k пп 3"],
+    "keys": [
+      "k call 3",
+      "k пп 3"
+    ],
     "desc": "Call subroutine at address in register 3"
   },
   {
     "code": "A4",
-    "keys": ["k call 4", "k пп 4"],
+    "keys": [
+      "k call 4",
+      "k пп 4"
+    ],
     "desc": "Call subroutine at address in register 4"
   },
   {
     "code": "A5",
-    "keys": ["k call 5", "k пп 5"],
+    "keys": [
+      "k call 5",
+      "k пп 5"
+    ],
     "desc": "Call subroutine at address in register 5"
   },
   {
     "code": "A6",
-    "keys": ["k call 6", "k пп 6"],
+    "keys": [
+      "k call 6",
+      "k пп 6"
+    ],
     "desc": "Call subroutine at address in register 6"
   },
   {
     "code": "A7",
-    "keys": ["k call 7", "k пп 7"],
+    "keys": [
+      "k call 7",
+      "k пп 7"
+    ],
     "desc": "Call subroutine at address in register 7"
   },
   {
     "code": "A8",
-    "keys": ["k call 8", "k пп 8"],
+    "keys": [
+      "k call 8",
+      "k пп 8"
+    ],
     "desc": "Call subroutine at address in register 8"
   },
   {
     "code": "A9",
-    "keys": ["k call 9", "k пп 9"],
+    "keys": [
+      "k call 9",
+      "k пп 9"
+    ],
     "desc": "Call subroutine at address in register 9"
   },
   {
     "code": "AA",
-    "keys": ["k call a", "k пп a"],
+    "keys": [
+      "k call a",
+      "k пп a"
+    ],
     "desc": "Call subroutine at address in register A"
   },
   {
     "code": "AB",
-    "keys": ["k call b", "k пп b"],
+    "keys": [
+      "k call b",
+      "k пп b"
+    ],
     "desc": "Call subroutine at address in register B"
   },
   {
     "code": "AC",
-    "keys": ["k call c", "k пп c"],
+    "keys": [
+      "k call c",
+      "k пп c"
+    ],
     "desc": "Call subroutine at address in register C"
   },
   {
     "code": "AD",
-    "keys": ["k call d", "k пп d"],
+    "keys": [
+      "k call d",
+      "k пп d"
+    ],
     "desc": "Call subroutine at address in register D"
   },
   {
     "code": "AE",
-    "keys": ["k call e", "k пп e"],
+    "keys": [
+      "k call e",
+      "k пп e"
+    ],
     "desc": "Call subroutine at address in register E"
   },
   {
     "code": "B0",
-    "keys": ["k sto 0", "k x->п 0", "k x→п 0"],
+    "keys": [
+      "k sto 0",
+      "k x->п 0",
+      "k x→п 0"
+    ],
     "desc": "Indirect memory write by address in register 0"
   },
   {
     "code": "B1",
-    "keys": ["k sto 1", "k x->п 1", "k x→п 1"],
+    "keys": [
+      "k sto 1",
+      "k x->п 1",
+      "k x→п 1"
+    ],
     "desc": "Indirect memory write by address in register 1"
   },
   {
     "code": "B2",
-    "keys": ["k sto 2", "k x->п 2", "k x→п 2"],
+    "keys": [
+      "k sto 2",
+      "k x->п 2",
+      "k x→п 2"
+    ],
     "desc": "Indirect memory write by address in register 2"
   },
   {
     "code": "B3",
-    "keys": ["k sto 3", "k x->п 3", "k x→п 3"],
+    "keys": [
+      "k sto 3",
+      "k x->п 3",
+      "k x→п 3"
+    ],
     "desc": "Indirect memory write by address in register 3"
   },
   {
     "code": "B4",
-    "keys": ["k sto 4", "k x->п 4", "k x→п 4"],
+    "keys": [
+      "k sto 4",
+      "k x->п 4",
+      "k x→п 4"
+    ],
     "desc": "Indirect memory write by address in register 4"
   },
   {
     "code": "B5",
-    "keys": ["k sto 5", "k x->п 5", "k x→п 5"],
+    "keys": [
+      "k sto 5",
+      "k x->п 5",
+      "k x→п 5"
+    ],
     "desc": "Indirect memory write by address in register 5"
   },
   {
     "code": "B6",
-    "keys": ["k sto 6", "k x->п 6", "k x→п 6"],
+    "keys": [
+      "k sto 6",
+      "k x->п 6",
+      "k x→п 6"
+    ],
     "desc": "Indirect memory write by address in register 6"
   },
   {
     "code": "B7",
-    "keys": ["k sto 7", "k x->п 7", "k x→п 7"],
+    "keys": [
+      "k sto 7",
+      "k x->п 7",
+      "k x→п 7"
+    ],
     "desc": "Indirect memory write by address in register 7"
   },
   {
     "code": "B8",
-    "keys": ["k sto 8", "k x->п 8", "k x→п 8"],
+    "keys": [
+      "k sto 8",
+      "k x->п 8",
+      "k x→п 8"
+    ],
     "desc": "Indirect memory write by address in register 8"
   },
   {
     "code": "B9",
-    "keys": ["k sto 9", "k x->п 9", "k x→п 9"],
+    "keys": [
+      "k sto 9",
+      "k x->п 9",
+      "k x→п 9"
+    ],
     "desc": "Indirect memory write by address in register 9"
   },
   {
     "code": "BA",
-    "keys": ["k sto a", "k x->п a", "k x→п a"],
+    "keys": [
+      "k sto a",
+      "k x->п a",
+      "k x→п a"
+    ],
     "desc": "Indirect memory write by address in register A"
   },
   {
     "code": "BB",
-    "keys": ["k sto b", "k x->п b", "k x→п b"],
+    "keys": [
+      "k sto b",
+      "k x->п b",
+      "k x→п b"
+    ],
     "desc": "Indirect memory write by address in register B"
   },
   {
     "code": "BC",
-    "keys": ["k sto c", "k x->п c", "k x→п c"],
+    "keys": [
+      "k sto c",
+      "k x->п c",
+      "k x→п c"
+    ],
     "desc": "Indirect memory write by address in register C"
   },
   {
     "code": "BD",
-    "keys": ["k sto d", "k x->п d", "k x→п d"],
+    "keys": [
+      "k sto d",
+      "k x->п d",
+      "k x→п d"
+    ],
     "desc": "Indirect memory write by address in register D"
   },
   {
     "code": "BE",
-    "keys": ["k sto e", "k x->п e", "k x→п e"],
+    "keys": [
+      "k sto e",
+      "k x->п e",
+      "k x→п e"
+    ],
     "desc": "Indirect memory write by address in register E"
   },
   {
     "code": "C0",
-    "keys": ["k x<0 0"],
+    "keys": [
+      "k x<0 0"
+    ],
     "desc": "Indirect conditional goto by address in register 0"
   },
   {
     "code": "C1",
-    "keys": ["k x<0 1"],
+    "keys": [
+      "k x<0 1"
+    ],
     "desc": "Indirect conditional goto by address in register 1"
   },
   {
     "code": "C2",
-    "keys": ["k x<0 2"],
+    "keys": [
+      "k x<0 2"
+    ],
     "desc": "Indirect conditional goto by address in register 2"
   },
   {
     "code": "C3",
-    "keys": ["k x<0 3"],
+    "keys": [
+      "k x<0 3"
+    ],
     "desc": "Indirect conditional goto by address in register 3"
   },
   {
     "code": "C4",
-    "keys": ["k x<0 4"],
+    "keys": [
+      "k x<0 4"
+    ],
     "desc": "Indirect conditional goto by address in register 4"
   },
   {
     "code": "C5",
-    "keys": ["k x<0 5"],
+    "keys": [
+      "k x<0 5"
+    ],
     "desc": "Indirect conditional goto by address in register 5"
   },
   {
     "code": "C6",
-    "keys": ["k x<0 6"],
+    "keys": [
+      "k x<0 6"
+    ],
     "desc": "Indirect conditional goto by address in register 6"
   },
   {
     "code": "C7",
-    "keys": ["k x<0 7"],
+    "keys": [
+      "k x<0 7"
+    ],
     "desc": "Indirect conditional goto by address in register 7"
   },
   {
     "code": "C8",
-    "keys": ["k x<0 8"],
+    "keys": [
+      "k x<0 8"
+    ],
     "desc": "Indirect conditional goto by address in register 8"
   },
   {
     "code": "C9",
-    "keys": ["k x<0 9"],
+    "keys": [
+      "k x<0 9"
+    ],
     "desc": "Indirect conditional goto by address in register 9"
   },
   {
     "code": "CA",
-    "keys": ["k x<0 a"],
+    "keys": [
+      "k x<0 a"
+    ],
     "desc": "Indirect conditional goto by address in register A"
   },
   {
     "code": "CB",
-    "keys": ["k x<0 b"],
+    "keys": [
+      "k x<0 b"
+    ],
     "desc": "Indirect conditional goto by address in register B"
   },
   {
     "code": "CC",
-    "keys": ["k x<0 c"],
+    "keys": [
+      "k x<0 c"
+    ],
     "desc": "Indirect conditional goto by address in register C"
   },
   {
     "code": "CD",
-    "keys": ["k x<0 d"],
+    "keys": [
+      "k x<0 d"
+    ],
     "desc": "Indirect conditional goto by address in register D"
   },
   {
     "code": "CE",
-    "keys": ["k x<0 e"],
+    "keys": [
+      "k x<0 e"
+    ],
     "desc": "Indirect conditional goto by address in register E"
   },
   {
     "code": "D0",
-    "keys": ["k п->x 0"],
+    "keys": [
+      "k п->x 0"
+    ],
     "desc": "Indirect memory read by address in register 0"
   },
   {
     "code": "D1",
-    "keys": ["k п->x 1"],
+    "keys": [
+      "k п->x 1"
+    ],
     "desc": "Indirect memory read by address in register 1"
   },
   {
     "code": "D2",
-    "keys": ["k п->x 2"],
+    "keys": [
+      "k п->x 2"
+    ],
     "desc": "Indirect memory read by address in register 2"
   },
   {
     "code": "D3",
-    "keys": ["k п->x 3"],
+    "keys": [
+      "k п->x 3"
+    ],
     "desc": "Indirect memory read by address in register 3"
   },
   {
     "code": "D4",
-    "keys": ["k п->x 4"],
+    "keys": [
+      "k п->x 4"
+    ],
     "desc": "Indirect memory read by address in register 4"
   },
   {
     "code": "D5",
-    "keys": ["k п->x 5"],
+    "keys": [
+      "k п->x 5"
+    ],
     "desc": "Indirect memory read by address in register 5"
   },
   {
     "code": "D6",
-    "keys": ["k п->x 6"],
+    "keys": [
+      "k п->x 6"
+    ],
     "desc": "Indirect memory read by address in register 6"
   },
   {
     "code": "D7",
-    "keys": ["k п->x 7"],
+    "keys": [
+      "k п->x 7"
+    ],
     "desc": "Indirect memory read by address in register 7"
   },
   {
     "code": "D8",
-    "keys": ["k п->x 8"],
+    "keys": [
+      "k п->x 8"
+    ],
     "desc": "Indirect memory read by address in register 8"
   },
   {
     "code": "D9",
-    "keys": ["k п->x 9"],
+    "keys": [
+      "k п->x 9"
+    ],
     "desc": "Indirect memory read by address in register 9"
   },
   {
     "code": "DA",
-    "keys": ["k п->x a"],
+    "keys": [
+      "k п->x a"
+    ],
     "desc": "Indirect memory read by address in register A"
   },
   {
     "code": "DB",
-    "keys": ["k п->x b"],
+    "keys": [
+      "k п->x b"
+    ],
     "desc": "Indirect memory read by address in register B"
   },
   {
     "code": "DC",
-    "keys": ["k п->x c"],
+    "keys": [
+      "k п->x c"
+    ],
     "desc": "Indirect memory read by address in register C"
   },
   {
     "code": "DD",
-    "keys": ["k п->x d"],
+    "keys": [
+      "k п->x d"
+    ],
     "desc": "Indirect memory read by address in register D"
   },
   {
     "code": "DE",
-    "keys": ["k п->x e"],
+    "keys": [
+      "k п->x e"
+    ],
     "desc": "Indirect memory read by address in register E"
   },
   {
     "code": "E0",
-    "keys": ["k x=0 0"],
+    "keys": [
+      "k x=0 0"
+    ],
     "desc": "Indirect conditional goto by address in register 0"
   },
   {
     "code": "E1",
-    "keys": ["k x=0 1"],
+    "keys": [
+      "k x=0 1"
+    ],
     "desc": "Indirect conditional goto by address in register 1"
   },
   {
     "code": "E2",
-    "keys": ["k x=0 2"],
+    "keys": [
+      "k x=0 2"
+    ],
     "desc": "Indirect conditional goto by address in register 2"
   },
   {
     "code": "E3",
-    "keys": ["k x=0 3"],
+    "keys": [
+      "k x=0 3"
+    ],
     "desc": "Indirect conditional goto by address in register 3"
   },
   {
     "code": "E4",
-    "keys": ["k x=0 4"],
+    "keys": [
+      "k x=0 4"
+    ],
     "desc": "Indirect conditional goto by address in register 4"
   },
   {
     "code": "E5",
-    "keys": ["k x=0 5"],
+    "keys": [
+      "k x=0 5"
+    ],
     "desc": "Indirect conditional goto by address in register 5"
   },
   {
     "code": "E6",
-    "keys": ["k x=0 6"],
+    "keys": [
+      "k x=0 6"
+    ],
     "desc": "Indirect conditional goto by address in register 6"
   },
   {
     "code": "E7",
-    "keys": ["k x=0 7"],
+    "keys": [
+      "k x=0 7"
+    ],
     "desc": "Indirect conditional goto by address in register 7"
   },
   {
     "code": "E8",
-    "keys": ["k x=0 8"],
+    "keys": [
+      "k x=0 8"
+    ],
     "desc": "Indirect conditional goto by address in register 8"
   },
   {
     "code": "E9",
-    "keys": ["k x=0 9"],
+    "keys": [
+      "k x=0 9"
+    ],
     "desc": "Indirect conditional goto by address in register 9"
   },
   {
     "code": "EA",
-    "keys": ["k x=0 a"],
+    "keys": [
+      "k x=0 a"
+    ],
     "desc": "Indirect conditional goto by address in register A"
   },
   {
     "code": "EB",
-    "keys": ["k x=0 b"],
+    "keys": [
+      "k x=0 b"
+    ],
     "desc": "Indirect conditional goto by address in register B"
   },
   {
     "code": "EC",
-    "keys": ["k x=0 c"],
+    "keys": [
+      "k x=0 c"
+    ],
     "desc": "Indirect conditional goto by address in register C"
   },
   {
     "code": "ED",
-    "keys": ["k x=0 d"],
+    "keys": [
+      "k x=0 d"
+    ],
     "desc": "Indirect conditional goto by address in register D"
   },
   {
     "code": "EE",
-    "keys": ["k x=0 e"],
+    "keys": [
+      "k x=0 e"
+    ],
     "desc": "Indirect conditional goto by address in register E"
-  },
+  }
 ]

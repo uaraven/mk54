@@ -24,12 +24,20 @@ This project is my attempt to build a translator from MK-series binary code into
 
 Its main idea is to play with bytecode generation and to remember my youth :)
 
+Limitations
+-----------
+
+I'm not going to support all the weird Еггогs and various undocumented behaviour. Only documented commands, sorry.
+
+In case you want real hardware-level emulator of calculators built with soviet 145-series chips see [here](http://www.emulator3000.org/c3.htm).
+
+It is possible to stop program execution using `С/П` command and request user to perform some actions, say enter new 
+parameter in X register or store something to memory register or change `rad-grad-deg` switch. As `mk54` is not an 
+emulator there will be no support for interactive mode. `С/П` command will terminate running program. 
+
+
 Implementation details
 ----------------------
-
-I'm not going to support all the weird Еггогs and various undocumented CPU behaviour. Only documented commands, sorry.
-
-In case you want real hardware-level emulator of soviet 145-series microcontrollers see [here](http://www.emulator3000.org/c3.htm).
 
 MK-series worked with decimal floating numbers represented as 8-digit mantissa and 2-digit power in base of 10. My goal
 is to generate self-contained `.class` file that can be run with JVM so mk54 will use Java `float` type for all 
