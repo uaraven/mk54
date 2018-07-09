@@ -102,6 +102,8 @@
       "↑",
       "b↑",
       "в↑",
+      "b^",
+      "в^",
       "enter"
     ],
     "desc": "Pushes current number up the stack"
@@ -109,11 +111,17 @@
   {
     "code": "0F",
     "keys": [
-      "fbx",
-      "fвх",
-      "fвx"
+      "f bx",
+      "f вx",
+      "f вх"
     ],
     "desc": "Restore previous result"
+  },
+  {
+    "code": "10",
+    "keys": [
+      "+"
+    ]
   },
   {
     "code": "11",
@@ -132,7 +140,8 @@
   {
     "code": "13",
     "keys": [
-      "+"
+      "/",
+      "÷"
     ]
   },
   {
@@ -252,6 +261,7 @@
     "code": "25",
     "keys": [
       "f ⟳",
+      "f r",
       "f rot"
     ],
     "desc": "Rotate stack"
@@ -265,6 +275,28 @@
       "k м->г"
     ],
     "desc": "Convert minutes to degrees"
+  },
+  {
+    "code": "27",
+    "keys": [
+      "k -"
+    ],
+    "desc": "Program fault. Causes program to stop execution and display Error message"
+  },
+  {
+    "code": "28",
+    "keys": [
+      "k +"
+    ],
+    "desc": "Program fault. Causes program to stop execution and display Error message"
+  },
+  {
+    "code": "29",
+    "keys": [
+      "k /",
+      "k ÷"
+    ],
+    "desc": "Program fault. Causes program to stop execution and display Error message"
   },
   {
     "code": "2A",
@@ -514,7 +546,7 @@
     "code": "50",
     "keys": [
       "с/п",
-      "s/s"
+      "r/s"
     ],
     "desc": "Start/stop program"
   },
@@ -540,6 +572,14 @@
       "call"
     ],
     "desc": "Call subroutine"
+  },
+  {
+    "code": "54",
+    "keys": [
+      "k nop",
+      "k ноп"
+    ],
+    "desc": "No operation"
   },
   {
     "code": "57",

@@ -15,6 +15,7 @@ repositories {
 dependencies {
     compile 'org.ow2.asm:asm:6.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
+    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'

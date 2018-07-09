@@ -4,6 +4,8 @@ import net.ninjacat.mk54.exceptions.UnknownKeyException;
 import net.ninjacat.mk54.opcodes.Opcodes;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -11,18 +13,35 @@ import java.util.stream.Collectors;
  */
 public class Mk54Compiler {
 
+    private static final Pattern ADDRESS = Pattern.compile("^(\\d{2}\\.).*");
+
     public static void main(final String[] args) {
         final Mk54Compiler compiler = new Mk54Compiler();
 
         //TODO: Parameter processing and I/O
     }
 
+    private static String stripAddress(final String line) {
+        final Matcher matcher = ADDRESS.matcher(line);
+        if (matcher.matches()) {
+            return line.substring(matcher.group(1).length()).trim();
+        } else {
+            return line.trim();
+        }
+    }
 
+    /**
+     * Converts program mnemonics into "binary" hex code
+     *
+     * @param input Program source
+     * @return String containing hex codes of operations
+     */
     public String compile(final String input) {
         final Opcodes opcodes = new Opcodes();
 
         final String[] keys = input.split("\n");
         return Arrays.stream(keys)
+                .map(Mk54Compiler::stripAddress)
                 .map(key -> opcodes.findOpcode(key).orElseThrow(() -> new UnknownKeyException(key)))
                 .collect(Collectors.joining(" "));
     }
