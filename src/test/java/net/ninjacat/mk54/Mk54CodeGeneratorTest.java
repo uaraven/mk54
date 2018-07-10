@@ -2,6 +2,7 @@ package net.ninjacat.mk54;
 
 import com.google.common.io.CharStreams;
 import net.ninjacat.mk54.exceptions.RuntimeIOException;
+import net.ninjacat.mk54.exceptions.UnknownCommandException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,13 +13,13 @@ import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class Mk54CompilerTest {
+public class Mk54CodeGeneratorTest {
 
-    private Mk54Compiler compiler;
+    private Mk54CodeGenerator compiler;
 
     @Before
     public void setUp() {
-        this.compiler = new Mk54Compiler();
+        this.compiler = new Mk54CodeGenerator();
     }
 
     @Test
@@ -45,6 +46,30 @@ public class Mk54CompilerTest {
 
         assertThat(mkCode.split(" "), arrayWithSize(9));
         assertThat(mkCode, is("01 02 0E 01 02 10 40 60 0F"));
+    }
+
+    @Test
+    public void shouldParseProgramsWithoutAddresses() {
+        final String program = loadProgram("/test_no_address.mk");
+        final String mkCode = this.compiler.compile(program);
+
+        assertThat(mkCode.split(" "), arrayWithSize(8));
+        assertThat(mkCode, is("01 02 0E 01 02 10 40 60"));
+    }
+
+    @Test
+    public void shouldParseProgramsWithMixedAddresses() {
+        final String program = loadProgram("/test_mixed_address.mk");
+        final String mkCode = this.compiler.compile(program);
+
+        assertThat(mkCode.split(" "), arrayWithSize(8));
+        assertThat(mkCode, is("01 02 0E 01 02 10 40 60"));
+    }
+
+    @Test(expected = UnknownCommandException.class)
+    public void shouldFailToCompileInvalidProgram() {
+        final String program = "F invalid";
+        this.compiler.compile(program);
     }
 
     private String loadProgram(final String resource) {
