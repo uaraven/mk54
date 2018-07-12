@@ -45,3 +45,5 @@ calculations. This should not cause any problems with simple programs, but more 
 overflow or relying on floating point number representation will fail.
 
 [Hex code mapping](docs/hexcode.md) to MK-series 8-segment display symbols.
+
+Some details about Java [Byte code generation](docs/code_generation.md)

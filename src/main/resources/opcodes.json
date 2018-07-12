@@ -646,7 +646,7 @@
     "keys": [
       "ип0",
       "пx0",
-      "ld0"
+      "rcl0"
     ],
     "desc": "Read value from memory register 0 to X register"
   },
@@ -655,7 +655,7 @@
     "keys": [
       "ип1",
       "пx1",
-      "ld1"
+      "rcl1"
     ],
     "desc": "Read value from memory register 1 to X register"
   },
@@ -664,7 +664,7 @@
     "keys": [
       "ип2",
       "пx2",
-      "ld2"
+      "rcl2"
     ],
     "desc": "Read value from memory register 2 to X register"
   },
@@ -673,7 +673,7 @@
     "keys": [
       "ип3",
       "пx3",
-      "ld3"
+      "rcl3"
     ],
     "desc": "Read value from memory register 3 to X register"
   },
@@ -682,7 +682,7 @@
     "keys": [
       "ип4",
       "пx4",
-      "ld4"
+      "rcl4"
     ],
     "desc": "Read value from memory register 4 to X register"
   },
@@ -691,7 +691,7 @@
     "keys": [
       "ип5",
       "пx5",
-      "ld5"
+      "rcl5"
     ],
     "desc": "Read value from memory register 5 to X register"
   },
@@ -700,7 +700,7 @@
     "keys": [
       "ип6",
       "пx6",
-      "ld6"
+      "rcl6"
     ],
     "desc": "Read value from memory register 6 to X register"
   },
@@ -709,7 +709,7 @@
     "keys": [
       "ип7",
       "пx7",
-      "ld7"
+      "rcl7"
     ],
     "desc": "Read value from memory register 7 to X register"
   },
@@ -718,7 +718,7 @@
     "keys": [
       "ип8",
       "пx8",
-      "ld8"
+      "rcl8"
     ],
     "desc": "Read value from memory register 8 to X register"
   },
@@ -727,7 +727,7 @@
     "keys": [
       "ип9",
       "пx9",
-      "ld9"
+      "rcl9"
     ],
     "desc": "Read value from memory register 9 to X register"
   },
@@ -736,7 +736,7 @@
     "keys": [
       "ипa",
       "пxa",
-      "lda"
+      "rcla"
     ],
     "desc": "Read value from memory register A to X register"
   },
@@ -745,7 +745,7 @@
     "keys": [
       "ипb",
       "пxb",
-      "ldb"
+      "rclb"
     ],
     "desc": "Read value from memory register B to X register"
   },
@@ -754,7 +754,7 @@
     "keys": [
       "ипc",
       "пxc",
-      "ldc"
+      "rclc"
     ],
     "desc": "Read value from memory register C to X register"
   },
@@ -763,7 +763,7 @@
     "keys": [
       "ипd",
       "пxd",
-      "ldd"
+      "rcld"
     ],
     "desc": "Read value from memory register D to X register"
   },
@@ -772,7 +772,7 @@
     "keys": [
       "ипe",
       "пxe",
-      "lde"
+      "rcle"
     ],
     "desc": "Read value from memory register E to X register"
   },
