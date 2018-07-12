@@ -52,13 +52,15 @@ digit handling code as byte code and insert it every time digit operation is enc
 `Mk54` will use combined approach by generating all code for mantissa operations, but calling to Java method for exponent
 operations.
 
+---
+
 After any calculation flag `entryMode` will be set to `MANTISSA` so that any digit entry will be performed on mantissa.
 Variable `decimalFactor` will be reset to `0` at the same time.
 
 Adding new digit to mantissa is more or less straightforward, but it requires a state variable `decimalFactor`. While
 decimal factor is 0, all digits are added to integer part of the number. For each digit N, current value of register X
 is multiplied by 10 and then N is added to register X. When `.` operation executes it will set `decimalFactor` to 10.
-When `decimalFactor` is not equal to 0, each new digit will be deleted by current `decimalFactor` and added to 
+When `decimalFactor` is not equal to 0, each new digit will be divided by current `decimalFactor` and added to 
 register X. After that `decimalFactor` itself will be divided by 10 to be ready for next fractional digit.
 
 Things become trickier as soon as `ВП` or `EXP` operation is encountered. This operation puts calculator in exponent 
