@@ -71,3 +71,6 @@ operation is executed.
 method `exponentDigitEntry(int)` will be called. It will convert register X to `binary32` representation, extract 
 exponent bits and perform necessary operations to add next digit, while managing exponent in -99..+99 range. After that
 it will modify exponent bits of `binary32` integer, convert it back to float and update register X. 
+
+Unary minus operator `/-/` works the same way. Mantissa sign negation is implemented by generating corresponding code,
+but exponent sign change requires bit arithmetic and is done in `negateExponent()` method. 

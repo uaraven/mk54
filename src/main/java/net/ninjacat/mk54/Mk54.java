@@ -56,6 +56,13 @@ public class Mk54 {
         mk54.execute();
     }
 
+    /**
+     * Performs digit entry to exponent. Exponent in MK-series consists of only 2 digits and if third digit is entered
+     * it will push the first one out. If exponent value is 56 and number 8 is entered then exponent will change to
+     * 68
+     *
+     * @param digit new exponent digit
+     */
     private void exponentDigitEntry(final int digit) {
         int xint = Float.floatToIntBits(this.x);
         final int exponent = (xint & EXPONENT_MASK) >> MANTISSA_BITS;
@@ -74,22 +81,30 @@ public class Mk54 {
     }
 
     /**
+     * Changes exponent sign.
+     */
+    private void negateExponent() {
+        int xint = Float.floatToIntBits(this.x);
+        final int exponent = (xint & EXPONENT_MASK) >> MANTISSA_BITS;
+        final int exponentValue = exponent - EXPONENT_BIAS;
+
+        int newExponentValue = -exponentValue;
+        newExponentValue += EXPONENT_BIAS;
+
+        final int exponentBits = newExponentValue << MANTISSA_BITS;
+        xint = (xint | ~EXPONENT_MASK) + exponentBits;
+
+        this.x = Float.intBitsToFloat(xint);
+    }
+
+    /**
      * Test method for getting asmified code
      *
-     * @param n
      */
     private void digit() {
-        if (this.entryMode == MANTISSA) {
-            if (this.decimalFactor == 0) {
-                this.x = this.x * 10 + 4;
-            } else {
-                this.x += 43 / this.decimalFactor;
-                this.decimalFactor /= 10;
-            }
-        } else {
-            exponentDigitEntry(44);
-        }
-
+        this.t = this.z;
+        this.z = this.y;
+        this.y = this.x;
     }
 
     /**
