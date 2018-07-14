@@ -7,6 +7,8 @@ import org.objectweb.asm.Opcodes;
 
 import java.util.Map;
 
+import static org.objectweb.asm.Opcodes.*;
+
 /**
  * Generates Java byte code for MK program
  */
@@ -16,10 +18,12 @@ class CodeGenerator {
     private static final String REGISTER_Z = "z";
     private static final String REGISTER_T = "t";
     private static final String REGISTER_Y = "y";
+    private static final String REGISTER_X_MANTISSA = "xMantissa";
+    private static final String REGISTER_X_EXPONENT = "xExponent";
+
 
     private static final String ENTRY_MODE = "entryMode";
     private static final String DECIMAL_FACTOR = "decimalFactor";
-    private static final float ORDER_MULTIPLIER = 10f;
     private static final String CLASS_NAME = "Mk54";
 
     Map<String, OperationCodeGenerator> OPERATION_CODEGEN = ImmutableMap.<String, OperationCodeGenerator>builder()
@@ -35,6 +39,7 @@ class CodeGenerator {
             .put("09", numberGenerator(9))
             .put("0A", CodeGenerator::decimal)
             .put("0B", CodeGenerator::changeSign)
+            .put("0C", CodeGenerator::startExponent)
             .put("0E", CodeGenerator::enterNumber)
             .put("0D", CodeGenerator::clearX)
             .build();
@@ -46,7 +51,7 @@ class CodeGenerator {
      * @param context Code generating context
      */
     public static void generateOperandAddressLabel(final MethodVisitor mv, final CodeGenContext context) {
-        final Label startLabel = context.addLabelForAddress(context.getCurrentAddress());
+        final Label startLabel = context.getLabelForAddress(context.getCurrentAddress());
         mv.visitLabel(startLabel);
     }
 
@@ -60,53 +65,9 @@ class CodeGenerator {
      */
     private static OperationCodeGenerator numberGenerator(final int digit) {
         return (mv, context) -> {
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
-            final Label entryModeExp = new Label();
-            mv.visitJumpInsn(Opcodes.IFNE, entryModeExp);
-            // Adding digit to integer part of mantissa
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
-            final Label decimalEntry = new Label();
-            mv.visitJumpInsn(Opcodes.IFNE, decimalEntry);
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitLdcInsn(ORDER_MULTIPLIER);
-            mv.visitInsn(Opcodes.FMUL);
-            mv.visitLdcInsn((float) digit);
-            mv.visitInsn(Opcodes.FADD);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-            final Label exitPoint = new Label();
-            mv.visitJumpInsn(Opcodes.GOTO, exitPoint);
-            mv.visitLabel(decimalEntry);
-            // Adding digit to fractional part of mantissa
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitInsn(Opcodes.DUP);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitIntInsn(Opcodes.BIPUSH, digit);
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
-            mv.visitInsn(Opcodes.IDIV);
-            mv.visitInsn(Opcodes.I2F);
-            mv.visitInsn(Opcodes.FADD);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitInsn(Opcodes.DUP);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
-            mv.visitIntInsn(Opcodes.BIPUSH, 10);
-            mv.visitInsn(Opcodes.IDIV);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
-            mv.visitJumpInsn(Opcodes.GOTO, exitPoint);
-            mv.visitLabel(entryModeExp);
-            // Adding digit to exponent - calling exponentDigitEntry() method
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            mv.visitIntInsn(Opcodes.BIPUSH, digit);
-            mv.visitVarInsn(Opcodes.ILOAD, 1);
-            mv.visitMethodInsn(Opcodes.INVOKESPECIAL, CLASS_NAME, "exponentDigitEntry", "(I)V", false);
-            mv.visitLabel(exitPoint);
-            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitIntInsn(BIPUSH, digit);
+            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "mantissaDigitEntry", "(I)V", false);
         };
     }
 
@@ -117,10 +78,23 @@ class CodeGenerator {
      * @param context Code generation context
      */
     private static void decimal(final MethodVisitor mv, final CodeGenContext context) {
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitIntInsn(Opcodes.BIPUSH, 10);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitIntInsn(BIPUSH, 10);
         mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
     }
+
+    /**
+     * Switches digit entry mode to exponent
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void startExponent(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, ENTRY_MODE, "I");
+    }
+
 
     /**
      * Clears X register
@@ -129,9 +103,15 @@ class CodeGenerator {
      * @param context Code generation context
      */
     private static void clearX(final MethodVisitor mv, final CodeGenContext context) {
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitLdcInsn(0f);
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(FCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(FCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
     }
 
     /**
@@ -141,18 +121,18 @@ class CodeGenerator {
      * @param context Code generation context
      */
     private static void enterNumber(final MethodVisitor mv, final CodeGenContext context) {
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Z, "F");
         mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_T, "F");
 
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
         mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
 
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
     }
@@ -165,25 +145,22 @@ class CodeGenerator {
      */
     private static void changeSign(final MethodVisitor mv, final CodeGenContext context) {
         // check what sign needs changing, either mantissa or exponent
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
 
         final Label exponentNegationBranch = new Label();
         mv.visitJumpInsn(Opcodes.IFNE, exponentNegationBranch);
 
-        // change mantissa sign
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FNEG);
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, CLASS_NAME, "negateMantissa", "()V", false);
         final Label exitPoint = new Label();
         mv.visitJumpInsn(Opcodes.GOTO, exitPoint);
 
         // change exponent sign - call negateExponent() method
         mv.visitLabel(exponentNegationBranch);
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, CLASS_NAME, "negateExponent", "()V", false);
 
         mv.visitLabel(exitPoint);

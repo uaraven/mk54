@@ -1,5 +1,7 @@
 package net.ninjacat.mk54;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.stream.IntStream;
 
 /**
@@ -13,7 +15,7 @@ public class Mk54 {
 
     private static final int MANTISSA = 0;
     private static final int EXPONENT = 1;
-    private static final int EXPONENT_MASK = 0x7f800000;
+    private static final int EXPONENT_MASK = 0b01111111_10000000_00000000_00000000;
     private static final int MANTISSA_BITS = 23;
     private static final int EXPONENT_BIAS = 127;
     /**
@@ -29,9 +31,11 @@ public class Mk54 {
      * Stack registers
      */
     private float x, y, z, t;
+    private float xMantissa;
+    private int xExponent;
     private float x1;
 
-    private Mk54() {
+    Mk54() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
@@ -39,6 +43,26 @@ public class Mk54 {
         this.memory = new float[14];
         this.x1 = 0;
         IntStream.range(0, this.memory.length).forEach(idx -> this.memory[idx] = 0);
+    }
+
+    public float getX() {
+        return this.x;
+    }
+
+    public float getY() {
+        return this.y;
+    }
+
+    public float getZ() {
+        return this.z;
+    }
+
+    public float getT() {
+        return this.t;
+    }
+
+    public float getX1() {
+        return this.x1;
     }
 
     /**
@@ -63,53 +87,67 @@ public class Mk54 {
      *
      * @param digit new exponent digit
      */
-    private void exponentDigitEntry(final int digit) {
-        int xint = Float.floatToIntBits(this.x);
-        final int exponent = (xint & EXPONENT_MASK) >> MANTISSA_BITS;
-        final int exponentValue = exponent - EXPONENT_BIAS;
-
-        int newExponentValue = Math.abs(exponent) % 10 * 10 + digit;
-        if (exponentValue < 0) {
-            newExponentValue = -newExponentValue;
-        }
-        newExponentValue += EXPONENT_BIAS;
-
-        final int exponentBits = newExponentValue << MANTISSA_BITS;
-        xint = (xint | ~EXPONENT_MASK) + exponentBits;
-
-        this.x = Float.intBitsToFloat(xint);
+    @VisibleForTesting
+    void exponentDigitEntry(final int digit) {
+        this.xExponent = Math.abs(this.xExponent) % 10 * 10 + digit;
+        makeXRegister();
     }
 
     /**
      * Changes exponent sign.
      */
-    private void negateExponent() {
-        int xint = Float.floatToIntBits(this.x);
-        final int exponent = (xint & EXPONENT_MASK) >> MANTISSA_BITS;
-        final int exponentValue = exponent - EXPONENT_BIAS;
+    @VisibleForTesting
+    void negateExponent() {
+        this.xExponent = -this.xExponent;
+        makeXRegister();
+    }
 
-        int newExponentValue = -exponentValue;
-        newExponentValue += EXPONENT_BIAS;
+    void mantissaDigitEntry(final int digit) {
+        if (this.decimalFactor == 0) {
+            this.xMantissa = this.xMantissa * 10f + digit;
+        } else {
+            this.xMantissa += digit / this.decimalFactor;
+            this.decimalFactor *= 10;
+        }
+        makeXRegister();
+    }
 
-        final int exponentBits = newExponentValue << MANTISSA_BITS;
-        xint = (xint | ~EXPONENT_MASK) + exponentBits;
+    void negateMantissa() {
+        this.xMantissa = -this.xMantissa;
+        makeXRegister();
+    }
 
-        this.x = Float.intBitsToFloat(xint);
+    /**
+     * This method is called after any modification of X register
+     */
+    private void makeXRegister() {
+        this.x = (float) (this.xMantissa * Math.pow(10, this.xExponent));
     }
 
     /**
      * Test method for getting asmified code
-     *
      */
     private void digit() {
-        this.t = this.z;
-        this.z = this.y;
-        this.y = this.x;
+        this.xMantissa = 0;
+        this.xExponent = 0;
+        makeXRegister();
     }
 
     /**
      * Placeholder method which will be replaced with actual bytecode during compilation
      */
     private void execute() {
+    }
+
+    /**
+     * Internal method to set register x
+     *
+     * @param mantissa Value of mantissa
+     * @param exponent Exponent
+     */
+    void setX(final float mantissa, final int exponent) {
+        this.xMantissa = mantissa;
+        this.xExponent = exponent;
+        makeXRegister();
     }
 }

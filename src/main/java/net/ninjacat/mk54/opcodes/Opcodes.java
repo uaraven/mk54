@@ -26,7 +26,7 @@ public class Opcodes {
 
     public Opcodes() {
 
-        try (InputStream is = getClass().getResourceAsStream("/opcodes.json")) {
+        try (final InputStream is = getClass().getResourceAsStream("/opcodes.json")) {
             final List<Opcode> opcodes = MAPPER.readValue(is, MAPPER.getTypeFactory().constructCollectionType(List.class, Opcode.class));
 
 
