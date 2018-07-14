@@ -1,8 +1,8 @@
 package net.ninjacat.mk54.codegen;
 
-import jdk.internal.org.objectweb.asm.ClassVisitor;
-import jdk.internal.org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 
 import java.util.HashMap;
 import java.util.List;

@@ -2,7 +2,7 @@ package net.ninjacat.mk54;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 /**
  * Template class for Mk54 runnable program
@@ -14,14 +14,10 @@ import java.util.stream.IntStream;
 public class Mk54 {
 
     private static final int MANTISSA = 0;
-    private static final int EXPONENT = 1;
-    private static final int EXPONENT_MASK = 0b01111111_10000000_00000000_00000000;
-    private static final int MANTISSA_BITS = 23;
-    private static final int EXPONENT_BIAS = 127;
     /**
      * Memory registers
      */
-    private final float[] memory;
+    private float[] memory;
     /**
      * Switches between entering digits for mantissa or exponent
      */
@@ -35,14 +31,15 @@ public class Mk54 {
     private int xExponent;
     private float x1;
 
-    Mk54() {
+
+    public Mk54() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
         this.t = 0;
-        this.memory = new float[14];
         this.x1 = 0;
-        IntStream.range(0, this.memory.length).forEach(idx -> this.memory[idx] = 0);
+        this.memory = new float[14];
+        Arrays.fill(this.memory, 0f);
     }
 
     public float getX() {
