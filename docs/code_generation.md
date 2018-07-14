@@ -66,8 +66,14 @@ entry mode. There is no easy way to manage adding exponent digit-by-digit and ch
 operation is executed. 
 
 `ВП` operation will switch state flag `entryMode` to value `EXPONENT`. When in `EXPONENT` mode for each digit entry 
-method `exponentDigitEntry(int)` will be called. It will  perform necessary operations to add next digit, while managing 
+method `exponentDigitEntry(int)` will be called. It will perform necessary operations to add next digit, while managing 
 exponent in -99..+99 range. 
 
 Unary minus operator `/-/` works the same way. Mantissa sign negation is implemented by calling `negateMantissa()` method,
 while exponent sign change is done in `negateExponent()` method. 
+
+---
+
+After `В↑` operation is performed value from register X is copied to register Y. Register X still contains the same
+value, but any digit operation will reset register X and start from scratch. This is implemented using flag `resetX`, 
+which is checked on each digit operation and set to `true` on all operations not related to number entry. 

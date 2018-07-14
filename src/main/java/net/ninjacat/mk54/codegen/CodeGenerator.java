@@ -24,7 +24,7 @@ class CodeGenerator {
     private static final String REGISTER_Y = "y";
     private static final String REGISTER_X_MANTISSA = "xMantissa";
     private static final String REGISTER_X_EXPONENT = "xExponent";
-
+    private static final String RESET_X = "resetX";
 
     private static final String ENTRY_MODE = "entryMode";
     private static final String DECIMAL_FACTOR = "decimalFactor";
@@ -88,10 +88,24 @@ class CodeGenerator {
      * @param digit digit to add
      * @return {@link OperationCodeGenerator} which generates digit-adding code
      * <p>
-     * TODO: Add another flag to check if new digit should reset register X first. This flag should be set by all operations except for digit entry
      */
     private static OperationCodeGenerator digit(final int digit) {
         return (mv, context) -> {
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
+            final Label noReset = new Label();
+            mv.visitJumpInsn(IFEQ, noReset);
+
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitInsn(FCONST_0);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitInsn(ICONST_0);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
+
+            mv.visitLabel(noReset);
+            mv.visitFrame(F_SAME, 0, null, 0, null);
+
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
             final Label exponentEntryLabel = new Label();
@@ -164,6 +178,10 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
     }
 
     /**

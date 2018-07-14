@@ -14,7 +14,8 @@ It was MK-54, a bit modernized version of even older programmable calculator nam
 That was as close to computer as average person could get in late 80s in the USSR.
 
 Trying to program it taught me several things: debugging by reading hex codes, reverse polish notation and
-importance of memory conservation.
+importance of memory management. It also taught me how to write clever incomprehensible programs using all 98 bytes of 
+program memory.
 
 My dreams came true, I got a MK-52, which was probably the best of the series and it helped me with
 my math assignments during my 9th year. Soon enough I got a PC, but that strange beast 
@@ -47,3 +48,8 @@ overflow or relying on floating point number representation will fail.
 [Hex code mapping](docs/hexcode.md) to MK-series 8-segment display symbols.
 
 Some details about Java [Byte code generation](docs/code_generation.md)
+
+Useful links
+------------
+
+[Links](docs/links.md) to documents that helped me.

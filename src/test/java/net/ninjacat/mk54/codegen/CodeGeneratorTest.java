@@ -121,4 +121,18 @@ public class CodeGeneratorTest {
     }
 
 
+    @Test
+    public void shouldResetRegisterXWhenEnterPressed() throws Exception {
+        final Object mk54 = getCompiledInstance(program(
+                DIGIT_1,
+                DIGIT_3,
+                ENTER,
+                DIGIT_5
+        ));
+
+        execute(mk54);
+        final float x = getX(mk54);
+
+        assertThat(x, is(5f));
+    }
 }

@@ -25,13 +25,23 @@ public class Mk54 {
      */
     private int entryMode = MANTISSA;
     private int decimalFactor = 0;
+
+
     /**
      * Stack registers
      */
     private float x, y, z, t;
+    private float x1;
+
+    /**
+     * Helper variables for managing X register
+     */
     private float xMantissa;
     private int xExponent;
-    private float x1;
+    /**
+     * If true, any new digit will first reset register X to zero
+     */
+    private boolean resetX;
 
 
     public Mk54() {
@@ -42,6 +52,7 @@ public class Mk54 {
         this.x1 = 0;
         this.memory = new float[14];
         Arrays.fill(this.memory, 0f);
+        this.resetX = true;
     }
 
     public float getX() {
@@ -130,10 +141,10 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        if (this.entryMode == MANTISSA) {
-            negateMantissa();
-        } else {
-            negateExponent();
+        this.resetX = true;
+        if (this.resetX) {
+            this.xMantissa = 0;
+            this.xExponent = 0;
         }
     }
 
