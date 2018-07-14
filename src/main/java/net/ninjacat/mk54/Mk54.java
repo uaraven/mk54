@@ -2,12 +2,14 @@ package net.ninjacat.mk54;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
  * Template class for Mk54 runnable program
  * <p>
- * This class contains operations stack, memory registers, helper methods and empty {@link #execute()} method.
+ * This class contains operations stack, memory registers and helper methods.
+ *
  * During bytecode generation new class will be created based on this class but with execute() method containing
  * actual bytecode generated from mk hex code.
  */
@@ -17,7 +19,7 @@ public class Mk54 {
     /**
      * Memory registers
      */
-    private float[] memory;
+    private final float[] memory;
     /**
      * Switches between entering digits for mantissa or exponent
      */
@@ -65,24 +67,26 @@ public class Mk54 {
     /**
      * Main method for running this class from command line.
      * <p>
-     * Parses parameters, sets up initial state and calls {@link #execute()} method.
+     * Parses parameters, sets up initial state and calls generated execute() method.
      * <p>
      * After execution is complete will print values from the stack and, optionally, memory registers
      *
      * @param args Command line arguments
      */
-    public static void main(final String[] args) {
+    @SuppressWarnings("JavaReflectionMemberAccess")
+    public static void main(final String[] args) throws Exception {
         final Mk54 mk54 = new Mk54();
 
-        mk54.execute();
+        final Method execute = Mk54.class.getDeclaredMethod("execute");
+        execute.invoke(mk54);
     }
 
     /**
-     * Performs digit entry to exponent. Exponent in MK-series consists of only 2 digits and if third digit is entered
+     * Performs testAsm entry to exponent. Exponent in MK-series consists of only 2 digits and if third testAsm is entered
      * it will push the first one out. If exponent value is 56 and number 8 is entered then exponent will change to
      * 68
      *
-     * @param digit new exponent digit
+     * @param digit new exponent testAsm
      */
     @VisibleForTesting
     void exponentDigitEntry(final int digit) {
@@ -103,7 +107,7 @@ public class Mk54 {
         if (this.decimalFactor == 0) {
             this.xMantissa = this.xMantissa * 10f + digit;
         } else {
-            this.xMantissa += digit / this.decimalFactor;
+            this.xMantissa += (float) digit / this.decimalFactor;
             this.decimalFactor *= 10;
         }
         makeXRegister();
@@ -112,6 +116,14 @@ public class Mk54 {
     void negateMantissa() {
         this.xMantissa = -this.xMantissa;
         makeXRegister();
+    }
+
+    void digitEntry(final int digit) {
+        if (this.entryMode == MANTISSA) {
+            mantissaDigitEntry(digit);
+        } else {
+            exponentDigitEntry(digit);
+        }
     }
 
     /**
@@ -124,16 +136,12 @@ public class Mk54 {
     /**
      * Test method for getting asmified code
      */
-    private void digit() {
-        this.xMantissa = 0;
-        this.xExponent = 0;
-        makeXRegister();
-    }
-
-    /**
-     * Placeholder method which will be replaced with actual bytecode during compilation
-     */
-    private void execute() {
+    private void testAsm() {
+        if (this.entryMode == MANTISSA) {
+            mantissaDigitEntry(8);
+        } else {
+            exponentDigitEntry(8);
+        }
     }
 
     /**

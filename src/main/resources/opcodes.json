@@ -75,7 +75,8 @@
   {
     "code": "0B",
     "keys": [
-      "/-/"
+      "/-/",
+      "neg"
     ],
     "desc": "Negation"
   },
