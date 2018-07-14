@@ -125,6 +125,10 @@ class CodeGenerator {
 
             mv.visitLabel(exitLabel);
             mv.visitFrame(F_SAME, 0, null, 0, null);
+
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitInsn(ICONST_0);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
         };
     }
 
