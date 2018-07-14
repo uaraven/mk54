@@ -7,7 +7,6 @@ import net.ninjacat.mk54.exceptions.ClassCreationException;
 import net.ninjacat.mk54.exceptions.UnknownOperationException;
 import org.objectweb.asm.*;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -50,11 +49,8 @@ class CodeGenerator {
             .put(CX, CodeGenerator::clearX)
             .build();
 
-    @Nullable
-    private Label startLabel;
-
     CodeGenerator() {
-        this.startLabel = null;
+        super();
     }
 
     /**
@@ -68,26 +64,25 @@ class CodeGenerator {
      */
     private static OperationCodeGenerator digit(final int digit) {
         return (mv, context) -> {
-//            mv.visitVarInsn(ALOAD, 0);
-//            mv.visitFieldInsn(GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
-//            final Label exponentEntryLabel = new Label();
-//            mv.visitJumpInsn(IFNE, exponentEntryLabel);
-//            mv.visitVarInsn(ALOAD, 0);
-//            mv.visitIntInsn(Opcodes.BIPUSH, digit);
-//            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "mantissaDigitEntry", "(I)V", false);
-//            final Label exitLabel = new Label();
-//            mv.visitJumpInsn(Opcodes.GOTO, exitLabel);
-//            mv.visitLabel(exponentEntryLabel);
-//            mv.visitFrame(F_SAME, 0, null, 0, null);
-//            mv.visitVarInsn(ALOAD, 0);
-//            mv.visitIntInsn(Opcodes.BIPUSH, digit);
-//            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "exponentDigitEntry", "(I)V", false);
-//            mv.visitLabel(exitLabel);
-//            mv.visitFrame(F_SAME, 0, null, 0, null);
-//            mv.visitInsn(NOP);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitIntInsn(BIPUSH, digit);
-            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "digitEntry", "(I)V", false);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
+            final Label exponentEntryLabel = new Label();
+            mv.visitJumpInsn(IFNE, exponentEntryLabel);
+
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitIntInsn(Opcodes.BIPUSH, digit);
+            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "mantissaDigitEntry", "(I)V", false);
+            final Label exitLabel = new Label();
+            mv.visitJumpInsn(Opcodes.GOTO, exitLabel);
+
+            mv.visitLabel(exponentEntryLabel);
+            mv.visitFrame(F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitIntInsn(Opcodes.BIPUSH, digit);
+            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "exponentDigitEntry", "(I)V", false);
+
+            mv.visitLabel(exitLabel);
+            mv.visitFrame(F_SAME, 0, null, 0, null);
         };
     }
 
@@ -101,17 +96,17 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_T, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_T, "F");
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
     }
 
     /**
@@ -120,11 +115,8 @@ class CodeGenerator {
      * @param mv      {@link MethodVisitor} for generated method
      * @param context Code generating context
      */
-    private void generateOperandAddressLabel(final MethodVisitor mv, final CodeGenContext context) {
+    private static void generateOperandAddressLabel(final MethodVisitor mv, final CodeGenContext context) {
         final Label opLabel = context.getLabelForAddress(context.getCurrentAddress());
-        if (this.startLabel == null) {
-            this.startLabel = opLabel;
-        }
         mv.visitLabel(opLabel);
     }
 
@@ -142,9 +134,8 @@ class CodeGenerator {
         final Label exponentNegationBranch = new Label();
         mv.visitJumpInsn(IFNE, exponentNegationBranch);
 
-        mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, CLASS_NAME, "negateMantissa", "()V", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "negateMantissa", "()V", false);
         final Label exitPoint = new Label();
         mv.visitJumpInsn(Opcodes.GOTO, exitPoint);
 
@@ -152,10 +143,13 @@ class CodeGenerator {
         mv.visitLabel(exponentNegationBranch);
         mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, CLASS_NAME, "negateExponent", "()V", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "negateExponent", "()V", false);
 
         mv.visitLabel(exitPoint);
         mv.visitFrame(F_SAME, 0, null, 0, null);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKESPECIAL, CLASS_NAME, "makeXRegister", "()V", false);
     }
 
 
@@ -167,8 +161,17 @@ class CodeGenerator {
      */
     private static void decimal(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
+
+        final Label alreadyInDecimal = new Label();
+        mv.visitJumpInsn(IFNE, alreadyInDecimal);
+
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitIntInsn(BIPUSH, 10);
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, DECIMAL_FACTOR, "I");
+
+        mv.visitLabel(alreadyInDecimal);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -202,39 +205,11 @@ class CodeGenerator {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
     }
 
-    byte[] compile(final String operationsStr) {
-        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
-
-        // Set up ASM
-        final ClassReader reader;
-        try {
-            reader = new ClassReader(Mk54.class.getName());
-        } catch (final Exception ex) {
-            throw new ClassCreationException("Failed to create class", ex);
-        }
-        final ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES);
-        final ClassVisitor cv = new ClassVisitor(ASM6, classWriter) {
-            @Override
-            public void visit(final int version, final int access, final String name, final String signature, final String superName, final String[] interfaces) {
-                this.cv.visit(Opcodes.V1_7, Opcodes.ACC_PUBLIC, CLASS_NAME, null, "java/lang/Object", null);
-            }
-
-            @Override
-            public void visitEnd() {
-                generateExecuteMethod(operations, this.cv);
-                super.visitEnd();
-            }
-
-        };
-        reader.accept(cv, 0);
-
-        return classWriter.toByteArray();
-
-    }
-
-    private void generateExecuteMethod(final List<String> operations, final ClassVisitor classWriter) {
+    private static void generateExecuteMethod(final List<String> operations, final ClassVisitor classWriter) {
         final MethodVisitor executeMethod = classWriter.visitMethod(Opcodes.ACC_PUBLIC, "execute", "()V", null, null);
         executeMethod.visitCode();
+        final Label startLabel = new Label();
+        executeMethod.visitLabel(startLabel);
 
         // Prepare context
         final CodeGenContext context = new CodeGenContext(operations, classWriter, executeMethod);
@@ -251,10 +226,37 @@ class CodeGenerator {
         executeMethod.visitInsn(Opcodes.RETURN);
         final Label finalLabel = new Label();
         executeMethod.visitLabel(finalLabel);
-        executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, this.startLabel, finalLabel, 0);
+        executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
         executeMethod.visitMaxs(0, 0);
         executeMethod.visitEnd();
 
         classWriter.visitEnd();
+    }
+
+    byte[] compile(final String operationsStr) {
+        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
+
+        // Set up ASM
+        final ClassReader reader;
+        try {
+            reader = new ClassReader(Mk54.class.getName());
+        } catch (final Exception ex) {
+            throw new ClassCreationException("Failed to create class", ex);
+        }
+        final ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES);
+
+        final ClassVisitor cv = new ClassVisitor(ASM5, classWriter) {
+            @Override
+            public void visitEnd() {
+                generateExecuteMethod(operations, this.cv);
+                super.visitEnd();
+            }
+
+        };
+
+        reader.accept(cv, 0);
+
+        return classWriter.toByteArray();
+
     }
 }

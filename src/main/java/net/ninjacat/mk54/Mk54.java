@@ -138,9 +138,9 @@ public class Mk54 {
      */
     private void testAsm() {
         if (this.entryMode == MANTISSA) {
-            mantissaDigitEntry(8);
+            negateMantissa();
         } else {
-            exponentDigitEntry(8);
+            negateExponent();
         }
     }
 

@@ -115,7 +115,7 @@ public class CodeGeneratorTest {
         execute(mk54);
         final float x = getX(mk54);
 
-        assertThat(x, is(13e-2f));
+        assertThat(x, is(13e-24f));
     }
 
 
