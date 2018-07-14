@@ -90,7 +90,8 @@ public class Mk54 {
      */
     @VisibleForTesting
     void exponentDigitEntry(final int digit) {
-        this.xExponent = Math.abs(this.xExponent) % 10 * 10 + digit;
+        final int sign = this.xExponent >= 0 ? 1 : -1;
+        this.xExponent = sign * (Math.abs(this.xExponent) % 10 * 10 + digit);
         makeXRegister();
     }
 
@@ -116,14 +117,6 @@ public class Mk54 {
     void negateMantissa() {
         this.xMantissa = -this.xMantissa;
         makeXRegister();
-    }
-
-    void digitEntry(final int digit) {
-        if (this.entryMode == MANTISSA) {
-            mantissaDigitEntry(digit);
-        } else {
-            exponentDigitEntry(digit);
-        }
     }
 
     /**

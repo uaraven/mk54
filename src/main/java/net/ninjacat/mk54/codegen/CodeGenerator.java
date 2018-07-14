@@ -43,7 +43,7 @@ class CodeGenerator {
             .put(DIGIT_8, digit(8))
             .put(DIGIT_9, digit(9))
             .put(DECIMAL_POINT, CodeGenerator::decimal)
-            .put(NEG, CodeGenerator::changeSign)
+            .put(NEG, CodeGenerator::negateSign)
             .put(EXP, CodeGenerator::startExponent)
             .put(ENTER, CodeGenerator::enterNumber)
             .put(CX, CodeGenerator::clearX)
@@ -53,6 +53,35 @@ class CodeGenerator {
         super();
     }
 
+
+    private static void generateExecuteMethod(final List<String> operations, final ClassVisitor classWriter) {
+        final MethodVisitor executeMethod = classWriter.visitMethod(Opcodes.ACC_PUBLIC, "execute", "()V", null, null);
+        executeMethod.visitCode();
+        final Label startLabel = new Label();
+        executeMethod.visitLabel(startLabel);
+
+        // Prepare context
+        final CodeGenContext context = new CodeGenContext(operations, classWriter, executeMethod);
+
+        for (final String operation : operations) {
+            generateOperandAddressLabel(executeMethod, context);
+            if (OPERATION_CODEGEN.containsKey(operation)) {
+                OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
+            } else {
+                throw new UnknownOperationException(operation);
+            }
+        }
+
+        executeMethod.visitInsn(Opcodes.RETURN);
+        final Label finalLabel = new Label();
+        executeMethod.visitLabel(finalLabel);
+        executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
+        executeMethod.visitMaxs(0, 0);
+        executeMethod.visitEnd();
+
+        classWriter.visitEnd();
+    }
+
     /**
      * Generates a function which creates a code to add a digit to register X
      *
@@ -60,7 +89,6 @@ class CodeGenerator {
      * @return {@link OperationCodeGenerator} which generates digit-adding code
      * <p>
      * TODO: Add another flag to check if new digit should reset register X first. This flag should be set by all operations except for digit entry
-     * TODO: Figure out stack frames, current generated code fails on stack frame validation (consider switching to Java 5 target?)
      */
     private static OperationCodeGenerator digit(final int digit) {
         return (mv, context) -> {
@@ -84,6 +112,35 @@ class CodeGenerator {
             mv.visitLabel(exitLabel);
             mv.visitFrame(F_SAME, 0, null, 0, null);
         };
+    }
+
+    /**
+     * Generates code for sign negation
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void negateSign(final MethodVisitor mv, final CodeGenContext context) {
+        // check what sign needs changing, either mantissa or exponent
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
+
+        final Label exponentNegationBranch = new Label();
+        mv.visitJumpInsn(IFNE, exponentNegationBranch);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "negateMantissa", "()V", false);
+        final Label exitPoint = new Label();
+        mv.visitJumpInsn(Opcodes.GOTO, exitPoint);
+
+        // change exponent sign - call negateExponent() method
+        mv.visitLabel(exponentNegationBranch);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "negateExponent", "()V", false);
+
+        mv.visitLabel(exitPoint);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -120,36 +177,30 @@ class CodeGenerator {
         mv.visitLabel(opLabel);
     }
 
-    /**
-     * Generates code for sign negation
-     *
-     * @param mv      Generated method visitor
-     * @param context Code generation context
-     */
-    private static void changeSign(final MethodVisitor mv, final CodeGenContext context) {
-        // check what sign needs changing, either mantissa or exponent
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, ENTRY_MODE, "I");
+    byte[] compile(final String operationsStr) {
+        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
 
-        final Label exponentNegationBranch = new Label();
-        mv.visitJumpInsn(IFNE, exponentNegationBranch);
+        // Set up ASM
+        final ClassReader reader;
+        try {
+            reader = new ClassReader(Mk54.class.getName());
+        } catch (final Exception ex) {
+            throw new ClassCreationException("Failed to create class", ex);
+        }
+        final ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
 
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "negateMantissa", "()V", false);
-        final Label exitPoint = new Label();
-        mv.visitJumpInsn(Opcodes.GOTO, exitPoint);
+        final ClassVisitor cv = new ClassVisitor(ASM6, classWriter) {
+            @Override
+            public void visitEnd() {
+                generateExecuteMethod(operations, this.cv);
+                super.visitEnd();
+            }
 
-        // change exponent sign - call negateExponent() method
-        mv.visitLabel(exponentNegationBranch);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "negateExponent", "()V", false);
+        };
 
-        mv.visitLabel(exitPoint);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
+        reader.accept(cv, 0);
 
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKESPECIAL, CLASS_NAME, "makeXRegister", "()V", false);
+        return classWriter.toByteArray();
     }
 
 
@@ -205,58 +256,4 @@ class CodeGenerator {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
     }
 
-    private static void generateExecuteMethod(final List<String> operations, final ClassVisitor classWriter) {
-        final MethodVisitor executeMethod = classWriter.visitMethod(Opcodes.ACC_PUBLIC, "execute", "()V", null, null);
-        executeMethod.visitCode();
-        final Label startLabel = new Label();
-        executeMethod.visitLabel(startLabel);
-
-        // Prepare context
-        final CodeGenContext context = new CodeGenContext(operations, classWriter, executeMethod);
-
-        for (final String operation : operations) {
-            generateOperandAddressLabel(executeMethod, context);
-            if (OPERATION_CODEGEN.containsKey(operation)) {
-                OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
-            } else {
-                throw new UnknownOperationException(operation);
-            }
-        }
-
-        executeMethod.visitInsn(Opcodes.RETURN);
-        final Label finalLabel = new Label();
-        executeMethod.visitLabel(finalLabel);
-        executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
-        executeMethod.visitMaxs(0, 0);
-        executeMethod.visitEnd();
-
-        classWriter.visitEnd();
-    }
-
-    byte[] compile(final String operationsStr) {
-        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
-
-        // Set up ASM
-        final ClassReader reader;
-        try {
-            reader = new ClassReader(Mk54.class.getName());
-        } catch (final Exception ex) {
-            throw new ClassCreationException("Failed to create class", ex);
-        }
-        final ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES);
-
-        final ClassVisitor cv = new ClassVisitor(ASM5, classWriter) {
-            @Override
-            public void visitEnd() {
-                generateExecuteMethod(operations, this.cv);
-                super.visitEnd();
-            }
-
-        };
-
-        reader.accept(cv, 0);
-
-        return classWriter.toByteArray();
-
-    }
 }

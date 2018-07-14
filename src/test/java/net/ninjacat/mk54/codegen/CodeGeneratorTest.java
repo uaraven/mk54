@@ -93,13 +93,14 @@ public class CodeGeneratorTest {
                 DIGIT_1,
                 DIGIT_3,
                 EXP,
-                DIGIT_2
+                DIGIT_2,
+                DIGIT_5
         ));
 
         execute(mk54);
         final float x = getX(mk54);
 
-        assertThat(x, is(13e2f));
+        assertThat(x, is(13e25f));
     }
 
     @Test
@@ -109,13 +110,14 @@ public class CodeGeneratorTest {
                 DIGIT_3,
                 EXP,
                 DIGIT_2,
-                NEG
+                NEG,
+                DIGIT_6
         ));
 
         execute(mk54);
         final float x = getX(mk54);
 
-        assertThat(x, is(13e-24f));
+        assertThat(x, is(13e-26f));
     }
 
 
