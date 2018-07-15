@@ -20,6 +20,9 @@ public final class Opcode {
     public static final String ENTER = "0E";
     public static final String RESTORE_X = "0F";
 
+    public static final String ADD = "10";
+    public static final String MUL = "12";
+
     private Opcode() {
     }
 }

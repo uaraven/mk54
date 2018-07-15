@@ -75,6 +75,7 @@ public class Mk54 {
         return this.x1;
     }
 
+
     /**
      * Main method for running this class from command line.
      * <p>
@@ -141,11 +142,7 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        this.resetX = true;
-        if (this.resetX) {
-            this.xMantissa = 0;
-            this.xExponent = 0;
-        }
+        this.x = x + y;
     }
 
     /**

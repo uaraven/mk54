@@ -19,6 +19,7 @@ import static org.objectweb.asm.Opcodes.*;
 class CodeGenerator {
 
     private static final String REGISTER_X = "x";
+    private static final String REGISTER_X1 = "x1";
     private static final String REGISTER_Z = "z";
     private static final String REGISTER_T = "t";
     private static final String REGISTER_Y = "y";
@@ -47,6 +48,9 @@ class CodeGenerator {
             .put(EXP, CodeGenerator::startExponent)
             .put(ENTER, CodeGenerator::enterNumber)
             .put(CX, CodeGenerator::clearX)
+            .put(RESTORE_X, CodeGenerator::restoreX)
+            .put(ADD, CodeGenerator::add)
+            .put(MUL, CodeGenerator::mul)
             .build();
 
     CodeGenerator() {
@@ -80,6 +84,43 @@ class CodeGenerator {
         executeMethod.visitEnd();
 
         classWriter.visitEnd();
+    }
+
+
+    /**
+     * Generates a label for each program step. This allows easy goto/conditional jmp implementation
+     *
+     * @param mv      {@link MethodVisitor} for generated method
+     * @param context Code generating context
+     */
+    private static void generateOperandAddressLabel(final MethodVisitor mv, final CodeGenContext context) {
+        final Label opLabel = context.getLabelForAddress(context.getCurrentAddress());
+        mv.visitLabel(opLabel);
+    }
+
+    /**
+     * Enters number in register X cycling the stack
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void enterNumber(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_T, "F");
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+
+        prepareXForReset(mv, context);
     }
 
     /**
@@ -162,69 +203,17 @@ class CodeGenerator {
     }
 
     /**
-     * Enters number in register X cycling the stack
+     * Restores X register from X1 register
      *
      * @param mv      Generated method visitor
      * @param context Code generation context
      */
-    private static void enterNumber(final MethodVisitor mv, final CodeGenContext context) {
+    private static void restoreX(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_T, "F");
-
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
-
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
-
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(ICONST_1);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X1, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
     }
-
-    /**
-     * Generates a label for each program step. This allows easy goto/conditional jmp implementation
-     *
-     * @param mv      {@link MethodVisitor} for generated method
-     * @param context Code generating context
-     */
-    private static void generateOperandAddressLabel(final MethodVisitor mv, final CodeGenContext context) {
-        final Label opLabel = context.getLabelForAddress(context.getCurrentAddress());
-        mv.visitLabel(opLabel);
-    }
-
-    byte[] compile(final String operationsStr) {
-        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
-
-        // Set up ASM
-        final ClassReader reader;
-        try {
-            reader = new ClassReader(Mk54.class.getName());
-        } catch (final Exception ex) {
-            throw new ClassCreationException("Failed to create class", ex);
-        }
-        final ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
-
-        final ClassVisitor cv = new ClassVisitor(ASM6, classWriter) {
-            @Override
-            public void visitEnd() {
-                generateExecuteMethod(operations, this.cv);
-                super.visitEnd();
-            }
-
-        };
-
-        reader.accept(cv, 0);
-
-        return classWriter.toByteArray();
-    }
-
 
     /**
      * Changes decimalFactor to 10 effectively switching entry mode to fractional part
@@ -278,4 +267,111 @@ class CodeGenerator {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
     }
 
+    /**
+     * Moves stack down from T to Z and Z  to Y. This must be executed for every operation which
+     * combines Y and X and puts result to X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void stackDown(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_T, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
+    }
+
+    /**
+     * Saves X to X1
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void saveX(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X1, "F");
+    }
+
+    /**
+     * Adds X to Y
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void add(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(FADD);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        stackDown(mv, context);
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Multiplies X by Y
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void mul(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(FMUL);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        stackDown(mv, context);
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Helper method called on all operations. Sets resetX flag to true
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void prepareXForReset(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
+    }
+
+    byte[] compile(final String operationsStr) {
+        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
+
+        // Set up ASM
+        final ClassReader reader;
+        try {
+            reader = new ClassReader(Mk54.class.getName());
+        } catch (final Exception ex) {
+            throw new ClassCreationException("Failed to create class", ex);
+        }
+        final ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
+
+        final ClassVisitor cv = new ClassVisitor(ASM6, classWriter) {
+            @Override
+            public void visitEnd() {
+                generateExecuteMethod(operations, this.cv);
+                super.visitEnd();
+            }
+
+        };
+
+        reader.accept(cv, 0);
+
+        return classWriter.toByteArray();
+    }
 }
