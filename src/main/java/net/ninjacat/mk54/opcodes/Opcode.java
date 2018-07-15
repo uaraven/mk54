@@ -21,7 +21,9 @@ public final class Opcode {
     public static final String RESTORE_X = "0F";
 
     public static final String ADD = "10";
+    public static final String SUB = "11";
     public static final String MUL = "12";
+    public static final String DIV = "13";
 
     private Opcode() {
     }

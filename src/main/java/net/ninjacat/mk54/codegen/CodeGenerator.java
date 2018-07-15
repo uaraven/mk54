@@ -50,7 +50,9 @@ class CodeGenerator {
             .put(CX, CodeGenerator::clearX)
             .put(RESTORE_X, CodeGenerator::restoreX)
             .put(ADD, CodeGenerator::add)
+            .put(SUB, CodeGenerator::sub)
             .put(MUL, CodeGenerator::mul)
+            .put(DIV, CodeGenerator::div)
             .build();
 
     CodeGenerator() {
@@ -332,6 +334,44 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitInsn(FMUL);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        stackDown(mv, context);
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Divides Y by X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void div(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(FDIV);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        stackDown(mv, context);
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Subtracts X from Y
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void sub(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(FSUB);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
         stackDown(mv, context);
         prepareXForReset(mv, context);
