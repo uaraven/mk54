@@ -134,4 +134,22 @@ public class DataEntryTests {
 
         assertThat(x, is(42f));
     }
+
+
+    @Test
+    public void shouldSwapXY() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_1,
+                ENTER,
+                DIGIT_3,
+                SWAP
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+        final float y = mk54.getY();
+
+        assertThat(x, is(1f));
+        assertThat(y, is(3f));
+    }
 }

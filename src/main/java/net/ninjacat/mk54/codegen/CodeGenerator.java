@@ -1,5 +1,6 @@
 package net.ninjacat.mk54.codegen;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.ninjacat.mk54.Mk54;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.ninjacat.mk54.opcodes.Opcode.*;
+import static net.ninjacat.mk54.opcodes.Opcode.SWAP;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
@@ -53,6 +55,11 @@ class CodeGenerator {
             .put(SUB, CodeGenerator::sub)
             .put(MUL, CodeGenerator::mul)
             .put(DIV, CodeGenerator::div)
+            .put(SWAP, CodeGenerator::swapXy)
+            .put(TEN_TO_POWER_X, CodeGenerator::tenToPowerX)
+            .put(E_TO_POWER_X, CodeGenerator::eToPowerX)
+            .put(LOG10, CodeGenerator::log)
+            .put(LN, CodeGenerator::ln)
             .build();
 
     CodeGenerator() {
@@ -139,6 +146,7 @@ class CodeGenerator {
             final Label noReset = new Label();
             mv.visitJumpInsn(IFEQ, noReset);
 
+            // Clear X if resetX flag is set
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(FCONST_0);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");
@@ -378,6 +386,99 @@ class CodeGenerator {
     }
 
     /**
+     * Swaps X and Y
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void swapXy(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Calculates ten to power of number in X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void tenToPowerX(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitLdcInsn(10.0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(F2D);
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "pow", "(DD)D", false);
+        mv.visitInsn(D2F);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Calculates e to power of number in X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void eToPowerX(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitLdcInsn(Math.E);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(F2D);
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "pow", "(DD)D", false);
+        mv.visitInsn(D2F);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Calculates log base 10 of number in X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void log(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(F2D);
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "log10", "(D)D", false);
+        mv.visitInsn(D2F);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Calculates natural logarithm of number in X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void ln(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(F2D);
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "log", "(D)D", false);
+        mv.visitInsn(D2F);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
+    }
+
+
+    /**
      * Helper method called on all operations. Sets resetX flag to true
      *
      * @param mv      Generated method visitor
@@ -390,7 +491,8 @@ class CodeGenerator {
     }
 
     byte[] compile(final String operationsStr) {
-        final List<String> operations = ImmutableList.copyOf(operationsStr.split("\\s+"));
+        final List<String> operations = ImmutableList.copyOf(
+                Splitter.onPattern("\\s+").omitEmptyStrings().trimResults().split(operationsStr));
 
         // Set up ASM
         final ClassReader reader;

@@ -142,7 +142,7 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        this.x = x + y;
+        this.x = (float) Math.log(this.x);
     }
 
     /**

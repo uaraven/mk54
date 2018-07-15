@@ -6,7 +6,7 @@ import static net.ninjacat.mk54.opcodes.Opcode.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ArithmeticTests {
+public class CalculationTests {
 
 
     @Test
@@ -116,6 +116,66 @@ public class ArithmeticTests {
         assertThat(x, is(-5f));
     }
 
+
+    @Test
+    public void shouldCalculateTenToPowerOfX() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_1,
+                DECIMAL_POINT,
+                DIGIT_3,
+                TEN_TO_POWER_X
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(19.952621f));
+    }
+
+    @Test
+    public void shouldCalculateEToPowerOfX() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_1,
+                DECIMAL_POINT,
+                DIGIT_5,
+                E_TO_POWER_X
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(4.481689f));
+    }
+
+    @Test
+    public void shouldCalculateLog10() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_1,
+                DIGIT_0,
+                DIGIT_0,
+                DIGIT_0,
+                LOG10
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(3f));
+    }
+
+    @Test
+    public void shouldCalculateLog() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_2,
+                DIGIT_0,
+                LN
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(2.9957323f));
+    }
 
     @Test
     public void shouldResetXAfterOperation() throws Exception {

@@ -25,6 +25,12 @@ public final class Opcode {
     public static final String MUL = "12";
     public static final String DIV = "13";
 
+    public static final String SWAP = "14";
+    public static final String TEN_TO_POWER_X = "15";
+    public static final String E_TO_POWER_X = "16";
+    public static final String LOG10 = "17";
+    public static final String LN = "18";
+
     private Opcode() {
     }
 }
