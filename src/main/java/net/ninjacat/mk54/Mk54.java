@@ -153,11 +153,13 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        this.x1 = this.x;
-        x = y;
-        y = z;
-        z = t;
-        t = x1;
+        if (x < 0) {
+            x = -1;
+        } else if (x > 0) {
+            x = 1;
+        } else {
+            x = 0;
+        }
     }
 
     /**

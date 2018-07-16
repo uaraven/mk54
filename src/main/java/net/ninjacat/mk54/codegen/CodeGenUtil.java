@@ -87,4 +87,5 @@ final class CodeGenUtil {
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, ENTRY_MODE, "I");
     }
+
 }

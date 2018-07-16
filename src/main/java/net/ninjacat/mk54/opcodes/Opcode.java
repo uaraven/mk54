@@ -44,6 +44,13 @@ public final class Opcode {
     public static final String INV = "23";
     public static final String X_POW_Y = "24";
     public static final String ROT = "25";
+    public static final String MIN_TO_DEG = "26";
+    public static final String FAIL1 = "27";
+    public static final String FAIL2 = "28";
+    public static final String FAIL3 = "29";
+
+    public static final String ABS = "31";
+    public static final String SIGN = "32";
 
     private Opcode() {
     }

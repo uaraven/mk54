@@ -381,4 +381,40 @@ public class CalculationTests {
         assertThat(resetX, is(true));
     }
 
+    @Test
+    public void shouldCalculateAbsoluteValue() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                ABS
+        ));
+
+        mk54.setX(-5);
+        mk54.execute();
+        assertThat(mk54.getX(), is(5f));
+
+        mk54.setX(12);
+        mk54.execute();
+        assertThat(mk54.getX(), is(12f));
+
+    }
+
+
+    @Test
+    public void shouldDetermineSignOfX() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                SIGN
+        ));
+
+        mk54.setX(-5);
+        mk54.execute();
+        assertThat(mk54.getX(), is(-1f));
+
+        mk54.setX(12);
+        mk54.execute();
+        assertThat(mk54.getX(), is(1f));
+
+        mk54.setX(0);
+        mk54.execute();
+        assertThat(mk54.getX(), is(0f));
+    }
+
 }

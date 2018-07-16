@@ -379,4 +379,68 @@ final class MathGen {
         stackDown(mv, context);
         prepareXForReset(mv, context);
     }
+
+    /**
+     * Absolute value of X
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void abs(final MethodVisitor mv, final CodeGenContext context) {
+        CodeGenUtil.saveX(mv, context);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "abs", "(F)F", false);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Determine sign of the value in X. Result is -1 if number is negative, 1 if it is positive or 0 if it is equal to 0
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void sign(final MethodVisitor mv, final CodeGenContext context) {
+        CodeGenUtil.saveX(mv, context);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(FCONST_0);
+        mv.visitInsn(FCMPG);
+        final Label positiveOrZeroBranch = new Label();
+        mv.visitJumpInsn(IFGE, positiveOrZeroBranch);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitLdcInsn(-1f);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        final Label exit = new Label();
+        mv.visitJumpInsn(GOTO, exit);
+
+        mv.visitLabel(positiveOrZeroBranch);
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(FCONST_0);
+        mv.visitInsn(FCMPL);
+        final Label zeroBranch = new Label();
+        mv.visitJumpInsn(IFLE, zeroBranch);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(FCONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitJumpInsn(GOTO, exit);
+
+        mv.visitLabel(zeroBranch);
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(FCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitLabel(exit);
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+
+        prepareXForReset(mv, context);
+    }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_DESCRIPTOR;
 import static net.ninjacat.mk54.opcodes.Opcode.*;
 import static org.objectweb.asm.Opcodes.ASM6;
+import static org.objectweb.asm.Opcodes.F_SAME;
 
 /**
  * Generates Java byte code for MK program.
@@ -58,6 +59,11 @@ class CodeGenerator {
             .put(INV, MathGen::inv)
             .put(X_POW_Y, MathGen::xPowY)
             .put(ROT, RegisterGen::rotate)
+            .put(FAIL1, CodeGenerator::fail)
+            .put(FAIL2, CodeGenerator::fail)
+            .put(FAIL3, CodeGenerator::fail)
+            .put(ABS, MathGen::abs)
+            .put(SIGN, MathGen::sign)
             .build();
 
 
@@ -106,7 +112,27 @@ class CodeGenerator {
         mv.visitLabel(opLabel);
     }
 
+    /**
+     * Throws runtime exception with message "Error"
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    private static void fail(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitTypeInsn(Opcodes.NEW, "java/lang/RuntimeException");
+        mv.visitInsn(Opcodes.DUP);
+        mv.visitLdcInsn("Error");
+        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "(Ljava/lang/String;)V", false);
+        mv.visitInsn(Opcodes.ATHROW);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
+    }
 
+    /**
+     * Compiles MK-series operations into Java byte code.
+     *
+     * @param operationsStr String of operation codes separated by whitespace
+     * @return byte array containing code fo generated class
+     */
     byte[] compile(final String operationsStr) {
         final List<String> operations = ImmutableList.copyOf(
                 Splitter.onPattern("\\s+").omitEmptyStrings().trimResults().split(operationsStr));
@@ -126,7 +152,6 @@ class CodeGenerator {
                 generateExecuteMethod(operations, this.cv);
                 super.visitEnd();
             }
-
         };
 
         reader.accept(cv, 0);
