@@ -152,4 +152,29 @@ public class DataEntryTests {
         assertThat(x, is(1f));
         assertThat(y, is(3f));
     }
+
+    @Test
+    public void shouldRotateStack() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                ROT
+        ));
+
+        mk54.setX1(10);
+        mk54.setX(1);
+        mk54.setY(2);
+        mk54.setZ(3);
+        mk54.setT(4);
+        mk54.execute();
+        final float x = mk54.getX();
+        final float y = mk54.getY();
+        final float z = mk54.getZ();
+        final float t = mk54.getT();
+        final float x1 = mk54.getX1();
+
+        assertThat(x, is(2f));
+        assertThat(y, is(3f));
+        assertThat(z, is(4f));
+        assertThat(t, is(1f));
+        assertThat(x1, is(1f));
+    }
 }

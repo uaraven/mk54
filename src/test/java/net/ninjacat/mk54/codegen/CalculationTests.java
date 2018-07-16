@@ -292,7 +292,79 @@ public class CalculationTests {
         assertThat((double) x, closeTo(50, 0.00001));
     }
 
+    @Test
+    public void shouldPutPiIntoX() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_0,
+                DECIMAL_POINT,
+                DIGIT_7,
+                DIGIT_0,
+                DIGIT_7,
+                PI
+        ));
 
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, is(closeTo(Math.PI, 0.0000001)));
+
+    }
+
+    @Test
+    public void shouldCalculateSquareRoot() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_2,
+                DIGIT_5,
+                SQRT
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, is(closeTo(5f, 0.0000001)));
+    }
+
+    @Test
+    public void shouldCalculatePow2() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_5,
+                POW2
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, is(closeTo(25f, 0.0000001)));
+    }
+
+    @Test
+    public void shouldCalculateInv() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_2,
+                INV
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, is(closeTo(0.5f, 0.0000001)));
+    }
+
+    @Test
+    public void shouldCalculateXPowY() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_2,
+                ENTER,
+                DIGIT_5,
+                X_POW_Y
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, is(closeTo(25f, 0.0000001)));
+
+    }
 
     @Test
     public void shouldResetXAfterOperation() throws Exception {

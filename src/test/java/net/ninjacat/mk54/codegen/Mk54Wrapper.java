@@ -34,22 +34,30 @@ class Mk54Wrapper {
         setRegister("x1", value);
     }
 
-    private void setRegister(final String register, final float value) throws Exception {
-        final Field x = this.mk54.getClass().getDeclaredField(register);
-        x.setAccessible(true);
-        x.setFloat(this.mk54, value);
-    }
-
     float getY() throws Exception {
         return getRegister("y");
+    }
+
+    void setX(final float value) throws Exception {
+        setRegister("x", value);
     }
 
     float getZ() throws Exception {
         return getRegister("z");
     }
 
+    private void setRegister(final String register, final float value) throws Exception {
+        final Field x = this.mk54.getClass().getDeclaredField(register);
+        x.setAccessible(true);
+        x.setFloat(this.mk54, value);
+    }
+
     float getT() throws Exception {
         return getRegister("t");
+    }
+
+    void setY(final float value) throws Exception {
+        setRegister("y", value);
     }
 
     public int getRadGradDeg() throws Exception {
@@ -69,5 +77,14 @@ class Mk54Wrapper {
         x.setAccessible(true);
         return x.getBoolean(this.mk54);
     }
+
+    void setZ(final float value) throws Exception {
+        setRegister("z", value);
+    }
+
+    void setT(final float value) throws Exception {
+        setRegister("t", value);
+    }
+
 
 }

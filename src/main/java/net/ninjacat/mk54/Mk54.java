@@ -153,16 +153,11 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        switch (this.radGradDeg) {
-            case RAD:
-                this.x = (float) Math.asin(this.x);
-                break;
-            case DEG:
-                this.x = (float) Math.toDegrees(Math.asin(this.x));
-                break;
-            case GRAD:
-                this.x = (float) (200d * Math.asin(this.x) / Math.PI);
-        }
+        this.x1 = this.x;
+        x = y;
+        y = z;
+        z = t;
+        t = x1;
     }
 
     /**

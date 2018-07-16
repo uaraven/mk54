@@ -39,6 +39,11 @@ public final class Opcode {
     public static final String TAN = "1E";
 
     public static final String PI = "20";
+    public static final String SQRT = "21";
+    public static final String POW2 = "22";
+    public static final String INV = "23";
+    public static final String X_POW_Y = "24";
+    public static final String ROT = "25";
 
     private Opcode() {
     }
