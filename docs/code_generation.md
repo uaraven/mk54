@@ -76,4 +76,12 @@ while exponent sign change is done in `negateExponent()` method.
 
 After `В↑` operation is performed value from register X is copied to register Y. Register X still contains the same
 value, but any digit operation will reset register X and start from scratch. This is implemented using flag `resetX`, 
-which is checked on each digit operation and set to `true` on all operations not related to number entry. 
+which is checked on each digit operation and set to `true` on all operations not related to number entry.
+
+### Register size
+
+Original MK-series registers were limited by their displays which could only show 8 digits of significand. Float data 
+type does not have such limitation, and `mk54` also does not limit its registers to 8 digits. This means that unlike
+in calculator one can create a program which enters more than 8 digits into a register and it will work. There is no
+cutting off input after first 8 digits. 
+ 

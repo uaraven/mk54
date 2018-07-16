@@ -1,8 +1,10 @@
 package net.ninjacat.mk54.codegen;
 
+import net.ninjacat.mk54.Mk54;
 import org.junit.Test;
 
 import static net.ninjacat.mk54.opcodes.Opcode.*;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -176,6 +178,121 @@ public class CalculationTests {
 
         assertThat(x, is(2.9957323f));
     }
+
+    @Test
+    public void shouldCalculateSinInRadians() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_0,
+                DECIMAL_POINT,
+                DIGIT_5,
+                SIN
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(0.47942555f));
+    }
+
+    @Test
+    public void shouldCalculateSinInDegrees() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_4,
+                DIGIT_0,
+                SIN
+        ));
+
+        mk54.setRadGradDeg(Mk54.DEG);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(0.64278764f));
+    }
+
+    @Test
+    public void shouldCalculateSinInGrads() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_5,
+                DIGIT_0,
+                SIN
+        ));
+
+        mk54.setRadGradDeg(Mk54.GRAD);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(0.70710678118f));
+    }
+
+    @Test
+    public void shouldCalculateASinInRadians() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_0,
+                DECIMAL_POINT,
+                DIGIT_4,
+                DIGIT_7,
+                DIGIT_9,
+                DIGIT_4,
+                DIGIT_2,
+                DIGIT_5,
+                DIGIT_5,
+                DIGIT_5,
+                ARCSIN
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, closeTo(0.5, 0.00001));
+    }
+
+    @Test
+    public void shouldCalculateASinInDegrees() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_0,
+                DECIMAL_POINT,
+                DIGIT_6,
+                DIGIT_4,
+                DIGIT_2,
+                DIGIT_7,
+                DIGIT_8,
+                DIGIT_7,
+                DIGIT_6,
+                DIGIT_4,
+                ARCSIN
+        ));
+
+        mk54.setRadGradDeg(Mk54.DEG);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, closeTo(40, 0.00001));
+    }
+
+    @Test
+    public void shouldCalculateASinInGrads() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT_0,
+                DECIMAL_POINT,
+                DIGIT_7,
+                DIGIT_0,
+                DIGIT_7,
+                DIGIT_1,
+                DIGIT_0,
+                DIGIT_6,
+                DIGIT_7,
+                DIGIT_8,
+                ARCSIN
+        ));
+
+        mk54.setRadGradDeg(Mk54.GRAD);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat((double) x, closeTo(50, 0.00001));
+    }
+
+
 
     @Test
     public void shouldResetXAfterOperation() throws Exception {

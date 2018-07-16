@@ -31,6 +31,15 @@ public final class Opcode {
     public static final String LOG10 = "17";
     public static final String LN = "18";
 
+    public static final String ARCSIN = "19";
+    public static final String ARCCOS = "1A";
+    public static final String ARCTAN = "1B";
+    public static final String SIN = "1C";
+    public static final String COS = "1D";
+    public static final String TAN = "1E";
+
+    public static final String PI = "20";
+
     private Opcode() {
     }
 }

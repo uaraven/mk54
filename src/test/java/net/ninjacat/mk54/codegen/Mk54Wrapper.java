@@ -3,11 +3,11 @@ package net.ninjacat.mk54.codegen;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class Mk54Wrapper {
+class Mk54Wrapper {
 
     private Object mk54;
 
-    public Mk54Wrapper(final Object mk54) {
+    Mk54Wrapper(final Object mk54) {
         this.mk54 = mk54;
     }
 
@@ -50,6 +50,18 @@ public class Mk54Wrapper {
 
     float getT() throws Exception {
         return getRegister("t");
+    }
+
+    public int getRadGradDeg() throws Exception {
+        final Field x = this.mk54.getClass().getDeclaredField("radGradDeg");
+        x.setAccessible(true);
+        return x.getInt(this.mk54);
+    }
+
+    public void setRadGradDeg(final int value) throws Exception {
+        final Field x = this.mk54.getClass().getDeclaredField("radGradDeg");
+        x.setAccessible(true);
+        x.setInt(this.mk54, value);
     }
 
     boolean getResetX() throws Exception {

@@ -9,17 +9,24 @@ import java.util.Arrays;
  * Template class for Mk54 runnable program
  * <p>
  * This class contains operations stack, memory registers and helper methods.
- *
+ * <p>
  * During bytecode generation new class will be created based on this class but with execute() method containing
  * actual bytecode generated from mk hex code.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Mk54 {
 
+    private static final int EXPONENT = 1;
+    public static final int RAD = 0;
+    public static final int GRAD = 1;
+
     private static final int MANTISSA = 0;
+    public static final int DEG = 2;
     /**
      * Memory registers
      */
     private final float[] memory;
+
     /**
      * Switches between entering digits for mantissa or exponent
      */
@@ -32,6 +39,10 @@ public class Mk54 {
      */
     private float x, y, z, t;
     private float x1;
+    /**
+     * rad-grad-deg switch
+     */
+    private int radGradDeg = RAD;
 
     /**
      * Helper variables for managing X register
@@ -142,7 +153,16 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        this.x = (float) Math.log(this.x);
+        switch (this.radGradDeg) {
+            case RAD:
+                this.x = (float) Math.asin(this.x);
+                break;
+            case DEG:
+                this.x = (float) Math.toDegrees(Math.asin(this.x));
+                break;
+            case GRAD:
+                this.x = (float) (200d * Math.asin(this.x) / Math.PI);
+        }
     }
 
     /**

@@ -34,6 +34,7 @@ class CodeGenerator {
     private static final String CLASS_NAME = "net/ninjacat/mk54/Mk54";
     private static final String CLASS_DESCRIPTOR = "L" + CLASS_NAME + ";";
 
+    public static final String JAVA_LANG_MATH = "java/lang/Math";
     private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = ImmutableMap.<String, OperationCodeGenerator>builder()
             .put(DIGIT_0, digit(0))
             .put(DIGIT_1, digit(1))
@@ -60,7 +61,14 @@ class CodeGenerator {
             .put(E_TO_POWER_X, CodeGenerator::eToPowerX)
             .put(LOG10, CodeGenerator::log)
             .put(LN, CodeGenerator::ln)
+            .put(ARCSIN, generateArcTrig("asin"))
+            .put(ARCCOS, generateArcTrig("acos"))
+            .put(ARCTAN, generateArcTrig("atan"))
+            .put(SIN, generateTrig("sin"))
+            .put(COS, generateTrig("cos"))
+            .put(TAN, generateTrig("tan"))
             .build();
+
 
     CodeGenerator() {
         super();
@@ -416,7 +424,7 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitInsn(F2D);
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "pow", "(DD)D", false);
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "pow", "(DD)D", false);
         mv.visitInsn(D2F);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
         prepareXForReset(mv, context);
@@ -435,7 +443,7 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitInsn(F2D);
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "pow", "(DD)D", false);
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "pow", "(DD)D", false);
         mv.visitInsn(D2F);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
         prepareXForReset(mv, context);
@@ -453,7 +461,7 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitInsn(F2D);
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "log10", "(D)D", false);
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "log10", "(D)D", false);
         mv.visitInsn(D2F);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
         prepareXForReset(mv, context);
@@ -471,12 +479,135 @@ class CodeGenerator {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitInsn(F2D);
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "log", "(D)D", false);
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "log", "(D)D", false);
         mv.visitInsn(D2F);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
         prepareXForReset(mv, context);
     }
 
+    /**
+     * Generates code for call of single-argument trigonometry function from Math class (sin/cos/tan)
+     *
+     * @param function Name of the function
+     * @return {@link OperationCodeGenerator}
+     * <p>
+     * TODO: Use rad-grad-deg switch
+     */
+    private static OperationCodeGenerator generateTrig(final String function) {
+        return (mv, context) -> {
+            saveX(mv, context);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(Opcodes.GETFIELD, "net/ninjacat/mk54/Mk54", "radGradDeg", "I");
+
+            final Label rad = new Label();
+            final Label grad = new Label();
+            final Label deg = new Label();
+            final Label defaultBlock = new Label();
+
+            mv.visitTableSwitchInsn(0, 2, defaultBlock, rad, grad, deg);
+
+            // radians
+            mv.visitLabel(rad);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(Opcodes.F2D);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
+            mv.visitInsn(Opcodes.D2F);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitJumpInsn(Opcodes.GOTO, defaultBlock);
+
+            // degrees
+            mv.visitLabel(deg);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(Opcodes.F2D);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, "toRadians", "(D)D", false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
+            mv.visitInsn(Opcodes.D2F);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitJumpInsn(Opcodes.GOTO, defaultBlock);
+
+            // grads
+            mv.visitLabel(grad);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(Opcodes.F2D);
+            mv.visitLdcInsn(Math.PI);
+            mv.visitInsn(Opcodes.DMUL);
+            mv.visitLdcInsn(200.0);
+            mv.visitInsn(Opcodes.DDIV);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
+            mv.visitInsn(Opcodes.D2F);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
+            mv.visitLabel(defaultBlock);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+
+            prepareXForReset(mv, context);
+        };
+    }
+
+    private static OperationCodeGenerator generateArcTrig(final String function) {
+        return (mv, context) -> {
+            saveX(mv, context);
+
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(Opcodes.GETFIELD, "net/ninjacat/mk54/Mk54", "radGradDeg", "I");
+            final Label rad = new Label();
+            final Label deg = new Label();
+            final Label grad = new Label();
+            final Label defaultBranch = new Label();
+            mv.visitTableSwitchInsn(0, 2, defaultBranch, rad, grad, deg);
+
+            mv.visitLabel(rad);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(Opcodes.F2D);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
+            mv.visitInsn(Opcodes.D2F);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitJumpInsn(Opcodes.GOTO, defaultBranch);
+
+            mv.visitLabel(deg);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(Opcodes.F2D);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, "toDegrees", "(D)D", false);
+            mv.visitInsn(Opcodes.D2F);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitJumpInsn(Opcodes.GOTO, defaultBranch);
+
+            mv.visitLabel(grad);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitLdcInsn(200.0);
+            mv.visitVarInsn(Opcodes.ALOAD, 0);
+            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(Opcodes.F2D);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
+            mv.visitInsn(Opcodes.DMUL);
+            mv.visitLdcInsn(Math.PI);
+            mv.visitInsn(Opcodes.DDIV);
+            mv.visitInsn(Opcodes.D2F);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
+            mv.visitLabel(defaultBranch);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+
+            prepareXForReset(mv, context);
+        };
+    }
 
     /**
      * Helper method called on all operations. Sets resetX flag to true
