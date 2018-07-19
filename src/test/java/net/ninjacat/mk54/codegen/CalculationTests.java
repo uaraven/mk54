@@ -417,4 +417,64 @@ public class CalculationTests {
         assertThat(mk54.getX(), is(0f));
     }
 
+    @Test
+    public void shouldTruncateFractionalPart() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                TRUNC
+        ));
+
+        mk54.setX(6.432f);
+        mk54.execute();
+        assertThat(mk54.getX(), is(6f));
+
+        mk54.setX(-6.432f);
+        mk54.execute();
+        assertThat(mk54.getX(), is(-6f));
+
+    }
+
+    @Test
+    public void shouldRemoveIntegerPart() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                FRAC
+        ));
+
+        mk54.setX(6.432f);
+        mk54.execute();
+        assertThat((double) mk54.getX(), closeTo(0.432f, 0.00001f));
+
+        mk54.setX(-6.432f);
+        mk54.execute();
+        assertThat((double) mk54.getX(), closeTo(-0.432f, 0.00001));
+
+    }
+
+    @Test
+    public void shouldFindMax() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                MAX
+        ));
+
+        mk54.setX(6.432f);
+        mk54.setY(-43);
+        mk54.execute();
+        assertThat((double) mk54.getX(), closeTo(6.432f, 0.00001f));
+
+        mk54.setX(-6.432f);
+        mk54.setY(3);
+        mk54.execute();
+        assertThat((double) mk54.getX(), closeTo(3f, 0.00001));
+
+        mk54.setX(0);
+        mk54.setY(3);
+        mk54.execute();
+        assertThat(mk54.getX(), is(0f));
+
+        mk54.setX(4);
+        mk54.setY(0);
+        mk54.execute();
+        assertThat(mk54.getX(), is(0f));
+    }
+
+
 }

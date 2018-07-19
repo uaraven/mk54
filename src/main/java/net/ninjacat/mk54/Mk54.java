@@ -153,12 +153,10 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        if (x < 0) {
-            x = -1;
-        } else if (x > 0) {
-            x = 1;
-        } else {
+        if (x == 0 || y == 0) {
             x = 0;
+        } else {
+            x = Math.max(x, y);
         }
     }
 

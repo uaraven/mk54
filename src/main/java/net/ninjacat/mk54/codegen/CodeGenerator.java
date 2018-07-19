@@ -64,6 +64,9 @@ class CodeGenerator {
             .put(FAIL3, CodeGenerator::fail)
             .put(ABS, MathGen::abs)
             .put(SIGN, MathGen::sign)
+            .put(TRUNC, MathGen::trunc)
+            .put(FRAC, MathGen::frac)
+            .put(MAX, MathGen::max)
             .build();
 
 

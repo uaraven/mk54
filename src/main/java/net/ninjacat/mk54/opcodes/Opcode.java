@@ -48,9 +48,15 @@ public final class Opcode {
     public static final String FAIL1 = "27";
     public static final String FAIL2 = "28";
     public static final String FAIL3 = "29";
-
+    public static final String MIN_SEC_TO_DEG = "2A";
+    public static final String DEG_TO_MIN_SEC = "30";
     public static final String ABS = "31";
     public static final String SIGN = "32";
+    public static final String DEG_TO_MIN = "33";
+
+    public static final String TRUNC = "34";
+    public static final String FRAC = "35";
+    public static final String MAX = "36";
 
     private Opcode() {
     }

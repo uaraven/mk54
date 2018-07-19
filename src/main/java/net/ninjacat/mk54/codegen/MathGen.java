@@ -22,7 +22,7 @@ final class MathGen {
      */
     static OperationCodeGenerator generateTrig(final String function) {
         return (mv, context) -> {
-            CodeGenUtil.saveX(mv, context);
+            saveX(mv, context);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, "radGradDeg", "I");
 
@@ -82,7 +82,7 @@ final class MathGen {
 
     static OperationCodeGenerator generateArcTrig(final String function) {
         return (mv, context) -> {
-            CodeGenUtil.saveX(mv, context);
+            saveX(mv, context);
 
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, "radGradDeg", "I");
@@ -143,7 +143,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void ln(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -161,7 +161,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void log(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -179,7 +179,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void tenToPowerX(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(10.0);
         mv.visitVarInsn(ALOAD, 0);
@@ -198,7 +198,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void eToPowerX(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(Math.E);
         mv.visitVarInsn(ALOAD, 0);
@@ -217,7 +217,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void sqrt(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -235,7 +235,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void pow2(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -252,7 +252,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void inv(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(FCONST_1);
         mv.visitVarInsn(ALOAD, 0);
@@ -269,7 +269,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void xPowY(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 0);
@@ -311,7 +311,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void add(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
@@ -330,7 +330,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void mul(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
@@ -349,7 +349,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void div(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
@@ -368,7 +368,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void sub(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
@@ -387,7 +387,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void abs(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
@@ -405,7 +405,7 @@ final class MathGen {
      * @param context Code generation context
      */
     static void sign(final MethodVisitor mv, final CodeGenContext context) {
-        CodeGenUtil.saveX(mv, context);
+        saveX(mv, context);
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -443,4 +443,97 @@ final class MathGen {
 
         prepareXForReset(mv, context);
     }
+
+    /**
+     * Truncates fractional part of the number
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void trunc(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+
+        mv.visitInsn(F2I);
+        mv.visitInsn(I2F);
+
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
+        prepareXForReset(mv, context);
+    }
+
+
+    /**
+     * Removes integer part of the number
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void frac(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(F2I);
+        mv.visitInsn(I2F);
+
+        mv.visitInsn(FSUB);
+
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
+        prepareXForReset(mv, context);
+    }
+
+    /**
+     * Finds maximal number of X and Y
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void max(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(Opcodes.FCMPL);
+        final Label xzero = new Label();
+        mv.visitJumpInsn(Opcodes.IFEQ, xzero);
+
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(Opcodes.FCMPL);
+        final Label compare = new Label();
+        mv.visitJumpInsn(Opcodes.IFNE, compare);
+
+        mv.visitLabel(xzero);
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        final Label exit = new Label();
+        mv.visitJumpInsn(Opcodes.GOTO, exit);
+
+        mv.visitLabel(compare);
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, "max", "(FF)F", false);
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitLabel(exit);
+        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+
+        prepareXForReset(mv, context);
+    }
+
 }
