@@ -10,7 +10,11 @@ import static org.objectweb.asm.Opcodes.*;
 /**
  * Code generation for math functions
  */
+@SuppressWarnings("MagicNumber")
 final class MathGen {
+
+    private static final String LAST_RANDOM = "lastRandom";
+
     private MathGen() {
     }
 
@@ -491,7 +495,7 @@ final class MathGen {
     }
 
     /**
-     * Finds maximal number of X and Y
+     * Finds maximal number of X and Y. Replicates a bug in MK-series where 0 is treated as largest number
      *
      * @param mv      Generated method visitor
      * @param context Code generation context
@@ -535,5 +539,62 @@ final class MathGen {
 
         prepareXForReset(mv, context);
     }
+
+    /**
+     * Generates random number in 0..1 range.
+     * <p>
+     * PRN generator formula used in calculators
+     * <p>
+     * ξi+1 = {10(ξi + Y + X7)/3 + 0,404067},
+     * <p>
+     * where ξi+1 is next PRN,
+     * ξi - previous PRN,
+     * Y - modified number in register X (it is not clear how it is modified),
+     * X7 - digit in 7th position of number in register X. positions were numbered from 1
+     *
+     * <p>
+     * Yes, this is a very bad PRNG
+     * </p>
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void rnd(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitLdcInsn(10f);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitInsn(FADD);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKESPECIAL, CLASS_NAME, "getSegment", "()F", false);
+        mv.visitInsn(FADD);
+        mv.visitInsn(FMUL);
+        mv.visitLdcInsn(3.0f);
+        mv.visitInsn(FDIV);
+        mv.visitLdcInsn(0.404067f);
+        mv.visitInsn(FADD);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitInsn(F2I);
+        mv.visitInsn(I2F);
+        mv.visitInsn(FSUB);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
+
+        prepareXForReset(mv, context);
+    }
+
 
 }

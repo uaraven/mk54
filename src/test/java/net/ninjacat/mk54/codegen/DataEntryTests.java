@@ -53,6 +53,21 @@ public class DataEntryTests {
     }
 
     @Test
+    public void shouldChangeXto1WhenStartingExponent() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                EXP,
+                DIGIT_2,
+                DIGIT_5
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(1e25f));
+    }
+
+
+    @Test
     public void shouldAddNumbersToExponent() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
                 DIGIT_1,

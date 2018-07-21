@@ -16,12 +16,13 @@ import java.util.Arrays;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Mk54 {
 
-    private static final int EXPONENT = 1;
     public static final int RAD = 0;
     public static final int GRAD = 1;
+    public static final int DEG = 2;
 
     private static final int MANTISSA = 0;
-    public static final int DEG = 2;
+    private static final int EXPONENT = 1;
+
     /**
      * Memory registers
      */
@@ -54,6 +55,11 @@ public class Mk54 {
      */
     private boolean resetX;
 
+    /**
+     * Holds last generated random value
+     */
+    private float lastRandom;
+
 
     public Mk54() {
         this.x = 0;
@@ -64,6 +70,7 @@ public class Mk54 {
         this.memory = new float[14];
         Arrays.fill(this.memory, 0f);
         this.resetX = true;
+        this.lastRandom = 0;
     }
 
     public float getX() {
@@ -146,20 +153,25 @@ public class Mk54 {
      * This method is called after any modification of X register
      */
     private void makeXRegister() {
+        if (this.xExponent != 0 && this.xMantissa == 0) {
+            this.xMantissa = 1;
+        }
         this.x = (float) (this.xMantissa * Math.pow(10, this.xExponent));
     }
 
     /**
-     * Test method for getting asmified code
+     * Helper for PRN generator. Gets digit in 6th position of the number
+     * of X register
+     * @return Digit in the 6th position of the X register or 0
      */
-    private void testAsm() {
-        if (x == 0 || y == 0) {
-            x = 0;
+    private float getSegment() {
+        final String registerString = new StringBuilder().append(this.x).reverse().toString().replaceAll("\\.", "");
+        if (registerString.length() >= 6) {
+            return Float.valueOf(registerString.substring(6, 7));
         } else {
-            x = Math.max(x, y);
+            return 0f;
         }
     }
-
     /**
      * Internal method to set register x
      *
@@ -171,4 +183,11 @@ public class Mk54 {
         this.xExponent = exponent;
         makeXRegister();
     }
+
+    /**
+     * Test method for getting asmified code
+     */
+    private void testAsm() {
+    }
+
 }

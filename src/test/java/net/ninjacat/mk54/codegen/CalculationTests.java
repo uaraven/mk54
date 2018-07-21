@@ -3,6 +3,8 @@ package net.ninjacat.mk54.codegen;
 import net.ninjacat.mk54.Mk54;
 import org.junit.Test;
 
+import static net.ninjacat.mk54.codegen.CodeGenFixtures.getCompiledInstance;
+import static net.ninjacat.mk54.codegen.CodeGenFixtures.program;
 import static net.ninjacat.mk54.opcodes.Opcode.*;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
@@ -13,7 +15,7 @@ public class CalculationTests {
 
     @Test
     public void shouldAddTwoNumbersAndStoreOldXinX1() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_1,
                 DIGIT_2,
                 ENTER,
@@ -31,7 +33,7 @@ public class CalculationTests {
 
     @Test
     public void shouldAddTwoNumbers() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_1,
                 DIGIT_2,
                 ENTER,
@@ -49,7 +51,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCycleStackDown() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_1,
                 ENTER,
                 DIGIT_2,
@@ -72,7 +74,7 @@ public class CalculationTests {
 
     @Test
     public void shouldMultiplyTwoNumbers() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_5,
                 ENTER,
                 DIGIT_6,
@@ -87,7 +89,7 @@ public class CalculationTests {
 
     @Test
     public void shouldDivideTwoNumbers() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_5,
                 DIGIT_0,
                 ENTER,
@@ -103,7 +105,7 @@ public class CalculationTests {
 
     @Test
     public void shouldSubtractTwoNumbers() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_5,
                 DIGIT_0,
                 ENTER,
@@ -121,7 +123,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateTenToPowerOfX() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_1,
                 DECIMAL_POINT,
                 DIGIT_3,
@@ -136,7 +138,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateEToPowerOfX() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_1,
                 DECIMAL_POINT,
                 DIGIT_5,
@@ -151,7 +153,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateLog10() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_1,
                 DIGIT_0,
                 DIGIT_0,
@@ -167,7 +169,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateLog() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_2,
                 DIGIT_0,
                 LN
@@ -181,7 +183,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateSinInRadians() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_0,
                 DECIMAL_POINT,
                 DIGIT_5,
@@ -196,7 +198,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateSinInDegrees() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_4,
                 DIGIT_0,
                 SIN
@@ -211,7 +213,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateSinInGrads() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_5,
                 DIGIT_0,
                 SIN
@@ -226,7 +228,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateASinInRadians() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_0,
                 DECIMAL_POINT,
                 DIGIT_4,
@@ -248,7 +250,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateASinInDegrees() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_0,
                 DECIMAL_POINT,
                 DIGIT_6,
@@ -271,7 +273,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateASinInGrads() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_0,
                 DECIMAL_POINT,
                 DIGIT_7,
@@ -294,7 +296,7 @@ public class CalculationTests {
 
     @Test
     public void shouldPutPiIntoX() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_0,
                 DECIMAL_POINT,
                 DIGIT_7,
@@ -312,7 +314,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateSquareRoot() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_2,
                 DIGIT_5,
                 SQRT
@@ -326,7 +328,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculatePow2() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_5,
                 POW2
         ));
@@ -339,7 +341,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateInv() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_2,
                 INV
         ));
@@ -352,7 +354,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateXPowY() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_2,
                 ENTER,
                 DIGIT_5,
@@ -368,7 +370,7 @@ public class CalculationTests {
 
     @Test
     public void shouldResetXAfterOperation() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT_5,
                 ENTER,
                 DIGIT_6,
@@ -383,7 +385,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateAbsoluteValue() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 ABS
         ));
 
@@ -400,7 +402,7 @@ public class CalculationTests {
 
     @Test
     public void shouldDetermineSignOfX() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 SIGN
         ));
 
@@ -419,7 +421,7 @@ public class CalculationTests {
 
     @Test
     public void shouldTruncateFractionalPart() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 TRUNC
         ));
 
@@ -435,7 +437,7 @@ public class CalculationTests {
 
     @Test
     public void shouldRemoveIntegerPart() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 FRAC
         ));
 
@@ -451,7 +453,7 @@ public class CalculationTests {
 
     @Test
     public void shouldFindMax() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
                 MAX
         ));
 
@@ -476,5 +478,16 @@ public class CalculationTests {
         assertThat(mk54.getX(), is(0f));
     }
 
+    @Test
+    public void shouldGenerateRandomNumber() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                RND
+        ));
 
+        mk54.execute();
+        assertThat(mk54.getX(), is(0.404067f));
+
+        mk54.execute();
+        assertThat(mk54.getX(), is(0.750957F));
+    }
 }

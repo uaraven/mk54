@@ -67,6 +67,7 @@ class CodeGenerator {
             .put(TRUNC, MathGen::trunc)
             .put(FRAC, MathGen::frac)
             .put(MAX, MathGen::max)
+            .put(RND, MathGen::rnd)
             .build();
 
 

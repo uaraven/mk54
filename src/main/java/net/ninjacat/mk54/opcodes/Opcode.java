@@ -58,6 +58,8 @@ public final class Opcode {
     public static final String FRAC = "35";
     public static final String MAX = "36";
 
+    public static final String RND = "3B";
+
     private Opcode() {
     }
 }
