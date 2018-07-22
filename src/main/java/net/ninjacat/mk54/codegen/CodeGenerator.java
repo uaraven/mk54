@@ -23,7 +23,6 @@ import static org.objectweb.asm.Opcodes.F_SAME;
 class CodeGenerator {
 
     private static final ImmutableMap.Builder<String, OperationCodeGenerator> OPERATIONS_BUILDER = ImmutableMap.builder();
-    private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
 
     static {
         OPERATIONS_BUILDER
@@ -71,7 +70,10 @@ class CodeGenerator {
                 .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
         IntStream.range(0, 15)
                 .forEach(mem -> OPERATIONS_BUILDER.put(RCL(mem), MemoryGen.recallFromMemory(mem)));
+
     }
+
+    private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
 
     CodeGenerator() {
         super();
