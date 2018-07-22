@@ -10,6 +10,7 @@ import org.objectweb.asm.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_DESCRIPTOR;
 import static net.ninjacat.mk54.opcodes.Opcode.*;
@@ -21,55 +22,56 @@ import static org.objectweb.asm.Opcodes.F_SAME;
  */
 class CodeGenerator {
 
-    private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = ImmutableMap.<String, OperationCodeGenerator>builder()
-            .put(DIGIT_0, RegisterGen.digit(0))
-            .put(DIGIT_1, RegisterGen.digit(1))
-            .put(DIGIT_2, RegisterGen.digit(2))
-            .put(DIGIT_3, RegisterGen.digit(3))
-            .put(DIGIT_4, RegisterGen.digit(4))
-            .put(DIGIT_5, RegisterGen.digit(5))
-            .put(DIGIT_6, RegisterGen.digit(6))
-            .put(DIGIT_7, RegisterGen.digit(7))
-            .put(DIGIT_8, RegisterGen.digit(8))
-            .put(DIGIT_9, RegisterGen.digit(9))
-            .put(DECIMAL_POINT, RegisterGen::decimal)
-            .put(NEG, RegisterGen::negateSign)
-            .put(EXP, CodeGenUtil::startExponent)
-            .put(ENTER, RegisterGen::enterNumber)
-            .put(CX, RegisterGen::clearX)
-            .put(RESTORE_X, RegisterGen::restoreX)
-            .put(ADD, MathGen::add)
-            .put(SUB, MathGen::sub)
-            .put(MUL, MathGen::mul)
-            .put(DIV, MathGen::div)
-            .put(SWAP, RegisterGen::swapXy)
-            .put(TEN_TO_POWER_X, MathGen::tenToPowerX)
-            .put(E_TO_POWER_X, MathGen::eToPowerX)
-            .put(LOG10, MathGen::log)
-            .put(LN, MathGen::ln)
-            .put(ARCSIN, MathGen.generateArcTrig("asin"))
-            .put(ARCCOS, MathGen.generateArcTrig("acos"))
-            .put(ARCTAN, MathGen.generateArcTrig("atan"))
-            .put(SIN, MathGen.generateTrig("sin"))
-            .put(COS, MathGen.generateTrig("cos"))
-            .put(TAN, MathGen.generateTrig("tan"))
-            .put(PI, MathGen::pi)
-            .put(SQRT, MathGen::sqrt)
-            .put(POW2, MathGen::pow2)
-            .put(INV, MathGen::inv)
-            .put(X_POW_Y, MathGen::xPowY)
-            .put(ROT, RegisterGen::rotate)
-            .put(FAIL1, CodeGenerator::fail)
-            .put(FAIL2, CodeGenerator::fail)
-            .put(FAIL3, CodeGenerator::fail)
-            .put(ABS, MathGen::abs)
-            .put(SIGN, MathGen::sign)
-            .put(TRUNC, MathGen::trunc)
-            .put(FRAC, MathGen::frac)
-            .put(MAX, MathGen::max)
-            .put(RND, MathGen::rnd)
-            .build();
+    private static final ImmutableMap.Builder<String, OperationCodeGenerator> OPERATIONS_BUILDER = ImmutableMap.builder();
+    private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
 
+    static {
+        OPERATIONS_BUILDER
+                .put(DECIMAL_POINT, RegisterGen::decimal)
+                .put(NEG, RegisterGen::negateSign)
+                .put(EXP, CodeGenUtil::startExponent)
+                .put(ENTER, RegisterGen::enterNumber)
+                .put(CX, RegisterGen::clearX)
+                .put(RESTORE_X, RegisterGen::restoreX)
+                .put(ADD, MathGen::add)
+                .put(SUB, MathGen::sub)
+                .put(MUL, MathGen::mul)
+                .put(DIV, MathGen::div)
+                .put(SWAP, RegisterGen::swapXy)
+                .put(TEN_TO_POWER_X, MathGen::tenToPowerX)
+                .put(E_TO_POWER_X, MathGen::eToPowerX)
+                .put(LOG10, MathGen::log)
+                .put(LN, MathGen::ln)
+                .put(ARCSIN, MathGen.generateArcTrig("asin"))
+                .put(ARCCOS, MathGen.generateArcTrig("acos"))
+                .put(ARCTAN, MathGen.generateArcTrig("atan"))
+                .put(SIN, MathGen.generateTrig("sin"))
+                .put(COS, MathGen.generateTrig("cos"))
+                .put(TAN, MathGen.generateTrig("tan"))
+                .put(PI, MathGen::pi)
+                .put(SQRT, MathGen::sqrt)
+                .put(POW2, MathGen::pow2)
+                .put(INV, MathGen::inv)
+                .put(X_POW_Y, MathGen::xPowY)
+                .put(ROT, RegisterGen::rotate)
+                .put(FAIL1, CodeGenerator::fail)
+                .put(FAIL2, CodeGenerator::fail)
+                .put(FAIL3, CodeGenerator::fail)
+                .put(ABS, MathGen::abs)
+                .put(SIGN, MathGen::sign)
+                .put(TRUNC, MathGen::trunc)
+                .put(FRAC, MathGen::frac)
+                .put(MAX, MathGen::max)
+                .put(RND, MathGen::rnd);
+
+        IntStream.range(0, 10)
+                .forEach(digit -> OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit)));
+
+        IntStream.range(0, 15)
+                .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
+        IntStream.range(0, 15)
+                .forEach(mem -> OPERATIONS_BUILDER.put(RCL(mem), MemoryGen.recallFromMemory(mem)));
+    }
 
     CodeGenerator() {
         super();

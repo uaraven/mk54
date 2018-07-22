@@ -67,7 +67,7 @@ public class Mk54 {
         this.z = 0;
         this.t = 0;
         this.x1 = 0;
-        this.memory = new float[14];
+        this.memory = new float[15];
         Arrays.fill(this.memory, 0f);
         this.resetX = true;
         this.lastRandom = 0;
@@ -188,6 +188,7 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
+        this.x = this.memory[10];
     }
 
 }

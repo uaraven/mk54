@@ -16,11 +16,11 @@ public class CalculationTests {
     @Test
     public void shouldAddTwoNumbersAndStoreOldXinX1() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_1,
-                DIGIT_2,
+                DIGIT(1),
+                DIGIT(2),
                 ENTER,
-                DIGIT_5,
-                DIGIT_8,
+                DIGIT(5),
+                DIGIT(8),
                 ADD
         ));
 
@@ -34,11 +34,11 @@ public class CalculationTests {
     @Test
     public void shouldAddTwoNumbers() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_1,
-                DIGIT_2,
+                DIGIT(1),
+                DIGIT(2),
                 ENTER,
-                DIGIT_5,
-                DIGIT_8,
+                DIGIT(5),
+                DIGIT(8),
                 ADD
         ));
 
@@ -52,13 +52,13 @@ public class CalculationTests {
     @Test
     public void shouldCycleStackDown() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_1,
+                DIGIT(1),
                 ENTER,
-                DIGIT_2,
+                DIGIT(2),
                 ENTER,
-                DIGIT_3,
+                DIGIT(3),
                 ENTER,
-                DIGIT_4,
+                DIGIT(4),
                 ADD
         ));
 
@@ -75,9 +75,9 @@ public class CalculationTests {
     @Test
     public void shouldMultiplyTwoNumbers() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_5,
+                DIGIT(5),
                 ENTER,
-                DIGIT_6,
+                DIGIT(6),
                 MUL
         ));
 
@@ -90,10 +90,10 @@ public class CalculationTests {
     @Test
     public void shouldDivideTwoNumbers() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_5,
-                DIGIT_0,
+                DIGIT(5),
+                DIGIT(0),
                 ENTER,
-                DIGIT_5,
+                DIGIT(5),
                 DIV
         ));
 
@@ -106,11 +106,11 @@ public class CalculationTests {
     @Test
     public void shouldSubtractTwoNumbers() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_5,
-                DIGIT_0,
+                DIGIT(5),
+                DIGIT(0),
                 ENTER,
-                DIGIT_5,
-                DIGIT_5,
+                DIGIT(5),
+                DIGIT(5),
                 SUB
         ));
 
@@ -124,9 +124,9 @@ public class CalculationTests {
     @Test
     public void shouldCalculateTenToPowerOfX() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_1,
+                DIGIT(1),
                 DECIMAL_POINT,
-                DIGIT_3,
+                DIGIT(3),
                 TEN_TO_POWER_X
         ));
 
@@ -139,9 +139,9 @@ public class CalculationTests {
     @Test
     public void shouldCalculateEToPowerOfX() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_1,
+                DIGIT(1),
                 DECIMAL_POINT,
-                DIGIT_5,
+                DIGIT(5),
                 E_TO_POWER_X
         ));
 
@@ -154,10 +154,10 @@ public class CalculationTests {
     @Test
     public void shouldCalculateLog10() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_1,
-                DIGIT_0,
-                DIGIT_0,
-                DIGIT_0,
+                DIGIT(1),
+                DIGIT(0),
+                DIGIT(0),
+                DIGIT(0),
                 LOG10
         ));
 
@@ -170,8 +170,8 @@ public class CalculationTests {
     @Test
     public void shouldCalculateLog() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_2,
-                DIGIT_0,
+                DIGIT(2),
+                DIGIT(0),
                 LN
         ));
 
@@ -184,9 +184,9 @@ public class CalculationTests {
     @Test
     public void shouldCalculateSinInRadians() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_0,
+                DIGIT(0),
                 DECIMAL_POINT,
-                DIGIT_5,
+                DIGIT(5),
                 SIN
         ));
 
@@ -199,8 +199,8 @@ public class CalculationTests {
     @Test
     public void shouldCalculateSinInDegrees() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_4,
-                DIGIT_0,
+                DIGIT(4),
+                DIGIT(0),
                 SIN
         ));
 
@@ -214,8 +214,8 @@ public class CalculationTests {
     @Test
     public void shouldCalculateSinInGrads() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_5,
-                DIGIT_0,
+                DIGIT(5),
+                DIGIT(0),
                 SIN
         ));
 
@@ -229,16 +229,16 @@ public class CalculationTests {
     @Test
     public void shouldCalculateASinInRadians() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_0,
+                DIGIT(0),
                 DECIMAL_POINT,
-                DIGIT_4,
-                DIGIT_7,
-                DIGIT_9,
-                DIGIT_4,
-                DIGIT_2,
-                DIGIT_5,
-                DIGIT_5,
-                DIGIT_5,
+                DIGIT(4),
+                DIGIT(7),
+                DIGIT(9),
+                DIGIT(4),
+                DIGIT(2),
+                DIGIT(5),
+                DIGIT(5),
+                DIGIT(5),
                 ARCSIN
         ));
 
@@ -251,16 +251,16 @@ public class CalculationTests {
     @Test
     public void shouldCalculateASinInDegrees() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_0,
+                DIGIT(0),
                 DECIMAL_POINT,
-                DIGIT_6,
-                DIGIT_4,
-                DIGIT_2,
-                DIGIT_7,
-                DIGIT_8,
-                DIGIT_7,
-                DIGIT_6,
-                DIGIT_4,
+                DIGIT(6),
+                DIGIT(4),
+                DIGIT(2),
+                DIGIT(7),
+                DIGIT(8),
+                DIGIT(7),
+                DIGIT(6),
+                DIGIT(4),
                 ARCSIN
         ));
 
@@ -274,16 +274,16 @@ public class CalculationTests {
     @Test
     public void shouldCalculateASinInGrads() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_0,
+                DIGIT(0),
                 DECIMAL_POINT,
-                DIGIT_7,
-                DIGIT_0,
-                DIGIT_7,
-                DIGIT_1,
-                DIGIT_0,
-                DIGIT_6,
-                DIGIT_7,
-                DIGIT_8,
+                DIGIT(7),
+                DIGIT(0),
+                DIGIT(7),
+                DIGIT(1),
+                DIGIT(0),
+                DIGIT(6),
+                DIGIT(7),
+                DIGIT(8),
                 ARCSIN
         ));
 
@@ -297,11 +297,11 @@ public class CalculationTests {
     @Test
     public void shouldPutPiIntoX() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_0,
+                DIGIT(0),
                 DECIMAL_POINT,
-                DIGIT_7,
-                DIGIT_0,
-                DIGIT_7,
+                DIGIT(7),
+                DIGIT(0),
+                DIGIT(7),
                 PI
         ));
 
@@ -315,8 +315,8 @@ public class CalculationTests {
     @Test
     public void shouldCalculateSquareRoot() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_2,
-                DIGIT_5,
+                DIGIT(2),
+                DIGIT(5),
                 SQRT
         ));
 
@@ -329,7 +329,7 @@ public class CalculationTests {
     @Test
     public void shouldCalculatePow2() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_5,
+                DIGIT(5),
                 POW2
         ));
 
@@ -342,7 +342,7 @@ public class CalculationTests {
     @Test
     public void shouldCalculateInv() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_2,
+                DIGIT(2),
                 INV
         ));
 
@@ -355,9 +355,9 @@ public class CalculationTests {
     @Test
     public void shouldCalculateXPowY() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_2,
+                DIGIT(2),
                 ENTER,
-                DIGIT_5,
+                DIGIT(5),
                 X_POW_Y
         ));
 
@@ -371,9 +371,9 @@ public class CalculationTests {
     @Test
     public void shouldResetXAfterOperation() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
-                DIGIT_5,
+                DIGIT(5),
                 ENTER,
-                DIGIT_6,
+                DIGIT(6),
                 ADD
         ));
 

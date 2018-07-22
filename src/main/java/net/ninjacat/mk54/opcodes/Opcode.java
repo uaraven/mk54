@@ -1,18 +1,6 @@
 package net.ninjacat.mk54.opcodes;
 
 public final class Opcode {
-
-    public static final String DIGIT_0 = "00";
-    public static final String DIGIT_1 = "01";
-    public static final String DIGIT_2 = "02";
-    public static final String DIGIT_3 = "03";
-    public static final String DIGIT_4 = "04";
-    public static final String DIGIT_5 = "05";
-    public static final String DIGIT_6 = "06";
-    public static final String DIGIT_7 = "07";
-    public static final String DIGIT_8 = "08";
-    public static final String DIGIT_9 = "09";
-
     public static final String DECIMAL_POINT = "0A";
     public static final String NEG = "0B";
     public static final String EXP = "0C";
@@ -59,6 +47,22 @@ public final class Opcode {
     public static final String MAX = "36";
 
     public static final String RND = "3B";
+
+    private static final String STO_BASE = "4%X";
+    private static final String RCL_BASE = "6%X";
+
+
+    public static String DIGIT(final int digit) {
+        return String.format("%02X", digit);
+    }
+
+    public static String STO(final int location) {
+        return String.format(STO_BASE, location);
+    }
+
+    public static String RCL(final int location) {
+        return String.format(RCL_BASE, location);
+    }
 
     private Opcode() {
     }

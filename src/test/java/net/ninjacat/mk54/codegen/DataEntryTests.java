@@ -11,7 +11,7 @@ public class DataEntryTests {
 
     @Test
     public void shouldAddNumbersToMantissa() throws Exception {
-        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(DIGIT_1, DIGIT_2, DIGIT_3));
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(DIGIT(1), DIGIT(2), DIGIT(3)));
 
         mk54.execute();
         final float x = mk54.getX();
@@ -22,11 +22,11 @@ public class DataEntryTests {
     @Test
     public void shouldAddNumbersToMantissaWithDecimalPoint() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_2,
+                DIGIT(1),
+                DIGIT(2),
                 DECIMAL_POINT,
-                DIGIT_3,
-                DIGIT_4
+                DIGIT(3),
+                DIGIT(4)
         ));
 
         mk54.execute();
@@ -38,11 +38,11 @@ public class DataEntryTests {
     @Test
     public void shouldChangeSignOfRegisterX() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_2,
+                DIGIT(1),
+                DIGIT(2),
                 DECIMAL_POINT,
-                DIGIT_3,
-                DIGIT_4,
+                DIGIT(3),
+                DIGIT(4),
                 NEG
         ));
 
@@ -56,8 +56,8 @@ public class DataEntryTests {
     public void shouldChangeXto1WhenStartingExponent() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
                 EXP,
-                DIGIT_2,
-                DIGIT_5
+                DIGIT(2),
+                DIGIT(5)
         ));
 
         mk54.execute();
@@ -70,11 +70,11 @@ public class DataEntryTests {
     @Test
     public void shouldAddNumbersToExponent() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_3,
+                DIGIT(1),
+                DIGIT(3),
                 EXP,
-                DIGIT_2,
-                DIGIT_5
+                DIGIT(2),
+                DIGIT(5)
         ));
 
         mk54.execute();
@@ -86,12 +86,12 @@ public class DataEntryTests {
     @Test
     public void shouldChangeSignOfExponent() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_3,
+                DIGIT(1),
+                DIGIT(3),
                 EXP,
-                DIGIT_2,
+                DIGIT(2),
                 NEG,
-                DIGIT_6
+                DIGIT(6)
         ));
 
         mk54.execute();
@@ -104,10 +104,10 @@ public class DataEntryTests {
     @Test
     public void shouldResetRegisterXWhenEnterPressed() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_3,
+                DIGIT(1),
+                DIGIT(3),
                 ENTER,
-                DIGIT_5
+                DIGIT(5)
         ));
 
         mk54.execute();
@@ -119,12 +119,12 @@ public class DataEntryTests {
     @Test
     public void shouldClearResetFlagWhenInEntryMode() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_3,
+                DIGIT(1),
+                DIGIT(3),
                 ENTER,
-                DIGIT_5,
+                DIGIT(5),
                 ADD,
-                DIGIT_9
+                DIGIT(9)
         ));
 
         mk54.execute();
@@ -137,8 +137,8 @@ public class DataEntryTests {
     @Test
     public void shouldRestoreX() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
-                DIGIT_3,
+                DIGIT(1),
+                DIGIT(3),
                 ENTER,
                 RESTORE_X
         ));
@@ -154,9 +154,9 @@ public class DataEntryTests {
     @Test
     public void shouldSwapXY() throws Exception {
         final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
-                DIGIT_1,
+                DIGIT(1),
                 ENTER,
-                DIGIT_3,
+                DIGIT(3),
                 SWAP
         ));
 

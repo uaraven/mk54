@@ -1,5 +1,6 @@
 package net.ninjacat.mk54.codegen;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -87,4 +88,15 @@ class Mk54Wrapper {
     }
 
 
+    float getMem(final int location) throws Exception {
+        final Field mem = this.mk54.getClass().getDeclaredField("memory");
+        mem.setAccessible(true);
+        return Array.getFloat(mem.get(this.mk54), location);
+    }
+
+    void setMem(final int location, final float value) throws Exception {
+        final Field mem = this.mk54.getClass().getDeclaredField("memory");
+        mem.setAccessible(true);
+        Array.setFloat(mem.get(this.mk54), location, value);
+    }
 }
