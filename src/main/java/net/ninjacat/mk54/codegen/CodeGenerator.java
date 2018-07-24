@@ -24,6 +24,8 @@ class CodeGenerator {
 
     private static final ImmutableMap.Builder<String, OperationCodeGenerator> OPERATIONS_BUILDER = ImmutableMap.builder();
 
+    private static final int MEMORY_SIZE = 15;
+
     static {
         OPERATIONS_BUILDER
                 .put(DECIMAL_POINT, RegisterGen::decimal)
@@ -61,14 +63,15 @@ class CodeGenerator {
                 .put(TRUNC, MathGen::trunc)
                 .put(FRAC, MathGen::frac)
                 .put(MAX, MathGen::max)
-                .put(RND, MathGen::rnd);
+                .put(RND, MathGen::rnd)
+                .put(RUN_STOP, ControlGen::startStop);
 
         IntStream.range(0, 10)
                 .forEach(digit -> OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit)));
 
-        IntStream.range(0, 15)
+        IntStream.range(0, MEMORY_SIZE)
                 .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
-        IntStream.range(0, 15)
+        IntStream.range(0, MEMORY_SIZE)
                 .forEach(mem -> OPERATIONS_BUILDER.put(RCL(mem), MemoryGen.recallFromMemory(mem)));
 
     }

@@ -5,7 +5,7 @@ import org.objectweb.asm.Opcodes;
 import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
 
 
-public final class MemoryGen {
+final class MemoryGen {
 
     private static final String MEMORY = "memory";
 
