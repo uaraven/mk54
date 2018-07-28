@@ -13,7 +13,7 @@ import java.util.Arrays;
  * During bytecode generation new class will be created based on this class but with execute() method containing
  * actual bytecode generated from mk hex code.
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess", "unused", "FieldMayBeFinal", "FieldCanBeLocal", "MismatchedReadAndWriteOfArray"})
 public class Mk54 {
 
     public static final int RAD = 0;
@@ -54,6 +54,11 @@ public class Mk54 {
      * If true, any new digit will first reset register X to zero
      */
     private boolean resetX;
+
+    /**
+     * MK address - target of indirect jump
+     */
+    private int indirectJumpAddress;
 
     /**
      * Holds last generated random value
@@ -162,6 +167,7 @@ public class Mk54 {
     /**
      * Helper for PRN generator. Gets digit in 6th position of the number
      * of X register
+     *
      * @return Digit in the 6th position of the X register or 0
      */
     private float getSegment() {
@@ -172,6 +178,7 @@ public class Mk54 {
             return 0f;
         }
     }
+
     /**
      * Internal method to set register x
      *
@@ -187,8 +194,17 @@ public class Mk54 {
     /**
      * Test method for getting asmified code
      */
-    private void testAsm() {
-        this.x = this.memory[10];
+    private int testAsm() {
+        switch (this.indirectJumpAddress) {
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            default:
+                throw new IllegalStateException("Invalid address");
+        }
     }
 
 }

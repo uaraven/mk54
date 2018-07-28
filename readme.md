@@ -47,6 +47,8 @@ overflow or relying on floating point number representation will fail.
 
 [Hex code mapping](docs/hexcode.md) to MK-series 8-segment display symbols.
 
+[JMP instructions](docs/goto.md)
+
 Some details about Java [Byte code generation](docs/code_generation.md)
 
 Useful links

@@ -7,6 +7,7 @@ import org.objectweb.asm.MethodVisitor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * Code generation context
@@ -20,18 +21,29 @@ public class CodeGenContext {
 
     private final ClassVisitor classVisitor;
     private final MethodVisitor methodVisitor;
+    private final Label trampolineLabel;
     private final Map<Integer, Label> addressLabels;
     private int address;
 
-    public CodeGenContext(final List<String> operations, final ClassVisitor classVisitor, final MethodVisitor methodVisitor) {
+    /**
+     * Creates code generation context
+     *
+     * @param operations    List of MK operations
+     * @param classVisitor  {@link ClassVisitor} for class that is being generated
+     * @param methodVisitor {@link MethodVisitor} for {@code execute()} method that is being generated
+     */
+    CodeGenContext(final List<String> operations,
+                   final ClassVisitor classVisitor,
+                   final MethodVisitor methodVisitor) {
         this.operations = operations;
         this.classVisitor = classVisitor;
         this.methodVisitor = methodVisitor;
+        this.trampolineLabel = new Label();
         this.addressLabels = new HashMap<>();
         this.address = 0;
     }
 
-    public List<String> getOperations() {
+    List<String> getOperations() {
         return this.operations;
     }
 
@@ -43,7 +55,7 @@ public class CodeGenContext {
      *
      * @return Current operation address
      */
-    public int getCurrentAddress() {
+    int getCurrentAddress() {
         return this.address;
     }
 
@@ -52,7 +64,7 @@ public class CodeGenContext {
      *
      * @return Operation code
      */
-    public String nextOperation() {
+    String nextOperation() {
         this.address += 1;
         return currentOperation();
     }
@@ -63,7 +75,11 @@ public class CodeGenContext {
      * @return Operation code
      */
     private String currentOperation() {
-        return this.operations.get(this.address);
+        if (this.operations.size() > this.address) {
+            return this.operations.get(this.address);
+        } else {
+            return null;
+        }
     }
 
     public ClassVisitor getClassVisitor() {
@@ -82,7 +98,7 @@ public class CodeGenContext {
      * @param addressOffset address for which label is requested
      * @return Label for the given address
      */
-    public Label getLabelForAddress(final int addressOffset) {
+    Label getLabelForAddress(final int addressOffset) {
         if (this.addressLabels.containsKey(addressOffset)) {
             return this.addressLabels.get(addressOffset);
         } else {
@@ -92,4 +108,38 @@ public class CodeGenContext {
         }
     }
 
+    public void incrementAddress() {
+        this.address += 1;
+    }
+
+    Label[] generateJumpTable() {
+        return IntStream.range(0, this.operations.size())
+                .mapToObj(this::getLabelForAddress)
+                .toArray(Label[]::new);
+    }
+
+    Label getTrampolineLabel() {
+        return this.trampolineLabel;
+    }
+
+    /**
+     * Forces label for the second byte of two-byte MK operations.
+     * <p>
+     * For example following MK operation generates two bytes:
+     * <pre>
+     *   10. GOTO
+     *   11. 65
+     *   </pre>
+     * There may be a jump somewhere in the code to a second byte of this command (11), but there is no corresponding byte
+     * code.
+     * <p>
+     * This method must be called by code generators for such two byte commands to duplicate label of MK address 10
+     * to MK address 11. This changes behaviour of calculator program, but there is no other option.
+     *
+     * @param address       address for which to create duplicate label
+     * @param actualAddress actual address to which all jump should be redirected
+     */
+    public void duplicateAddressLabel(final int address, final int actualAddress) {
+        this.addressLabels.put(address, getLabelForAddress(actualAddress));
+    }
 }
