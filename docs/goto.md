@@ -18,6 +18,10 @@ And here come stack frames. JVM requires compiler to generate stack frame at any
 ahead, labels that are used as jump target can be marked and stack frame can be generated when this label is reached. 
 But back jumps cannot be handled this way as byte code for these operations is already generated.
 
+To simplify code generation, `mk54` code generator performs two passes over calculator code. On the first pass it creates
+mapping between MK addresses and JVM labels, taking into account two byte operations, on the second pass actual code
+generation happens.  
+
 Direct jump
 -----------
 
@@ -43,6 +47,9 @@ byte code address to jump to.
 
 Subroutines
 -----------
+
+Although JVM supports instructions for subroutine call/return (`jsr` and `ret`) these instructions cannot be used
+in .class files with version 51 or higher (i.e. Java 6 and up).
 
 ### Calling subroutines 
 
@@ -75,3 +82,13 @@ address stack.
    
    `mk54` code generator does not support such jumps as there is no byte code generated for
    operations at addresses `04` and `06`. `GOTO 04`
+ - MK calculators allow jumps to anywhere in address space, for example following program is valid and will be executed
+      
+      00. GOTO
+      01. 90
+     
+   It will jump to address 90, and execute operations there, which would be `00`, so it will run appending zeroes to 
+   register X.
+   
+   `mk54` code generator does not generate byte code for operations which are not present in the Mk program, so it is
+   unable to generate jumps beyond last operation. Such jumps will generate exception during code generation. 

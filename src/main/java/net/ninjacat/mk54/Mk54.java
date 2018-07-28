@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * Template class for Mk54 runnable program
@@ -61,6 +62,11 @@ public class Mk54 {
     private int indirectJumpAddress;
 
     /**
+     * Call stack for subroutine calls
+     */
+    private Stack<Integer> callStack;
+
+    /**
      * Holds last generated random value
      */
     private float lastRandom;
@@ -76,6 +82,7 @@ public class Mk54 {
         Arrays.fill(this.memory, 0f);
         this.resetX = true;
         this.lastRandom = 0;
+        this.callStack = new Stack<>();
     }
 
     public float getX() {
@@ -194,16 +201,11 @@ public class Mk54 {
     /**
      * Test method for getting asmified code
      */
-    private int testAsm() {
-        switch (this.indirectJumpAddress) {
-            case 0:
-                return 0;
-            case 1:
-                return 1;
-            case 2:
-                return 2;
-            default:
-                throw new IllegalStateException("Invalid address");
+    private void testAsm() {
+        try {
+            this.indirectJumpAddress = this.callStack.pop();
+        } finally {
+            this.indirectJumpAddress = 0;
         }
     }
 

@@ -1,6 +1,5 @@
 package net.ninjacat.mk54.codegen;
 
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -19,8 +18,6 @@ public class CodeGenContext {
 
     private final List<String> operations;
 
-    private final ClassVisitor classVisitor;
-    private final MethodVisitor methodVisitor;
     private final Label trampolineLabel;
     private final Map<Integer, Label> addressLabels;
     private int address;
@@ -28,16 +25,10 @@ public class CodeGenContext {
     /**
      * Creates code generation context
      *
-     * @param operations    List of MK operations
-     * @param classVisitor  {@link ClassVisitor} for class that is being generated
-     * @param methodVisitor {@link MethodVisitor} for {@code execute()} method that is being generated
+     * @param operations List of MK operations
      */
-    CodeGenContext(final List<String> operations,
-                   final ClassVisitor classVisitor,
-                   final MethodVisitor methodVisitor) {
+    CodeGenContext(final List<String> operations) {
         this.operations = operations;
-        this.classVisitor = classVisitor;
-        this.methodVisitor = methodVisitor;
         this.trampolineLabel = new Label();
         this.addressLabels = new HashMap<>();
         this.address = 0;
@@ -82,14 +73,6 @@ public class CodeGenContext {
         }
     }
 
-    public ClassVisitor getClassVisitor() {
-        return this.classVisitor;
-    }
-
-    public MethodVisitor getMethodVisitor() {
-        return this.methodVisitor;
-    }
-
     /**
      * Returns a label for a give address.
      * If label for address does not exist it will create new and return it.
@@ -108,10 +91,6 @@ public class CodeGenContext {
         }
     }
 
-    public void incrementAddress() {
-        this.address += 1;
-    }
-
     Label[] generateJumpTable() {
         return IntStream.range(0, this.operations.size())
                 .mapToObj(this::getLabelForAddress)
@@ -123,23 +102,30 @@ public class CodeGenContext {
     }
 
     /**
-     * Forces label for the second byte of two-byte MK operations.
+     * Creates label for the second byte of two-byte MK operations.
+     * <p>
+     * This method creates a label for current address pointing to previous MK address
+     *
      * <p>
      * For example following MK operation generates two bytes:
      * <pre>
      *   10. GOTO
      *   11. 65
      *   </pre>
-     * There may be a jump somewhere in the code to a second byte of this command (11), but there is no corresponding byte
-     * code.
+     * There may be a jump somewhere in the code to a second byte of this command (address 11), but there is no
+     * corresponding byte code.
      * <p>
      * This method must be called by code generators for such two byte commands to duplicate label of MK address 10
      * to MK address 11. This changes behaviour of calculator program, but there is no other option.
-     *
-     * @param address       address for which to create duplicate label
-     * @param actualAddress actual address to which all jump should be redirected
      */
-    public void duplicateAddressLabel(final int address, final int actualAddress) {
-        this.addressLabels.put(address, getLabelForAddress(actualAddress));
+    void duplicateLabelForTwoByteOperation() {
+        this.addressLabels.put(getCurrentAddress(), getLabelForAddress(getCurrentAddress() - 1));
+    }
+
+    /**
+     * Resets current address pointer to 0
+     */
+    public void resetAddress() {
+        this.address = 0;
     }
 }

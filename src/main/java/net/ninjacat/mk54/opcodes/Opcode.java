@@ -50,6 +50,9 @@ public final class Opcode {
 
     public static final String RUN_STOP = "50";
     public static final String GOTO = "51";
+    public static final String RET = "52";
+    public static final String GOSUB = "53";
+    public static final String NOP = "54";
 
     private static final String STO_BASE = "4%X";
     private static final String RCL_BASE = "6%X";

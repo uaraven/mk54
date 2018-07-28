@@ -3,14 +3,17 @@ package net.ninjacat.mk54.codegen;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.ninjacat.mk54.Mk54;
 import net.ninjacat.mk54.exceptions.ClassCreationException;
+import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
 import net.ninjacat.mk54.exceptions.UnknownOperationException;
 import net.ninjacat.mk54.opcodes.Opcode;
 import org.objectweb.asm.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_DESCRIPTOR;
@@ -27,6 +30,12 @@ class CodeGenerator {
 
     private static final int MEMORY_SIZE = 15;
     private static final String ILLEGAL_STATE_EXCEPTION = "java/lang/IllegalStateException";
+
+    private static final Set<String> TWO_BYTE_OPS = ImmutableSet.of(
+            Opcode.GOTO,
+            GOSUB
+    );
+    public static final String JAVA_LANG_INTEGER = "java/lang/Integer";
 
     static {
         OPERATIONS_BUILDER
@@ -67,7 +76,10 @@ class CodeGenerator {
                 .put(MAX, MathGen::max)
                 .put(RND, MathGen::rnd)
                 .put(RUN_STOP, ControlGen::startStop)
-                .put(Opcode.GOTO, ControlGen::gotoAddr);
+                .put(Opcode.GOTO, ControlGen::gotoAddr)
+                .put(GOSUB, ControlGen::gosub)
+                .put(Opcode.RET, ControlGen::returnFromSub)
+                .put(Opcode.NOP, ControlGen::nop);
 
         IntStream.range(0, 10)
                 .forEach(digit -> OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit)));
@@ -93,7 +105,9 @@ class CodeGenerator {
         executeMethod.visitLabel(startLabel);
 
         // Prepare context
-        final CodeGenContext context = new CodeGenContext(operations, classWriter, executeMethod);
+        final CodeGenContext context = new CodeGenContext(operations);
+
+        buildMkLabels(context);
 
         String operation = operations.get(0);
         while (operation != null) {
@@ -116,6 +130,27 @@ class CodeGenerator {
         executeMethod.visitEnd();
 
         classWriter.visitEnd();
+    }
+
+    /**
+     * Scans all operations and build MK address to label map. Builds correct lables for two-byte operations
+     *
+     * @param context Code generation context
+     */
+    private static void buildMkLabels(final CodeGenContext context) {
+        String op = context.getOperations().get(0);
+        while (op != null) {
+            context.getLabelForAddress(context.getCurrentAddress());
+            if (TWO_BYTE_OPS.contains(op)) {
+                final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+                if (targetAddress > context.getOperations().size() - 1) {
+                    throw new InvalidJumpTargetException(Integer.toHexString(targetAddress));
+                }
+                context.duplicateLabelForTwoByteOperation();
+            }
+            op = context.nextOperation();
+        }
+        context.resetAddress();
     }
 
     /**

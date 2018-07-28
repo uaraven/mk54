@@ -150,6 +150,21 @@ public class DataEntryTests {
         assertThat(x, is(42f));
     }
 
+    @Test
+    public void shouldClearX() throws Exception {
+        final Mk54Wrapper mk54 = CodeGenFixtures.getCompiledInstance(CodeGenFixtures.program(
+                DIGIT(1),
+                DIGIT(3),
+                CX
+        ));
+
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(0f));
+    }
+
+
 
     @Test
     public void shouldSwapXY() throws Exception {
