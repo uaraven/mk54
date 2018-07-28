@@ -58,5 +58,20 @@ correct JVM address for that MK address.
 
 ### Differences between MK calculators and generated JVM code
 
-MK calculators subroutine return address stack was limited to 5 addresses, JVM code does not have a limits on return
+ - MK calculators subroutine return address stack was limited to 5 addresses, JVM code does not have a limits on return
 address stack.
+ - MK calculators allow following program
+ 
+       00. 01
+       01. 02
+       03. GOTO
+       04. 05
+       05. GOTO
+       06. 04
+       
+   Second `GOTO` will jump to address `04`, which contains address `05` of previous
+   GOTO command. Code at this address is a valid operation which will append number 5
+   to register X.
+   
+   `mk54` code generator does not support such jumps as there is no byte code generated for
+   operations at addresses `04` and `06`. `GOTO 04`

@@ -28,7 +28,9 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void gotoAddr(final MethodVisitor mv, final CodeGenContext context) {
+        final int actualAddress = context.getCurrentAddress();
         final int address = Integer.parseInt(context.nextOperation(), 16);
+        context.duplicateAddressLabel(context.getCurrentAddress(), actualAddress);
         final Label label = context.getLabelForAddress(address);
         mv.visitJumpInsn(GOTO, label);
     }

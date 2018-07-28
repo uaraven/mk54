@@ -167,6 +167,7 @@ public class Mk54 {
     /**
      * Helper for PRN generator. Gets digit in 6th position of the number
      * of X register
+     *
      * @return Digit in the 6th position of the X register or 0
      */
     private float getSegment() {
@@ -177,6 +178,7 @@ public class Mk54 {
             return 0f;
         }
     }
+
     /**
      * Internal method to set register x
      *
@@ -192,8 +194,17 @@ public class Mk54 {
     /**
      * Test method for getting asmified code
      */
-    private void testAsm() {
-        throw new IllegalStateException("Invalid jump at operation xx");
+    private int testAsm() {
+        switch (this.indirectJumpAddress) {
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            default:
+                throw new IllegalStateException("Invalid address");
+        }
     }
 
 }

@@ -110,8 +110,7 @@ class CodeGenerator {
         executeMethod.visitLabel(finalLabel);
         executeMethod.visitFrame(F_SAME, 0, null, 0, null);
         executeMethod.visitInsn(Opcodes.RETURN);
-//        generateTrampolineTable(executeMethod, context);
-//        executeMethod.visitInsn(Opcodes.RETURN);
+        generateTrampolineTable(executeMethod, context);
         executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
         executeMethod.visitMaxs(0, 0);
         executeMethod.visitEnd();
@@ -130,6 +129,11 @@ class CodeGenerator {
      */
     private static void generateTrampolineTable(final MethodVisitor mv, final CodeGenContext context) {
         final Label defaultLabel = new Label();
+        mv.visitLabel(context.getTrampolineLabel());
+        mv.visitFrame(F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, "indirectJumpAddress", "I");
+        mv.visitTableSwitchInsn(0, context.getOperations().size() - 1, defaultLabel, context.generateJumpTable());
         mv.visitLabel(defaultLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitTypeInsn(NEW, ILLEGAL_STATE_EXCEPTION);
@@ -137,11 +141,6 @@ class CodeGenerator {
         mv.visitLdcInsn("Invalid jump operation");
         mv.visitMethodInsn(INVOKESPECIAL, ILLEGAL_STATE_EXCEPTION, "<init>", "(Ljava/lang/String;)V", false);
         mv.visitInsn(ATHROW);
-        mv.visitLabel(context.getTrampolineLabel());
-        mv.visitFrame(F_SAME, 0, null, 0, null);
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, "indirectJumpAddress", "I");
-        mv.visitTableSwitchInsn(0, context.getOperations().size() - 1, defaultLabel, context.generateJumpTable());
     }
 
 

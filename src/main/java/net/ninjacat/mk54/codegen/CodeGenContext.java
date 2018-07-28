@@ -121,4 +121,25 @@ public class CodeGenContext {
     Label getTrampolineLabel() {
         return this.trampolineLabel;
     }
+
+    /**
+     * Forces label for the second byte of two-byte MK operations.
+     * <p>
+     * For example following MK operation generates two bytes:
+     * <pre>
+     *   10. GOTO
+     *   11. 65
+     *   </pre>
+     * There may be a jump somewhere in the code to a second byte of this command (11), but there is no corresponding byte
+     * code.
+     * <p>
+     * This method must be called by code generators for such two byte commands to duplicate label of MK address 10
+     * to MK address 11. This changes behaviour of calculator program, but there is no other option.
+     *
+     * @param address       address for which to create duplicate label
+     * @param actualAddress actual address to which all jump should be redirected
+     */
+    public void duplicateAddressLabel(final int address, final int actualAddress) {
+        this.addressLabels.put(address, getLabelForAddress(actualAddress));
+    }
 }
