@@ -156,7 +156,8 @@ public class CodeGenerator {
                 }
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
                 if (!KEEP_STACK.contains(operation) && currentDelayPushStack) {
-                    CodeGenUtil.forcePushStack(executeMethod, context);
+                    // next line seems unneeded as stack push is forced every time X is supposed to be reset
+//                    CodeGenUtil.forcePushStack(executeMethod, context);
                     currentDelayPushStack = false;
                 } else {
                     currentDelayPushStack = true;
