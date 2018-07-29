@@ -16,8 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_DESCRIPTOR;
-import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
+import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
 import static net.ninjacat.mk54.opcodes.Opcode.*;
 import static org.objectweb.asm.Opcodes.*;
 
@@ -101,6 +100,8 @@ public class CodeGenerator {
                     KEEP_STACK_BUILDER.add(DIGIT(digit));
                 });
 
+        IntStream.rangeClosed(0, 15).forEach(reg -> OPERATIONS_BUILDER.put(IGOTO(reg), ControlGen.indirectGoto(reg)));
+
         IntStream.range(0, MEMORY_SIZE)
                 .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
         IntStream.range(0, MEMORY_SIZE)
@@ -137,7 +138,7 @@ public class CodeGenerator {
         final Label startLabel = new Label();
         executeMethod.visitLabel(startLabel);
 
-        boolean currentPushStackState = false;
+        boolean currentDelayPushStack = true;
         // Prepare context
         final CodeGenContext context = new CodeGenContext(operations);
 
@@ -150,12 +151,15 @@ public class CodeGenerator {
                 if (this.generateDebugCode) {
                     generateDump(executeMethod, context);
                 }
+                if (!KEEP_STACK.contains(operation)) {
+                    CodeGenUtil.prepareXForReset(executeMethod, context);
+                }
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
-                if (!KEEP_STACK.contains(operation) && !currentPushStackState) {
+                if (!KEEP_STACK.contains(operation) && currentDelayPushStack) {
                     CodeGenUtil.forcePushStack(executeMethod, context);
-                    currentPushStackState = true;
+                    currentDelayPushStack = false;
                 } else {
-                    currentPushStackState = false;
+                    currentDelayPushStack = true;
                 }
             } else {
                 throw new UnknownOperationException(operation);
@@ -199,7 +203,7 @@ public class CodeGenerator {
         while (op != null) {
             context.getLabelForAddress(context.getCurrentAddress());
             if (TWO_BYTE_OPS.contains(op)) {
-                final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+                final int targetAddress = parseAddress(context.nextOperation());
                 if (targetAddress > context.getOperations().size() - 1) {
                     throw new InvalidJumpTargetException(Integer.toHexString(targetAddress));
                 }

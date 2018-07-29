@@ -12,7 +12,7 @@ public class FunctionalTest {
 
     @Test
     public void calculateAreaOfCircle() throws Exception {
-        final Mk54Wrapper mk54 = compileResource();
+        final Mk54Wrapper mk54 = compileResource("/functional/circle_area.mk");
         mk54.setX(4f);
 
         mk54.execute();
@@ -20,8 +20,8 @@ public class FunctionalTest {
         assertThat((double) mk54.getX(), is(closeTo(12.566, 0.01)));
     }
 
-    private static Mk54Wrapper compileResource() throws Exception {
-        final String program = Resources.loadProgram("/functional/circle_area.mk");
+    private static Mk54Wrapper compileResource(final String resource) throws Exception {
+        final String program = Resources.loadProgram(resource);
         final String mk54Code = new Mk54CodeGenerator().compile(program);
 
         return CodeGenFixtures.getCompiledInstance(mk54Code);

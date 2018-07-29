@@ -67,29 +67,34 @@ public class ControlGenTest {
     public void shouldGoToSubroutineAndReturn() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 GOSUB,
-                "04",
+                "05",
                 DIGIT(2),
+                ADD,
                 STOP,
                 DIGIT(9),
+                ENTER,
                 RET
         ));
 
         mk54.execute();
         final float x = mk54.getX();
 
-        assertThat(x, is(92f));
+        assertThat(x, is(11f));
     }
 
     @Test
     public void shouldSupportNestedSubroutines() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 GOSUB,
-                "04",
+                "06",
                 DIGIT(2),
+                ADD,
+                ADD,
                 STOP,
                 DIGIT(9),
+                ENTER,
                 GOSUB,
-                "08",
+                "11",
                 RET,
                 DIGIT(1),
                 RET
@@ -98,7 +103,7 @@ public class ControlGenTest {
         mk54.execute();
         final float x = mk54.getX();
 
-        assertThat(x, is(912f));
+        assertThat(x, is(12f));
     }
 
     @Test(expected = InvalidJumpTargetException.class)
@@ -227,9 +232,54 @@ public class ControlGenTest {
         x = mk54.getX();
 
         assertThat("Should put 1 into X", x, is(1f));
-
     }
 
+    @Test
+    public void shouldDecreaseMemValueAndPerformIndirectJump() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                IGOTO(0),
+                DIGIT(5),
+                STOP
+        ));
 
+        mk54.setMem(0, 3);
+        mk54.execute();
+        final float x = mk54.getX();
 
+        assertThat(x, is(5f));
+    }
+
+    @Test
+    public void shouldIncreaseMemValueAndPerformIndirectJump() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                IGOTO(5),
+                DIGIT(5),
+                STOP
+        ));
+
+        mk54.setMem(5, 2);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(4f));
+    }
+
+    @Test
+    public void shouldPerformIndirectJump() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                IGOTO(10),
+                STOP,
+                DIGIT(5),
+                STOP
+        ));
+
+        mk54.setMem(10, 3);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(5f));
+    }
 }

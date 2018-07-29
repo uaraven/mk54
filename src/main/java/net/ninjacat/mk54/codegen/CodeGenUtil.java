@@ -1,5 +1,6 @@
 package net.ninjacat.mk54.codegen;
 
+import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -19,6 +20,7 @@ final class CodeGenUtil {
     static final String REGISTER_Y = "y";
     static final String REGISTER_X_MANTISSA = "xMantissa";
     static final String REGISTER_X_EXPONENT = "xExponent";
+    static final String MEMORY = "memory";
     static final String RESET_X = "resetX";
 
     static final String ENTRY_MODE = "entryMode";
@@ -31,6 +33,21 @@ final class CodeGenUtil {
     private CodeGenUtil() {
     }
 
+
+    /**
+     * Parses binary-decimal MK address.
+     *
+     * @param addr Address written in MK format
+     * @return integer address
+     */
+    static int parseAddress(final String addr) {
+        if (addr.length() != 2) {
+            throw new InvalidJumpTargetException(addr);
+        }
+        final int addr1 = Integer.parseInt(addr.substring(0, 1), 16);
+        final int addr2 = Integer.parseInt(addr.substring(1, 2), 16);
+        return addr1 * 10 + addr2;
+    }
 
     /**
      * Moves stack down from T to Z and Z  to Y. This must be executed for every operation which
@@ -74,6 +91,8 @@ final class CodeGenUtil {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
+
+        forcePushStack(mv, context);
     }
 
     /**

@@ -4,8 +4,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
-import static net.ninjacat.mk54.codegen.CodeGenUtil.REGISTER_X;
+import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
@@ -51,7 +50,7 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void gotoAddr(final MethodVisitor mv, final CodeGenContext context) {
-        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitJumpInsn(GOTO, targetLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);
@@ -64,7 +63,7 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void gosub(final MethodVisitor mv, final CodeGenContext context) {
-        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label subroutineLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
@@ -115,7 +114,7 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void jnz(final MethodVisitor mv, final CodeGenContext context) {
-        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -131,7 +130,7 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void jz(final MethodVisitor mv, final CodeGenContext context) {
-        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -147,7 +146,7 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void jltz(final MethodVisitor mv, final CodeGenContext context) {
-        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -163,7 +162,7 @@ final class ControlGen {
      * @param context Code generation context
      */
     static void jgez(final MethodVisitor mv, final CodeGenContext context) {
-        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
@@ -172,5 +171,38 @@ final class ControlGen {
         mv.visitJumpInsn(Opcodes.IFGE, targetLabel);
     }
 
+
+    static OperationCodeGenerator indirectGoto(final int register) {
+        return (mv, context) -> {
+            if (register >= 0 && register <= 3) {
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+                mv.visitIntInsn(BIPUSH, register);
+                mv.visitInsn(DUP2);
+                mv.visitInsn(FALOAD);
+                mv.visitInsn(FCONST_1);
+                mv.visitInsn(FSUB);
+                mv.visitInsn(FASTORE);
+            } else if (register >= 4 && register <= 6) {
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+                mv.visitIntInsn(BIPUSH, register);
+                mv.visitInsn(DUP2);
+                mv.visitInsn(FALOAD);
+                mv.visitInsn(FCONST_1);
+                mv.visitInsn(FADD);
+                mv.visitInsn(FASTORE);
+            }
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(F2I);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
+            mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
+            mv.visitFrame(F_SAME, 0, null, 0, null);
+        };
+    }
 
 }

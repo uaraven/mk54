@@ -61,17 +61,22 @@ public final class Opcode {
 
     private static final String STO_BASE = "4%X";
     private static final String RCL_BASE = "6%X";
+    private static final String INDIRECT_GOTO_BASE = "8%X";
+
+
 
     public static String DIGIT(final int digit) {
         return String.format("%02X", digit);
     }
-
     public static String STO(final int location) {
         return String.format(STO_BASE, location);
     }
-
     public static String RCL(final int location) {
         return String.format(RCL_BASE, location);
+    }
+
+    public static String IGOTO(final int register) {
+        return String.format(INDIRECT_GOTO_BASE, register);
     }
 
     private Opcode() {

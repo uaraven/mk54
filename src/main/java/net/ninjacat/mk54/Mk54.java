@@ -249,7 +249,8 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        debug(10, "50");
+        memory[8] += 1;
+        indirectJumpAddress = (int) memory[8];
     }
 
 }
