@@ -138,7 +138,6 @@ public class CodeGenerator {
         final Label startLabel = new Label();
         executeMethod.visitLabel(startLabel);
 
-        boolean currentDelayPushStack = true;
         // Prepare context
         final CodeGenContext context = new CodeGenContext(operations);
 
@@ -155,13 +154,6 @@ public class CodeGenerator {
                     CodeGenUtil.prepareXForReset(executeMethod, context);
                 }
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
-                if (!KEEP_STACK.contains(operation) && currentDelayPushStack) {
-                    // next line seems unneeded as stack push is forced every time X is supposed to be reset
-//                    CodeGenUtil.forcePushStack(executeMethod, context);
-                    currentDelayPushStack = false;
-                } else {
-                    currentDelayPushStack = true;
-                }
             } else {
                 throw new UnknownOperationException(operation);
             }

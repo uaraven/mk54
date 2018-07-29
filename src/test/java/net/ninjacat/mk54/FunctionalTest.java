@@ -23,6 +23,15 @@ public class FunctionalTest {
         assertThat((double) mk54.getX(), is(closeTo(12.566, 0.01)));
     }
 
+    @Test
+    public void testSequenceOfCalculations() throws Exception {
+        final Mk54Wrapper mk54 = compileResource("/functional/useless_calculations.mk");
+        mk54.setX(5f);
+
+        mk54.execute();
+
+        assertThat((double) mk54.getX(), is(closeTo(1.79176, 0.00001)));
+    }
 
     @Test
     public void testIndirectJumps() throws Exception {

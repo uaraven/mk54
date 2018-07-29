@@ -2,7 +2,8 @@ package net.ninjacat.mk54.codegen;
 
 import org.objectweb.asm.Opcodes;
 
-import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
+import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
+import static net.ninjacat.mk54.codegen.CodeGenUtil.REGISTER_X;
 
 
 final class MemoryGen {
@@ -26,8 +27,6 @@ final class MemoryGen {
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
             mv.visitInsn(Opcodes.FASTORE);
-
-            prepareXForReset(mv, context);
         };
     }
 
@@ -45,8 +44,6 @@ final class MemoryGen {
             mv.visitIntInsn(Opcodes.BIPUSH, location);
             mv.visitInsn(Opcodes.FALOAD);
             mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-
-            prepareXForReset(mv, context);
         };
     }
 }

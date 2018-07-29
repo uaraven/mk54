@@ -152,7 +152,6 @@ final class RegisterGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X1, "F");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-        prepareXForReset(mv, context);
     }
 
     /**
@@ -192,7 +191,6 @@ final class RegisterGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(FCONST_0);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-        prepareXForReset(mv, context);
     }
 
     /**
@@ -210,7 +208,6 @@ final class RegisterGen {
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-        prepareXForReset(mv, context);
     }
 
 
@@ -245,8 +242,6 @@ final class RegisterGen {
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X1, "F");
         mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_T, "F");
-
-        prepareXForReset(mv, context);
     }
 
 }
