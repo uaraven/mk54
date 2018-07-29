@@ -3,7 +3,6 @@ package net.ninjacat.mk54.opcodes;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Streams;
 import net.ninjacat.mk54.exceptions.RuntimeIOException;
 
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class Opcodes {
 
             // no use of .collect() because of https://bugs.openjdk.java.net/browse/JDK-8040892
             this.keyToOpcodeMap = new HashMap<>();
-            Streams.concat(
+            Stream.concat(
                     opcodes.stream()
                             .flatMap(oc -> oc.getKeys().stream()
                                     .map(Utils::normalizeKey)

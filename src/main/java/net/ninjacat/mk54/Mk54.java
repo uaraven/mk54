@@ -209,7 +209,8 @@ public class Mk54 {
     }
 
     void debug(final int address, final String operation) {
-        System.out.println(String.format("Addr: %02x, Oper: %s", address, operation));
+        System.out.println("------------------");
+        System.out.println(String.format("Addr: %X%X, Oper: %s", address / 10, address % 10, operation));
         System.out.println();
         dumpRegisters();
         System.out.println();
@@ -249,8 +250,6 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        memory[8] += 1;
-        indirectJumpAddress = (int) memory[8];
     }
 
 }

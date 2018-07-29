@@ -11,6 +11,7 @@ import static org.objectweb.asm.Opcodes.*;
  * Register operations: number entry, swap, rot, etc.
  */
 final class RegisterGen {
+
     private RegisterGen() {
     }
 

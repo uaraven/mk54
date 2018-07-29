@@ -3,7 +3,6 @@ package net.ninjacat.mk54.codegen;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.ninjacat.mk54.Mk54;
 import net.ninjacat.mk54.exceptions.ClassCreationException;
 import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
@@ -13,7 +12,6 @@ import org.objectweb.asm.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
@@ -26,20 +24,10 @@ import static org.objectweb.asm.Opcodes.*;
 public class CodeGenerator {
 
     private static final ImmutableMap.Builder<String, OperationCodeGenerator> OPERATIONS_BUILDER = ImmutableMap.builder();
-    private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
 
     private static final int MEMORY_SIZE = 15;
     private static final String ILLEGAL_STATE_EXCEPTION = "java/lang/IllegalStateException";
     static final String JAVA_LANG_INTEGER = "java/lang/Integer";
-
-    private static final Set<String> TWO_BYTE_OPS = ImmutableSet.of(
-            Opcode.GOTO,
-            GOSUB,
-            JNZ,
-            JZ,
-            JGEZ,
-            JLTZ
-    );
 
     static {
         OPERATIONS_BUILDER
@@ -89,18 +77,12 @@ public class CodeGenerator {
                 .put(JLTZ, ControlGen::jltz)
                 .put(JGEZ, ControlGen::jgez);
 
-        KEEP_STACK_BUILDER.add(ENTER);
-        KEEP_STACK_BUILDER.add(DECIMAL_POINT);
-        KEEP_STACK_BUILDER.add(NEG);
-        KEEP_STACK_BUILDER.add(EXP);
-
         IntStream.range(0, 10)
                 .forEach(digit -> {
                     OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit));
-                    KEEP_STACK_BUILDER.add(DIGIT(digit));
                 });
 
-        IntStream.rangeClosed(0, 15).forEach(reg -> OPERATIONS_BUILDER.put(IGOTO(reg), ControlGen.indirectGoto(reg)));
+        IntStream.rangeClosed(0, MEMORY_SIZE).forEach(reg -> OPERATIONS_BUILDER.put(IGOTO(reg), ControlGen.indirectGoto(reg)));
 
         IntStream.range(0, MEMORY_SIZE)
                 .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
@@ -110,7 +92,6 @@ public class CodeGenerator {
     }
 
     private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
-    private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();
     private final boolean generateDebugCode;
 
     /**
@@ -150,7 +131,7 @@ public class CodeGenerator {
                 if (this.generateDebugCode) {
                     generateDump(executeMethod, context);
                 }
-                if (!KEEP_STACK.contains(operation)) {
+                if (shouldResetX(operation)) {
                     CodeGenUtil.prepareXForReset(executeMethod, context);
                 }
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
@@ -195,7 +176,7 @@ public class CodeGenerator {
         String op = context.getOperations().get(0);
         while (op != null) {
             context.getLabelForAddress(context.getCurrentAddress());
-            if (TWO_BYTE_OPS.contains(op)) {
+            if (Opcode.isJump(op)) {
                 final int targetAddress = parseAddress(context.nextOperation());
                 if (targetAddress > context.getOperations().size() - 1) {
                     throw new InvalidJumpTargetException(Integer.toHexString(targetAddress));
@@ -221,7 +202,7 @@ public class CodeGenerator {
         mv.visitLabel(context.getTrampolineLabel());
         mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, "indirectJumpAddress", "I");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, ControlGen.INDIRECT_JUMP_ADDRESS, "I");
         mv.visitTableSwitchInsn(0, context.getOperations().size() - 1, defaultLabel, context.generateJumpTable());
         mv.visitLabel(defaultLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);

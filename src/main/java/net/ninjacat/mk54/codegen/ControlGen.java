@@ -5,6 +5,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
+import static net.ninjacat.mk54.codegen.CodeGenerator.JAVA_LANG_INTEGER;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
@@ -15,8 +16,7 @@ final class ControlGen {
     private static final String STACK_DESCRIPTOR = "Ljava/util/Stack;";
     private static final String JAVA_UTIL_STACK = "java/util/Stack";
     private static final String CALL_STACK = "callStack";
-    private static final String INDIRECT_JUMP_ADDRESS = "indirectJumpAddress";
-    private static final String JAVA_LANG_INTEGER = "java/lang/Integer";
+    static final String INDIRECT_JUMP_ADDRESS = "indirectJumpAddress";
 
     private ControlGen() {
     }
@@ -40,7 +40,6 @@ final class ControlGen {
      */
     static void startStop(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitInsn(RETURN);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -53,7 +52,6 @@ final class ControlGen {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitJumpInsn(GOTO, targetLabel);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -68,11 +66,10 @@ final class ControlGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
         mv.visitIntInsn(BIPUSH, context.getCurrentAddress() + 1);
-        mv.visitMethodInsn(INVOKESTATIC, CodeGenerator.JAVA_LANG_INTEGER, "valueOf", "(I)Ljava/lang/Integer;", false);
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_INTEGER, "valueOf", "(I)Ljava/lang/Integer;", false);
         mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
         mv.visitInsn(POP);
         mv.visitJumpInsn(GOTO, subroutineLabel);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -104,7 +101,6 @@ final class ControlGen {
         mv.visitLabel(exitLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
-        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -201,7 +197,6 @@ final class ControlGen {
             mv.visitInsn(F2I);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
             mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
-            mv.visitFrame(F_SAME, 0, null, 0, null);
         };
     }
 

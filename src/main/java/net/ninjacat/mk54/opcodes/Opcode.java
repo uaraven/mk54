@@ -1,5 +1,10 @@
 package net.ninjacat.mk54.opcodes;
 
+import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
+import java.util.stream.IntStream;
+
 public final class Opcode {
     public static final String DECIMAL_POINT = "0A";
     public static final String NEG = "0B";
@@ -66,15 +71,60 @@ public final class Opcode {
     public static String DIGIT(final int digit) {
         return String.format("%02X", digit);
     }
+
     public static String STO(final int location) {
         return String.format(STO_BASE, location);
     }
+
     public static String RCL(final int location) {
         return String.format(RCL_BASE, location);
     }
 
     public static String IGOTO(final int register) {
         return String.format(INDIRECT_GOTO_BASE, register);
+    }
+
+
+    private static final Set<String> JUMP_OPS = ImmutableSet.of(
+            Opcode.GOTO,
+            GOSUB,
+            JNZ,
+            JZ,
+            JGEZ,
+            JLTZ
+    );
+
+    private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
+
+    static {
+        KEEP_STACK_BUILDER.add(ENTER);
+        KEEP_STACK_BUILDER.add(DECIMAL_POINT);
+        KEEP_STACK_BUILDER.add(NEG);
+        KEEP_STACK_BUILDER.add(EXP);
+
+        IntStream.range(0, 10)
+                .forEach(digit -> {
+                    KEEP_STACK_BUILDER.add(DIGIT(digit));
+                });
+    }
+
+    private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();
+
+    /**
+     * Checks if operation is a jump instruction, which contain address in the next byte
+     */
+    public static boolean isJump(final String code) {
+        return JUMP_OPS.contains(code);
+    }
+
+    /**
+     * Checks if operation should set reset X flag
+     *
+     * @param code operation code
+     * @return true or false
+     */
+    public static boolean shouldResetX(final String code) {
+        return !KEEP_STACK.contains(code);
     }
 
     private Opcode() {
