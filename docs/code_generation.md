@@ -78,6 +78,10 @@ After `В↑` operation is performed value from register X is copied to register
 value, but any digit operation will reset register X and start from scratch. This is implemented using flag `resetX`, 
 which is checked on each digit operation and set to `true` on all operations not related to number entry.
 
+---
+
+Every new digit entry after performed operation will push stack forward, moving X->Y, Y->Z and Z->T. 
+
 ### Register size
 
 Original MK-series registers were limited by their displays which could only show 8 digits of significand. Float data 

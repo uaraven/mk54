@@ -8,6 +8,9 @@ import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+/**
+ * Programs tested here were validated on actual MK-52 calculator
+ */
 public class FunctionalTest {
 
     @Test
@@ -18,6 +21,22 @@ public class FunctionalTest {
         mk54.execute();
 
         assertThat((double) mk54.getX(), is(closeTo(12.566, 0.01)));
+    }
+
+
+    @Test
+    public void testIndirectJumps() throws Exception {
+        final Mk54Wrapper mk54 = compileResource("/functional/indirect_jumps.mk");
+        mk54.setMem(3, 5f);
+        mk54.setMem(4, 7f);
+        mk54.setMem(10, 12f);
+
+        mk54.execute();
+
+        assertThat(mk54.getX(), is(18.0f));
+        assertThat(mk54.getMem(3), is(4f));
+        assertThat(mk54.getMem(4), is(8f));
+        assertThat(mk54.getMem(10), is(12f));
     }
 
     private static Mk54Wrapper compileResource(final String resource) throws Exception {

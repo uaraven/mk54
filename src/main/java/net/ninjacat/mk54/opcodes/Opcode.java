@@ -63,8 +63,6 @@ public final class Opcode {
     private static final String RCL_BASE = "6%X";
     private static final String INDIRECT_GOTO_BASE = "8%X";
 
-
-
     public static String DIGIT(final int digit) {
         return String.format("%02X", digit);
     }
