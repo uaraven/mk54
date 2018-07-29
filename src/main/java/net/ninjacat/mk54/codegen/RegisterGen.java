@@ -54,6 +54,7 @@ final class RegisterGen {
             mv.visitJumpInsn(IFEQ, noReset);
 
             // Clear X if resetX flag is set
+            enterNumber(mv, context);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(FCONST_0);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");

@@ -198,15 +198,29 @@ public class Mk54 {
         makeXRegister();
     }
 
+    void debug(final int address, final String operation) {
+        System.out.println(String.format("Addr: %d, Oper: %s", address, operation));
+        dumpRegisters();
+        System.out.println();
+    }
+
+    void dumpRegisters() {
+        System.out.println(String.format(" X: %f", this.x));
+        System.out.println(String.format(" Y: %f", this.y));
+        System.out.println(String.format(" Z: %f", this.z));
+        System.out.println(String.format(" T: %f", this.t));
+        System.out.println(String.format("X1: %f", this.x1));
+
+        for (int i = 0; i < this.memory.length; i++) {
+            System.out.println(String.format("Mem[%X]: %f", i, this.memory[i]));
+        }
+    }
+
     /**
      * Test method for getting asmified code
      */
     private void testAsm() {
-        if (x >= 0) {
-            indirectJumpAddress = 0;
-        } else {
-            indirectJumpAddress = 1;
-        }
+        debug(10, "50");
     }
 
 }

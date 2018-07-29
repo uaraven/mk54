@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
  * This class contains all the data required for code generation, such as list of MK operations, ASM {@link MethodVisitor}
  * for generated method, list of all labels corresponding to MK operations, etc.
  */
-public class CodeGenContext {
+class CodeGenContext {
 
     private final List<String> operations;
 
@@ -125,7 +125,14 @@ public class CodeGenContext {
     /**
      * Resets current address pointer to 0
      */
-    public void resetAddress() {
+    void resetAddress() {
         this.address = 0;
+    }
+
+    /**
+     * @return Code of current operation
+     */
+    String getCurrentOperation() {
+        return this.operations.get(this.address);
     }
 }

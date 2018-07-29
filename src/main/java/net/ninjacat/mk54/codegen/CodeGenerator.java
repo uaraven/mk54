@@ -100,13 +100,28 @@ class CodeGenerator {
     }
 
     private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
+    private final boolean generateDebugCode;
 
+    /**
+     * Creates new instance of CodeGenerator
+     * <p>
+     * Will generate code without debug output
+     */
     CodeGenerator() {
-        super();
+        this(false);
     }
 
+    /**
+     * Creates new instance of CodeGenerator
+     *
+     * @param generateDebugCode Flag that determines whether to generate register dumping code for each operation
+     */
+    CodeGenerator(final boolean generateDebugCode) {
+        super();
+        this.generateDebugCode = generateDebugCode;
+    }
 
-    private static void generateExecuteMethod(final List<String> operations, final ClassVisitor classWriter) {
+    private void generateExecuteMethod(final List<String> operations, final ClassVisitor classWriter) {
         final MethodVisitor executeMethod = classWriter.visitMethod(Opcodes.ACC_PUBLIC, "execute", "()V", null, null);
         executeMethod.visitCode();
         final Label startLabel = new Label();
@@ -121,6 +136,9 @@ class CodeGenerator {
         while (operation != null) {
             generateOperandAddressLabel(executeMethod, context);
             if (OPERATION_CODEGEN.containsKey(operation)) {
+                if (this.generateDebugCode) {
+                    generateDump(executeMethod, context);
+                }
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
             } else {
                 throw new UnknownOperationException(operation);
@@ -138,6 +156,20 @@ class CodeGenerator {
         executeMethod.visitEnd();
 
         classWriter.visitEnd();
+    }
+
+    /**
+     * Generates call to {@link Mk54#debug(int, String)} which prints current address, operation code and state of
+     * registers and memory
+     *
+     * @param mv      {@link MethodVisitor} for {@code Mk54.execute()} method
+     * @param context Code generation context
+     */
+    private static void generateDump(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitIntInsn(BIPUSH, context.getCurrentAddress());
+        mv.visitLdcInsn(context.getCurrentOperation());
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debug", "(ILjava/lang/String;)V", false);
     }
 
     /**

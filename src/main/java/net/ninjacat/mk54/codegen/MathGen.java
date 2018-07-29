@@ -294,17 +294,20 @@ final class MathGen {
     /**
      * Puts value of PI into X
      * <p>
-     * TODO: Check if X must be saved
      *
      * @param mv      Generated method visitor
      * @param context Code generation context
      */
     static void pi(final MethodVisitor mv, final CodeGenContext context) {
         saveX(mv, context);
+
+        RegisterGen.enterNumber(mv, context);
+
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(Math.PI);
         mv.visitInsn(D2F);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+
         prepareXForReset(mv, context);
     }
 

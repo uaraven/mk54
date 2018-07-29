@@ -4,20 +4,20 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-class Mk54Wrapper {
+public class Mk54Wrapper {
 
-    private Object mk54;
+    private final Object mk54;
 
-    Mk54Wrapper(final Object mk54) {
+    public Mk54Wrapper(final Object mk54) {
         this.mk54 = mk54;
     }
 
-    void execute() throws Exception {
+    public void execute() throws Exception {
         final Method executeMethod = this.mk54.getClass().getMethod("execute");
         executeMethod.invoke(this.mk54);
     }
 
-    float getX() throws Exception {
+    public float getX() throws Exception {
         return getRegister("x");
     }
 
@@ -27,23 +27,23 @@ class Mk54Wrapper {
         return x.getFloat(this.mk54);
     }
 
-    float getX1() throws Exception {
+    public float getX1() throws Exception {
         return getRegister("x1");
     }
 
-    void setX1(final float value) throws Exception {
+    public void setX1(final float value) throws Exception {
         setRegister("x1", value);
     }
 
-    float getY() throws Exception {
+    public float getY() throws Exception {
         return getRegister("y");
     }
 
-    void setX(final float value) throws Exception {
+    public void setX(final float value) throws Exception {
         setRegister("x", value);
     }
 
-    float getZ() throws Exception {
+    public float getZ() throws Exception {
         return getRegister("z");
     }
 
@@ -53,11 +53,11 @@ class Mk54Wrapper {
         x.setFloat(this.mk54, value);
     }
 
-    float getT() throws Exception {
+    public float getT() throws Exception {
         return getRegister("t");
     }
 
-    void setY(final float value) throws Exception {
+    public void setY(final float value) throws Exception {
         setRegister("y", value);
     }
 
@@ -86,22 +86,22 @@ class Mk54Wrapper {
     }
 
 
-    void setZ(final float value) throws Exception {
+    public void setZ(final float value) throws Exception {
         setRegister("z", value);
     }
 
-    void setT(final float value) throws Exception {
+    public void setT(final float value) throws Exception {
         setRegister("t", value);
     }
 
 
-    float getMem(final int location) throws Exception {
+    public float getMem(final int location) throws Exception {
         final Field mem = this.mk54.getClass().getDeclaredField("memory");
         mem.setAccessible(true);
         return Array.getFloat(mem.get(this.mk54), location);
     }
 
-    void setMem(final int location, final float value) throws Exception {
+    public void setMem(final int location, final float value) throws Exception {
         final Field mem = this.mk54.getClass().getDeclaredField("memory");
         mem.setAccessible(true);
         Array.setFloat(mem.get(this.mk54), location, value);

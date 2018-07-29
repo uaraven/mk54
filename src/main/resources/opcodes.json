@@ -548,7 +548,8 @@
     "code": "50",
     "keys": [
       "с/п",
-      "r/s"
+      "r/s",
+      "stop"
     ],
     "desc": "Start/stop program"
   },

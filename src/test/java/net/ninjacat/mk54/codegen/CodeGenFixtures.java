@@ -5,12 +5,12 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-final class CodeGenFixtures {
+public final class CodeGenFixtures {
     private CodeGenFixtures() {
     }
 
-    static Mk54Wrapper getCompiledInstance(final String operations) throws Exception {
-        final CodeGenerator codeGenerator = new CodeGenerator();
+    public static Mk54Wrapper getCompiledInstance(final String operations) throws Exception {
+        final CodeGenerator codeGenerator = new CodeGenerator(true);
         final byte[] classBytes = codeGenerator.compile(operations);
 
         // TODO: remove class writing out
@@ -23,7 +23,7 @@ final class CodeGenFixtures {
         return new Mk54Wrapper(mk54.newInstance());
     }
 
-    static String program(final String... operand) {
+    public static String program(final String... operand) {
         return Arrays.stream(operand).collect(Collectors.joining(" "));
     }
 }

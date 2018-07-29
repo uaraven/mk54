@@ -1,14 +1,10 @@
 package net.ninjacat.mk54;
 
-import com.google.common.io.CharStreams;
-import net.ninjacat.mk54.exceptions.RuntimeIOException;
 import net.ninjacat.mk54.exceptions.UnknownCommandException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import static net.ninjacat.mk54.Resources.loadProgram;
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -72,11 +68,4 @@ public class Mk54CodeGeneratorTest {
         this.compiler.compile(program);
     }
 
-    private String loadProgram(final String resource) {
-        try (final InputStreamReader is = new InputStreamReader(getClass().getResourceAsStream(resource))) {
-            return CharStreams.toString(is);
-        } catch (final IOException e) {
-            throw new RuntimeIOException(e);
-        }
-    }
 }

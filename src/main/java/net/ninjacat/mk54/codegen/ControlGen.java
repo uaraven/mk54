@@ -8,12 +8,16 @@ import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
 import static net.ninjacat.mk54.codegen.CodeGenUtil.REGISTER_X;
 import static org.objectweb.asm.Opcodes.*;
 
+/**
+ * Contains methods to generate byte code for control operations
+ */
 final class ControlGen {
 
     private static final String STACK_DESCRIPTOR = "Ljava/util/Stack;";
     private static final String JAVA_UTIL_STACK = "java/util/Stack";
     private static final String CALL_STACK = "callStack";
     private static final String INDIRECT_JUMP_ADDRESS = "indirectJumpAddress";
+    private static final String JAVA_LANG_INTEGER = "java/lang/Integer";
 
     private ControlGen() {
     }
@@ -37,7 +41,6 @@ final class ControlGen {
      */
     static void startStop(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitInsn(RETURN);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -93,8 +96,8 @@ final class ControlGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
         mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "pop", "()Ljava/lang/Object;", false);
-        mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
+        mv.visitTypeInsn(CHECKCAST, JAVA_LANG_INTEGER);
+        mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_LANG_INTEGER, "intValue", "()I", false);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
         mv.visitLabel(exitLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);
