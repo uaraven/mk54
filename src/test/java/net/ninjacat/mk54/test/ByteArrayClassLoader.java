@@ -1,4 +1,4 @@
-package net.ninjacat.mk54.codegen;
+package net.ninjacat.mk54.test;
 
 public class ByteArrayClassLoader extends ClassLoader {
 

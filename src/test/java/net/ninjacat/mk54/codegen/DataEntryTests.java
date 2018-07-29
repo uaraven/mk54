@@ -1,5 +1,7 @@
 package net.ninjacat.mk54.codegen;
 
+import net.ninjacat.mk54.test.CodeGenFixtures;
+import net.ninjacat.mk54.test.Mk54Wrapper;
 import org.junit.Test;
 
 import static net.ninjacat.mk54.opcodes.Opcode.*;

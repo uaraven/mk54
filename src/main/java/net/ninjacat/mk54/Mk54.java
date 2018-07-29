@@ -5,6 +5,7 @@ import com.google.common.annotations.VisibleForTesting;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * Template class for Mk54 runnable program
@@ -14,7 +15,7 @@ import java.util.Stack;
  * During bytecode generation new class will be created based on this class but with execute() method containing
  * actual bytecode generated from mk hex code.
  */
-@SuppressWarnings({"WeakerAccess", "unused", "FieldMayBeFinal", "FieldCanBeLocal", "MismatchedReadAndWriteOfArray"})
+@SuppressWarnings({"WeakerAccess", "unused", "FieldMayBeFinal", "FieldCanBeLocal", "MismatchedReadAndWriteOfArray", "SameParameterValue"})
 public class Mk54 {
 
     public static final int RAD = 0;
@@ -71,6 +72,7 @@ public class Mk54 {
     /**
      * Call stack for subroutine calls
      */
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private Stack<Integer> callStack;
 
     /**
@@ -207,9 +209,22 @@ public class Mk54 {
     }
 
     void debug(final int address, final String operation) {
-        System.out.println(String.format("Addr: %d, Oper: %s", address, operation));
+        System.out.println(String.format("Addr: %02x, Oper: %s", address, operation));
+        System.out.println();
         dumpRegisters();
         System.out.println();
+        dumpInternalState();
+        System.out.println();
+    }
+
+    private void dumpInternalState() {
+        System.out.println(String.format("    entryMode: %s", this.entryMode == MANTISSA ? "Mantissa" : "Exponent"));
+        System.out.println(String.format("decimalFactor: %d", this.decimalFactor));
+        System.out.println(String.format("       resetX: %s", Boolean.toString(this.resetX)));
+        System.out.println(String.format("    pushStack: %s", Boolean.toString(this.pushStack)));
+        System.out.println(String.format("    Ret stack: [%s]", this.callStack.stream()
+                .map(Integer::toHexString)
+                .collect(Collectors.joining(" "))));
     }
 
     void dumpRegisters() {
@@ -218,9 +233,15 @@ public class Mk54 {
         System.out.println(String.format(" Z: %f", this.z));
         System.out.println(String.format(" T: %f", this.t));
         System.out.println(String.format("X1: %f", this.x1));
+        System.out.println();
 
         for (int i = 0; i < this.memory.length; i++) {
-            System.out.println(String.format("Mem[%X]: %f", i, this.memory[i]));
+            System.out.print(String.format("M[%X]: %f", i, this.memory[i]));
+            if ((i + 1) % 3 == 0) {
+                System.out.println();
+            } else {
+                System.out.print("     ");
+            }
         }
     }
 

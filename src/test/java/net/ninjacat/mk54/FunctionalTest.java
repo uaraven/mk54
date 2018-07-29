@@ -1,7 +1,7 @@
 package net.ninjacat.mk54;
 
-import net.ninjacat.mk54.codegen.CodeGenFixtures;
-import net.ninjacat.mk54.codegen.Mk54Wrapper;
+import net.ninjacat.mk54.test.CodeGenFixtures;
+import net.ninjacat.mk54.test.Mk54Wrapper;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.closeTo;

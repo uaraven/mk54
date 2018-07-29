@@ -1,4 +1,4 @@
-package net.ninjacat.mk54.codegen;
+package net.ninjacat.mk54.test;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -73,13 +73,13 @@ public class Mk54Wrapper {
         x.setInt(this.mk54, value);
     }
 
-    boolean getResetX() throws Exception {
+    public boolean getResetX() throws Exception {
         final Field x = this.mk54.getClass().getDeclaredField("resetX");
         x.setAccessible(true);
         return x.getBoolean(this.mk54);
     }
 
-    void setResetX(final boolean value) throws Exception {
+    public void setResetX(final boolean value) throws Exception {
         final Field x = this.mk54.getClass().getDeclaredField("resetX");
         x.setAccessible(true);
         x.setBoolean(this.mk54, value);

@@ -1,11 +1,12 @@
 package net.ninjacat.mk54.codegen;
 
 import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
+import net.ninjacat.mk54.test.Mk54Wrapper;
 import org.junit.Test;
 
-import static net.ninjacat.mk54.codegen.CodeGenFixtures.getCompiledInstance;
-import static net.ninjacat.mk54.codegen.CodeGenFixtures.program;
 import static net.ninjacat.mk54.opcodes.Opcode.*;
+import static net.ninjacat.mk54.test.CodeGenFixtures.getCompiledInstance;
+import static net.ninjacat.mk54.test.CodeGenFixtures.program;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;

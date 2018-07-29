@@ -1,4 +1,6 @@
-package net.ninjacat.mk54.codegen;
+package net.ninjacat.mk54.test;
+
+import net.ninjacat.mk54.codegen.CodeGenerator;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -10,7 +12,7 @@ public final class CodeGenFixtures {
     }
 
     public static Mk54Wrapper getCompiledInstance(final String operations) throws Exception {
-        final CodeGenerator codeGenerator = new CodeGenerator();
+        final CodeGenerator codeGenerator = new CodeGenerator(true);
         final byte[] classBytes = codeGenerator.compile(operations);
 
         // TODO: remove class writing out

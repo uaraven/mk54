@@ -24,7 +24,7 @@ import static org.objectweb.asm.Opcodes.*;
 /**
  * Generates Java byte code for MK program.
  */
-class CodeGenerator {
+public class CodeGenerator {
 
     private static final ImmutableMap.Builder<String, OperationCodeGenerator> OPERATIONS_BUILDER = ImmutableMap.builder();
     private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
@@ -117,7 +117,7 @@ class CodeGenerator {
      * <p>
      * Will generate code without debug output
      */
-    CodeGenerator() {
+    public CodeGenerator() {
         this(false);
     }
 
@@ -126,7 +126,7 @@ class CodeGenerator {
      *
      * @param generateDebugCode Flag that determines whether to generate register dumping code for each operation
      */
-    CodeGenerator(final boolean generateDebugCode) {
+    public CodeGenerator(final boolean generateDebugCode) {
         super();
         this.generateDebugCode = generateDebugCode;
     }
@@ -272,7 +272,7 @@ class CodeGenerator {
      * @param operationsStr String of operation codes separated by whitespace
      * @return byte array containing code fo generated class
      */
-    byte[] compile(final String operationsStr) {
+    public byte[] compile(final String operationsStr) {
         final List<String> operations = ImmutableList.copyOf(
                 Splitter.onPattern("\\s+").omitEmptyStrings().trimResults().split(operationsStr));
 
