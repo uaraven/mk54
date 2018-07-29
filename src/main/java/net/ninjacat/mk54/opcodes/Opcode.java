@@ -48,11 +48,16 @@ public final class Opcode {
 
     public static final String RND = "3B";
 
-    public static final String RUN_STOP = "50";
+    public static final String STOP = "50";
     public static final String GOTO = "51";
     public static final String RET = "52";
     public static final String GOSUB = "53";
     public static final String NOP = "54";
+
+    public static final String JNZ = "57";
+    public static final String JGEZ = "59";
+    public static final String JLTZ = "5C";
+    public static final String JZ = "5E";
 
     private static final String STO_BASE = "4%X";
     private static final String RCL_BASE = "6%X";

@@ -202,10 +202,10 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        try {
-            this.indirectJumpAddress = this.callStack.pop();
-        } finally {
-            this.indirectJumpAddress = 0;
+        if (x >= 0) {
+            indirectJumpAddress = 0;
+        } else {
+            indirectJumpAddress = 1;
         }
     }
 

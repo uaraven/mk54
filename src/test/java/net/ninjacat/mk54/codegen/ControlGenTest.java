@@ -17,7 +17,7 @@ public class ControlGenTest {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT(1),
                 DIGIT(2),
-                RUN_STOP,
+                STOP,
                 DIGIT(3),
                 DIGIT(4)
         ));
@@ -68,7 +68,7 @@ public class ControlGenTest {
                 GOSUB,
                 "04",
                 DIGIT(2),
-                RUN_STOP,
+                STOP,
                 DIGIT(9),
                 RET
         ));
@@ -79,14 +79,13 @@ public class ControlGenTest {
         assertThat(x, is(92f));
     }
 
-
     @Test
     public void shouldSupportNestedSubroutines() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 GOSUB,
                 "04",
                 DIGIT(2),
-                RUN_STOP,
+                STOP,
                 DIGIT(9),
                 GOSUB,
                 "08",
@@ -109,5 +108,127 @@ public class ControlGenTest {
         ));
         fail("Should have failed during code generation");
     }
+
+    @Test
+    public void shouldCorrectlyHandleJNZ() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                JNZ,
+                "04",
+                DIGIT(1),
+                STOP,
+                DIGIT(2),
+                STOP
+        ));
+
+        mk54.setX(5);
+        mk54.setResetX(true);
+        mk54.execute();
+        float x = mk54.getX();
+
+        assertThat("Should put 2 into X", x, is(2f));
+
+        mk54.setX(0);
+        mk54.setResetX(true);
+        mk54.execute();
+        x = mk54.getX();
+
+        assertThat("Should put 1 into X", x, is(1f));
+    }
+
+    @Test
+    public void shouldCorrectlyHandleJZ() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                JZ,
+                "04",
+                DIGIT(1),
+                STOP,
+                DIGIT(2),
+                STOP
+        ));
+
+        mk54.setX(5);
+        mk54.setResetX(true);
+        mk54.execute();
+        float x = mk54.getX();
+
+        assertThat("Should put 1 into X", x, is(1f));
+
+        mk54.setX(0);
+        mk54.setResetX(true);
+        mk54.execute();
+        x = mk54.getX();
+
+        assertThat("Should put 2 into X", x, is(2f));
+    }
+
+    @Test
+    public void shouldCorrectlyHandleJLTZ() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                JLTZ,
+                "04",
+                DIGIT(1),
+                STOP,
+                DIGIT(2),
+                STOP
+        ));
+
+        mk54.setX(5);
+        mk54.setResetX(true);
+        mk54.execute();
+        float x = mk54.getX();
+
+        assertThat("Should put 1 into X", x, is(1f));
+
+        mk54.setX(-5);
+        mk54.setResetX(true);
+        mk54.execute();
+        x = mk54.getX();
+
+        assertThat("Should put 2 into X", x, is(2f));
+
+        mk54.setX(0);
+        mk54.setResetX(true);
+        mk54.execute();
+        x = mk54.getX();
+
+        assertThat("Should put 1 into X", x, is(1f));
+
+    }
+
+    @Test
+    public void shouldCorrectlyHandleJGEZ() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                JGEZ,
+                "04",
+                DIGIT(2),
+                STOP,
+                DIGIT(1),
+                STOP
+        ));
+
+        mk54.setX(5);
+        mk54.setResetX(true);
+        mk54.execute();
+        float x = mk54.getX();
+
+        assertThat("Should put 1 into X", x, is(1f));
+
+        mk54.setX(-5);
+        mk54.setResetX(true);
+        mk54.execute();
+        x = mk54.getX();
+
+        assertThat("Should put 2 into X", x, is(2f));
+
+        mk54.setX(0);
+        mk54.setResetX(true);
+        mk54.execute();
+        x = mk54.getX();
+
+        assertThat("Should put 1 into X", x, is(1f));
+
+    }
+
+
 
 }

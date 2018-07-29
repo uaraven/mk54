@@ -2,8 +2,10 @@ package net.ninjacat.mk54.codegen;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
+import static net.ninjacat.mk54.codegen.CodeGenUtil.REGISTER_X;
 import static org.objectweb.asm.Opcodes.*;
 
 final class ControlGen {
@@ -11,6 +13,7 @@ final class ControlGen {
     private static final String STACK_DESCRIPTOR = "Ljava/util/Stack;";
     private static final String JAVA_UTIL_STACK = "java/util/Stack";
     private static final String CALL_STACK = "callStack";
+    private static final String INDIRECT_JUMP_ADDRESS = "indirectJumpAddress";
 
     private ControlGen() {
     }
@@ -67,15 +70,100 @@ final class ControlGen {
         mv.visitJumpInsn(GOTO, subroutineLabel);
     }
 
+    /**
+     * Generates code to return from subroutine. If return stack is empty, it will return to address 00
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
     static void returnFromSub(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
+        mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "isEmpty", "()Z", false);
+        final Label hasAddressLabel = new Label();
+        mv.visitJumpInsn(IFEQ, hasAddressLabel);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
+        final Label exitLabel = new Label();
+        mv.visitJumpInsn(GOTO, exitLabel);
+        mv.visitLabel(hasAddressLabel);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
         mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "pop", "()Ljava/lang/Object;", false);
-        mv.visitTypeInsn(CHECKCAST, CodeGenerator.JAVA_LANG_INTEGER);
-        mv.visitMethodInsn(INVOKEVIRTUAL, CodeGenerator.JAVA_LANG_INTEGER, "intValue", "()I", false);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "indirectJumpAddress", "I");
+        mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
+        mv.visitLabel(exitLabel);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
     }
+
+    /**
+     * Performs conditional jump to an address in the next program step if value in register X is not 0
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void jnz(final MethodVisitor mv, final CodeGenContext context) {
+        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final Label targetLabel = context.getLabelForAddress(targetAddress);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(FCMPL);
+        mv.visitJumpInsn(Opcodes.IFNE, targetLabel);
+    }
+
+    /**
+     * Performs conditional jump to an address in the next program step if value in register X is 0
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void jz(final MethodVisitor mv, final CodeGenContext context) {
+        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final Label targetLabel = context.getLabelForAddress(targetAddress);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(FCMPL);
+        mv.visitJumpInsn(Opcodes.IFEQ, targetLabel);
+    }
+
+    /**
+     * Performs conditional jump to an address in the next program step if value in register X is less than 0
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void jltz(final MethodVisitor mv, final CodeGenContext context) {
+        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final Label targetLabel = context.getLabelForAddress(targetAddress);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(FCMPL);
+        mv.visitJumpInsn(Opcodes.IFLT, targetLabel);
+    }
+
+    /**
+     * Performs conditional jump to an address in the next program step if value in register X is greater than or equal to 0
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void jgez(final MethodVisitor mv, final CodeGenContext context) {
+        final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
+        final Label targetLabel = context.getLabelForAddress(targetAddress);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(FCMPL);
+        mv.visitJumpInsn(Opcodes.IFGE, targetLabel);
+    }
+
 
 }

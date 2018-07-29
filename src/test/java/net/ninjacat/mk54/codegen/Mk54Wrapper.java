@@ -79,6 +79,13 @@ class Mk54Wrapper {
         return x.getBoolean(this.mk54);
     }
 
+    void setResetX(final boolean value) throws Exception {
+        final Field x = this.mk54.getClass().getDeclaredField("resetX");
+        x.setAccessible(true);
+        x.setBoolean(this.mk54, value);
+    }
+
+
     void setZ(final float value) throws Exception {
         setRegister("z", value);
     }

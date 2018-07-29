@@ -81,7 +81,7 @@ address stack.
    to register X.
    
    `mk54` code generator does not support such jumps as there is no byte code generated for
-   operations at addresses `04` and `06`. `GOTO 04`
+   operations at addresses `04` and `06`. `GOTO 04` will generate code identical to `GOTO 03`
  - MK calculators allow jumps to anywhere in address space, for example following program is valid and will be executed
       
       00. GOTO
@@ -90,5 +90,5 @@ address stack.
    It will jump to address 90, and execute operations there, which would be `00`, so it will run appending zeroes to 
    register X.
    
-   `mk54` code generator does not generate byte code for operations which are not present in the Mk program, so it is
+   `mk54` code generator does not generate byte code for operations which are not present in the program, so it is
    unable to generate jumps beyond last operation. Such jumps will generate exception during code generation. 

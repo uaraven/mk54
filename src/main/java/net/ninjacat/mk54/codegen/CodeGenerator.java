@@ -33,7 +33,11 @@ class CodeGenerator {
 
     private static final Set<String> TWO_BYTE_OPS = ImmutableSet.of(
             Opcode.GOTO,
-            GOSUB
+            GOSUB,
+            JNZ,
+            JZ,
+            JGEZ,
+            JLTZ
     );
     public static final String JAVA_LANG_INTEGER = "java/lang/Integer";
 
@@ -75,11 +79,15 @@ class CodeGenerator {
                 .put(FRAC, MathGen::frac)
                 .put(MAX, MathGen::max)
                 .put(RND, MathGen::rnd)
-                .put(RUN_STOP, ControlGen::startStop)
+                .put(STOP, ControlGen::startStop)
                 .put(Opcode.GOTO, ControlGen::gotoAddr)
                 .put(GOSUB, ControlGen::gosub)
                 .put(Opcode.RET, ControlGen::returnFromSub)
-                .put(Opcode.NOP, ControlGen::nop);
+                .put(Opcode.NOP, ControlGen::nop)
+                .put(JNZ, ControlGen::jnz)
+                .put(JZ, ControlGen::jz)
+                .put(JLTZ, ControlGen::jltz)
+                .put(JGEZ, ControlGen::jgez);
 
         IntStream.range(0, 10)
                 .forEach(digit -> OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit)));
