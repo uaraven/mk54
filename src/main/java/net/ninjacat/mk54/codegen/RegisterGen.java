@@ -21,6 +21,13 @@ final class RegisterGen {
      * @param context Code generation context
      */
     static void enterNumber(final MethodVisitor mv, final CodeGenContext context) {
+        pushStack(mv);
+
+        prepareXForReset(mv, context);
+        delayPushStack(mv, context);
+    }
+
+    static void pushStack(final MethodVisitor mv) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
@@ -35,8 +42,6 @@ final class RegisterGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
-
-        prepareXForReset(mv, context);
     }
 
     /**
@@ -48,13 +53,25 @@ final class RegisterGen {
      */
     static OperationCodeGenerator digit(final int digit) {
         return (mv, context) -> {
+            // check if we need to push current value of x up the stack
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, "pushStack", "Z");
+            final Label noPushStack = new Label();
+            mv.visitJumpInsn(IFEQ, noPushStack);
+
+            // push it
+            pushStack(mv);
+
+            mv.visitLabel(noPushStack);
+            mv.visitFrame(F_SAME, 0, null, 0, null);
+
+            // check if we need to reset X before entering next digit
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
             final Label noReset = new Label();
             mv.visitJumpInsn(IFEQ, noReset);
 
             // Clear X if resetX flag is set
-            enterNumber(mv, context);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(FCONST_0);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");
@@ -85,9 +102,13 @@ final class RegisterGen {
             mv.visitLabel(exitLabel);
             mv.visitFrame(F_SAME, 0, null, 0, null);
 
+            // do not reset X
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(ICONST_0);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
+
+            // do not push stack
+            CodeGenUtil.delayPushStack(mv, context);
         };
     }
 
@@ -131,6 +152,7 @@ final class RegisterGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X1, "F");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
     }
 
     /**
@@ -170,6 +192,7 @@ final class RegisterGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(FCONST_0);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        prepareXForReset(mv, context);
     }
 
     /**

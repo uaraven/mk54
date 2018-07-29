@@ -55,6 +55,13 @@ public class Mk54 {
      * If true, any new digit will first reset register X to zero
      */
     private boolean resetX;
+    /**
+     * If true any digit entry will first push stack.
+     * This is to distinguish between digit entry after other operation result and after other digit or В↑ operation
+     * <p>
+     * Stack should be pushed in the former case but not in the latter
+     */
+    private boolean pushStack;
 
     /**
      * MK address - target of indirect jump
@@ -81,6 +88,7 @@ public class Mk54 {
         this.memory = new float[15];
         Arrays.fill(this.memory, 0f);
         this.resetX = true;
+        this.pushStack = false;
         this.lastRandom = 0;
         this.callStack = new Stack<>();
     }

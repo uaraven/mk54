@@ -41,6 +41,7 @@ final class ControlGen {
      */
     static void startStop(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitInsn(RETURN);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -53,6 +54,7 @@ final class ControlGen {
         final int targetAddress = Integer.parseInt(context.nextOperation(), 16);
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitJumpInsn(GOTO, targetLabel);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -71,6 +73,7 @@ final class ControlGen {
         mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
         mv.visitInsn(POP);
         mv.visitJumpInsn(GOTO, subroutineLabel);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -102,6 +105,7 @@ final class ControlGen {
         mv.visitLabel(exitLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**

@@ -27,9 +27,11 @@ import static org.objectweb.asm.Opcodes.*;
 class CodeGenerator {
 
     private static final ImmutableMap.Builder<String, OperationCodeGenerator> OPERATIONS_BUILDER = ImmutableMap.builder();
+    private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
 
     private static final int MEMORY_SIZE = 15;
     private static final String ILLEGAL_STATE_EXCEPTION = "java/lang/IllegalStateException";
+    static final String JAVA_LANG_INTEGER = "java/lang/Integer";
 
     private static final Set<String> TWO_BYTE_OPS = ImmutableSet.of(
             Opcode.GOTO,
@@ -39,7 +41,6 @@ class CodeGenerator {
             JGEZ,
             JLTZ
     );
-    public static final String JAVA_LANG_INTEGER = "java/lang/Integer";
 
     static {
         OPERATIONS_BUILDER
@@ -89,8 +90,16 @@ class CodeGenerator {
                 .put(JLTZ, ControlGen::jltz)
                 .put(JGEZ, ControlGen::jgez);
 
+        KEEP_STACK_BUILDER.add(ENTER);
+        KEEP_STACK_BUILDER.add(DECIMAL_POINT);
+        KEEP_STACK_BUILDER.add(NEG);
+        KEEP_STACK_BUILDER.add(EXP);
+
         IntStream.range(0, 10)
-                .forEach(digit -> OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit)));
+                .forEach(digit -> {
+                    OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit));
+                    KEEP_STACK_BUILDER.add(DIGIT(digit));
+                });
 
         IntStream.range(0, MEMORY_SIZE)
                 .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
@@ -100,6 +109,7 @@ class CodeGenerator {
     }
 
     private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
+    private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();
     private final boolean generateDebugCode;
 
     /**
@@ -127,6 +137,7 @@ class CodeGenerator {
         final Label startLabel = new Label();
         executeMethod.visitLabel(startLabel);
 
+        boolean currentPushStackState = false;
         // Prepare context
         final CodeGenContext context = new CodeGenContext(operations);
 
@@ -140,6 +151,12 @@ class CodeGenerator {
                     generateDump(executeMethod, context);
                 }
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
+                if (!KEEP_STACK.contains(operation) && !currentPushStackState) {
+                    CodeGenUtil.forcePushStack(executeMethod, context);
+                    currentPushStackState = true;
+                } else {
+                    currentPushStackState = false;
+                }
             } else {
                 throw new UnknownOperationException(operation);
             }

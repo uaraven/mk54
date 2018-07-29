@@ -10,7 +10,7 @@ public final class CodeGenFixtures {
     }
 
     public static Mk54Wrapper getCompiledInstance(final String operations) throws Exception {
-        final CodeGenerator codeGenerator = new CodeGenerator(true);
+        final CodeGenerator codeGenerator = new CodeGenerator();
         final byte[] classBytes = codeGenerator.compile(operations);
 
         // TODO: remove class writing out

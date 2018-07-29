@@ -77,6 +77,34 @@ final class CodeGenUtil {
     }
 
     /**
+     * Sets {@link net.ninjacat.mk54.Mk54#pushStack} flag, forcing pushing current register X up the stack
+     * when next digit or F Pi operation is processed
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+
+    static void forcePushStack(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "pushStack", "Z");
+    }
+
+    /**
+     * Clears {@link net.ninjacat.mk54.Mk54#pushStack} flag, preventing pushing current register X up the stack
+     * when next digit or F Pi operation is processed
+     *
+     * @param mv      Generated method visitor
+     * @param context Code generation context
+     */
+    static void delayPushStack(final MethodVisitor mv, final CodeGenContext context) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "pushStack", "Z");
+    }
+
+
+    /**
      * Switches digit entry mode to exponent
      *
      * @param mv      Generated method visitor

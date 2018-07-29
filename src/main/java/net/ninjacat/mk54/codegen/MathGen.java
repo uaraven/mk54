@@ -301,7 +301,7 @@ final class MathGen {
     static void pi(final MethodVisitor mv, final CodeGenContext context) {
         saveX(mv, context);
 
-        RegisterGen.enterNumber(mv, context);
+        RegisterGen.pushStack(mv);
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(Math.PI);
