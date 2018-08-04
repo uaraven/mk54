@@ -311,6 +311,6 @@ public class ControlGenTest {
         final float accum = mk54.getMem(5);
 
         assertThat(counter, is(1f));
-        assertThat(accum, is(5f));
+        assertThat(accum, is(4f));
     }
 }

@@ -216,14 +216,14 @@ final class ControlGen {
             final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
             final Label targetLabel = context.getLabelForAddress(targetAddress);
 
-            // if memory[register] > 0
+            // if memory[register] > 1
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
             mv.visitIntInsn(BIPUSH, register);
             mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_0);
+            mv.visitInsn(FCONST_1);
             mv.visitInsn(FCMPL);
-            // stop loop if reached 0
+            // stop loop if reached 1
             final Label stopLoop = new Label();
             mv.visitJumpInsn(IFLE, stopLoop);
             // decrement and then perform jump
@@ -241,12 +241,6 @@ final class ControlGen {
 
             mv.visitLabel(stopLoop);
             mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-            // store 1 in register to be compatible with MK
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(BIPUSH, register);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FASTORE);
         };
     }
 }
