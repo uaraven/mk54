@@ -72,7 +72,14 @@ public final class Opcode {
 
     private static final String STO_BASE = "4%X";
     private static final String RCL_BASE = "6%X";
-    private static final String INDIRECT_GOTO_BASE = "8%X";
+    private static final String IJNZ_BASE = "7%X";
+    private static final String IGOTO_BASE = "8%X";
+    private static final String IJGEZ_BASE = "9%X";
+    private static final String ICALL_BASE = "A%X";
+    private static final String ISTO_BASE = "B%X";
+    private static final String IJLZ_BASE = "C%X";
+    private static final String IRCL_BASE = "D%X";
+    private static final String IJZ_BASE = "E%X";
 
     public static String DIGIT(final int digit) {
         return String.format("%02X", digit);
@@ -87,7 +94,7 @@ public final class Opcode {
     }
 
     public static String IGOTO(final int register) {
-        return String.format(INDIRECT_GOTO_BASE, register);
+        return String.format(IGOTO_BASE, register);
     }
 
     public static String LOOP(final int register) {
@@ -103,6 +110,34 @@ public final class Opcode {
             default:
                 throw new UnknownOperationException("LOOP(" + register + ")");
         }
+    }
+
+    public static String IJNZ(final int register) {
+        return String.format(IJNZ_BASE, register);
+    }
+
+    public static String IJGEZ(final int register) {
+        return String.format(IJGEZ_BASE, register);
+    }
+
+    public static String IJLZ(final int register) {
+        return String.format(IJLZ_BASE, register);
+    }
+
+    public static String IJZ(final int register) {
+        return String.format(IJZ_BASE, register);
+    }
+
+    public static String ICALL(final int register) {
+        return String.format(ICALL_BASE, register);
+    }
+
+    public static String ISTO(final int register) {
+        return String.format(ISTO_BASE, register);
+    }
+
+    public static String IRCL(final int register) {
+        return String.format(IRCL_BASE, register);
     }
 
     /**

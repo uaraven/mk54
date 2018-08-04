@@ -175,25 +175,7 @@ final class ControlGen {
      */
     static OperationCodeGenerator indirectGoto(final int register) {
         return (mv, context) -> {
-            if (register >= 0 && register <= 3) {
-                mv.visitVarInsn(ALOAD, 0);
-                mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-                mv.visitIntInsn(BIPUSH, register);
-                mv.visitInsn(DUP2);
-                mv.visitInsn(FALOAD);
-                mv.visitInsn(FCONST_1);
-                mv.visitInsn(FSUB);
-                mv.visitInsn(FASTORE);
-            } else if (register >= 4 && register <= 6) {
-                mv.visitVarInsn(ALOAD, 0);
-                mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-                mv.visitIntInsn(BIPUSH, register);
-                mv.visitInsn(DUP2);
-                mv.visitInsn(FALOAD);
-                mv.visitInsn(FCONST_1);
-                mv.visitInsn(FADD);
-                mv.visitInsn(FASTORE);
-            }
+            modifyRegisterForIndirect(register, mv);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
@@ -203,6 +185,28 @@ final class ControlGen {
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
             mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
         };
+    }
+
+    private static void modifyRegisterForIndirect(final int register, final MethodVisitor mv) {
+        if (register >= 0 && register <= 3) {
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(DUP2);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(FCONST_1);
+            mv.visitInsn(FSUB);
+            mv.visitInsn(FASTORE);
+        } else if (register >= 4 && register <= 6) {
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(DUP2);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(FCONST_1);
+            mv.visitInsn(FADD);
+            mv.visitInsn(FASTORE);
+        }
     }
 
     /**
