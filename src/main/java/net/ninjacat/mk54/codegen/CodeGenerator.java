@@ -86,12 +86,13 @@ public class CodeGenerator {
                     OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit));
                 });
 
-        IntStream.rangeClosed(0, MEMORY_SIZE).forEach(reg -> OPERATIONS_BUILDER.put(IGOTO(reg), ControlGen.indirectGoto(reg)));
-
-        IntStream.range(0, MEMORY_SIZE)
-                .forEach(mem -> OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem)));
-        IntStream.range(0, MEMORY_SIZE)
-                .forEach(mem -> OPERATIONS_BUILDER.put(RCL(mem), MemoryGen.recallFromMemory(mem)));
+        IntStream.rangeClosed(0, MEMORY_SIZE)
+                .forEach(mem -> {
+                    OPERATIONS_BUILDER.put(STO(mem), MemoryGen.storeToMemory(mem));
+                    OPERATIONS_BUILDER.put(RCL(mem), MemoryGen.recallFromMemory(mem));
+                    OPERATIONS_BUILDER.put(IGOTO(mem), ControlGen.indirectGoto(mem));
+                    OPERATIONS_BUILDER.put(ICALL(mem), ControlGen.icall(mem));
+                });
 
     }
 

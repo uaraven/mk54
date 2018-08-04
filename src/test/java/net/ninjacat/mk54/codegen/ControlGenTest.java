@@ -284,6 +284,58 @@ public class ControlGenTest {
     }
 
     @Test
+    public void shouldDecreaseMemValueAndPerformIndirectCall() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                ICALL(0),
+                STOP,
+                DIGIT(5),
+                RET
+        ));
+
+        mk54.setMem(0, 4);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(5f));
+    }
+
+    @Test
+    public void shouldIncreaseMemValueAndPerformIndirectCall() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                ICALL(5),
+                STOP,
+                DIGIT(5),
+                RET
+        ));
+
+        mk54.setMem(5, 2);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(5f));
+    }
+
+    @Test
+    public void shouldPerformIndirectCall() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                ICALL(10),
+                STOP,
+                DIGIT(5),
+                RET
+        ));
+
+        mk54.setMem(10, 3);
+        mk54.execute();
+        final float x = mk54.getX();
+
+        assertThat(x, is(5f));
+    }
+
+
+    @Test
     public void shouldExecuteLoop() throws Exception {
         testLoop(0);
         testLoop(1);

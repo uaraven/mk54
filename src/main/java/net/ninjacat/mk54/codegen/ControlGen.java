@@ -210,7 +210,7 @@ final class ControlGen {
     }
 
     /**
-     * Returns generator for loop instruction
+     * Returns generator for loop operation
      *
      * @param register Loop register
      * @return Loop generating function
@@ -245,6 +245,37 @@ final class ControlGen {
 
             mv.visitLabel(stopLoop);
             mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        };
+    }
+
+    /**
+     * Returns generator for indirect subroutine call operation
+     *
+     * @param register Loop register
+     * @return Loop generating function
+     */
+    static OperationCodeGenerator icall(final int register) {
+        return (mv, context) -> {
+            modifyRegisterForIndirect(register, mv);
+            // save address from memory register into indirect jump address register
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(F2I);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
+
+            // store return address
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
+            mv.visitIntInsn(BIPUSH, context.getCurrentAddress() + 1);
+            mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_INTEGER, "valueOf", "(I)Ljava/lang/Integer;", false);
+            mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
+            mv.visitInsn(POP);
+
+            // jump to trampoline
+            mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
         };
     }
 }
