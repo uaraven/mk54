@@ -1,6 +1,7 @@
 package net.ninjacat.mk54.opcodes;
 
 import com.google.common.collect.ImmutableSet;
+import net.ninjacat.mk54.exceptions.UnknownOperationException;
 
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -64,6 +65,11 @@ public final class Opcode {
     public static final String JLTZ = "5C";
     public static final String JZ = "5E";
 
+    public static final String LOOP0 = "5D";
+    public static final String LOOP1 = "5B";
+    public static final String LOOP2 = "58";
+    public static final String LOOP3 = "5A";
+
     private static final String STO_BASE = "4%X";
     private static final String RCL_BASE = "6%X";
     private static final String INDIRECT_GOTO_BASE = "8%X";
@@ -84,14 +90,36 @@ public final class Opcode {
         return String.format(INDIRECT_GOTO_BASE, register);
     }
 
+    public static String LOOP(final int register) {
+        switch (register) {
+            case 0:
+                return LOOP0;
+            case 1:
+                return LOOP1;
+            case 2:
+                return LOOP2;
+            case 3:
+                return LOOP3;
+            default:
+                throw new UnknownOperationException("LOOP(" + register + ")");
+        }
+    }
 
+    /**
+     * Jump operations with additional operand - take two bytes and need to be handled correctly when building
+     * trampoline table
+     */
     private static final Set<String> JUMP_OPS = ImmutableSet.of(
             Opcode.GOTO,
             GOSUB,
             JNZ,
             JZ,
             JGEZ,
-            JLTZ
+            JLTZ,
+            LOOP0,
+            LOOP1,
+            LOOP2,
+            LOOP3
     );
 
     private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();

@@ -282,4 +282,35 @@ public class ControlGenTest {
 
         assertThat(x, is(5f));
     }
+
+    @Test
+    public void shouldExecuteLoop() throws Exception {
+        testLoop(0);
+        testLoop(1);
+        testLoop(2);
+        testLoop(3);
+    }
+
+    private static void testLoop(final int register) throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                STO(register),
+                DIGIT(0),
+                STO(5),
+                RCL(5),
+                DIGIT(1),
+                ADD,
+                STO(5),
+                LOOP(register),
+                "04",
+                STOP
+        ));
+
+        mk54.execute();
+        final float counter = mk54.getMem(register);
+        final float accum = mk54.getMem(5);
+
+        assertThat(counter, is(1f));
+        assertThat(accum, is(5f));
+    }
 }

@@ -167,7 +167,12 @@ final class ControlGen {
         mv.visitJumpInsn(Opcodes.IFGE, targetLabel);
     }
 
-
+    /**
+     * Returns generator for indirect goto operation
+     *
+     * @param register Register to use as address holder
+     * @return Code generating function
+     */
     static OperationCodeGenerator indirectGoto(final int register) {
         return (mv, context) -> {
             if (register >= 0 && register <= 3) {
@@ -200,4 +205,48 @@ final class ControlGen {
         };
     }
 
+    /**
+     * Returns generator for loop instruction
+     *
+     * @param register Loop register
+     * @return Loop generating function
+     */
+    static OperationCodeGenerator loop(final int register) {
+        return (mv, context) -> {
+            final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
+            final Label targetLabel = context.getLabelForAddress(targetAddress);
+
+            // if memory[register] > 0
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(FCONST_0);
+            mv.visitInsn(FCMPL);
+            // stop loop if reached 0
+            final Label stopLoop = new Label();
+            mv.visitJumpInsn(IFLE, stopLoop);
+            // decrement and then perform jump
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(DUP2);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(FCONST_1);
+            mv.visitInsn(FSUB);
+            mv.visitInsn(FASTORE);
+            // jump to loop address
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            mv.visitJumpInsn(GOTO, targetLabel);
+
+            mv.visitLabel(stopLoop);
+            mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            // store 1 in register to be compatible with MK
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(FCONST_1);
+            mv.visitInsn(FASTORE);
+        };
+    }
 }

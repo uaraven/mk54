@@ -75,7 +75,11 @@ public class CodeGenerator {
                 .put(JNZ, ControlGen::jnz)
                 .put(JZ, ControlGen::jz)
                 .put(JLTZ, ControlGen::jltz)
-                .put(JGEZ, ControlGen::jgez);
+                .put(JGEZ, ControlGen::jgez)
+                .put(LOOP0, ControlGen.loop(0))
+                .put(LOOP1, ControlGen.loop(1))
+                .put(LOOP2, ControlGen.loop(2))
+                .put(LOOP3, ControlGen.loop(3));
 
         IntStream.range(0, 10)
                 .forEach(digit -> {

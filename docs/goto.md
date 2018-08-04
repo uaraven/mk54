@@ -92,3 +92,17 @@ address stack.
    
    `mk54` code generator does not generate byte code for operations which are not present in the program, so it is
    unable to generate jumps beyond last operation. Such jumps will generate exception during code generation. 
+   
+Loops
+-----
+
+MK calculators supported loops over values in memory registers 0..3. While value in corresponding register is greater
+than 0, calculator will decrement register and perform jump to target address. 
+Value of register will not be decremented to 0 though, it will be left equal to 1.
+
+*Undocumented behaviour*
+If value of memory register was less than or equal to zero, then it will be changed to -99999999 and the value will be
+incremented towards 0, and not decremented. 
+
+This behaviour is not supported by `mk54` code generator.     
+ 
