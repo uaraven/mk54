@@ -187,28 +187,6 @@ final class ControlGen {
         };
     }
 
-    private static void modifyRegisterForIndirect(final int register, final MethodVisitor mv) {
-        if (register >= 0 && register <= 3) {
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(BIPUSH, register);
-            mv.visitInsn(DUP2);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FSUB);
-            mv.visitInsn(FASTORE);
-        } else if (register >= 4 && register <= 6) {
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(BIPUSH, register);
-            mv.visitInsn(DUP2);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FADD);
-            mv.visitInsn(FASTORE);
-        }
-    }
-
     /**
      * Returns generator for loop operation
      *

@@ -89,5 +89,106 @@ public class MemoryGenTest {
         }
     }
 
+    @Test
+    public void shouldDecreaseMemValueAndStoreToMemory() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(5),
+                DIGIT(4),
+                ISTO(0),
+                STOP
+        ));
 
+        mk54.setMem(0, 2);
+        mk54.execute();
+        final float m1 = mk54.getMem(1);
+        final float m2 = mk54.getMem(2);
+
+        assertThat(m1, is(54f));
+        assertThat(m2, is(0f));
+    }
+
+    @Test
+    public void shouldIncreaseMemValueAndStoreToMemory() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(5),
+                DIGIT(4),
+                ISTO(5),
+                STOP
+        ));
+
+        mk54.setMem(5, 2);
+        mk54.execute();
+        final float m2 = mk54.getMem(2);
+        final float m3 = mk54.getMem(3);
+
+        assertThat(m3, is(54f));
+        assertThat(m2, is(0f));
+    }
+
+    @Test
+    public void shouldPerformIndirectStore() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(5),
+                DIGIT(4),
+                ISTO(10),
+                STOP
+        ));
+
+        mk54.setMem(10, 2);
+        mk54.execute();
+        final float m2 = mk54.getMem(2);
+
+        assertThat(m2, is(54f));
+    }
+
+    @Test
+    public void shouldDecreaseMemValueAndReadMemory() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                IRCL(0),
+                STOP
+        ));
+
+        mk54.setMem(1, 54f);
+        mk54.setMem(0, 2);
+        mk54.execute();
+        final float m0 = mk54.getMem(0);
+        final float x = mk54.getX();
+
+        assertThat(m0, is(1f));
+        assertThat(x, is(54f));
+    }
+
+    @Test
+    public void shouldIncreaseMemValueAndReadMemory() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                IRCL(5),
+                STOP
+        ));
+
+        mk54.setMem(5, 2);
+        mk54.setMem(3, 54f);
+        mk54.execute();
+        final float m2 = mk54.getMem(5);
+        final float x = mk54.getX();
+
+        assertThat(x, is(54f));
+        assertThat(m2, is(3f));
+    }
+
+    @Test
+    public void shouldPerformIndirectRead() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                IRCL(10),
+                STOP
+        ));
+
+        mk54.setMem(10, 2);
+        mk54.setMem(2, 54f);
+        mk54.execute();
+        final float m2 = mk54.getMem(10);
+        final float x = mk54.getX();
+
+        assertThat(m2, is(2f));
+        assertThat(x, is(54f));
+    }
 }

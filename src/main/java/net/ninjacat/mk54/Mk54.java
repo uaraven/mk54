@@ -250,12 +250,7 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        if (memory[6] > 0) {
-            memory[6] -= 1;
-            indirectJumpAddress = 11;
-        } else {
-            memory[6] = 1;
-        }
+        x = memory[(int) memory[6]];
     }
 
 }

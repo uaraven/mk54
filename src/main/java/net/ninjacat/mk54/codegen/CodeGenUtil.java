@@ -135,4 +135,31 @@ final class CodeGenUtil {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, ENTRY_MODE, "I");
     }
 
+    /**
+     * Logic for modifying registers during indirect operations
+     *
+     * @param register memory register number
+     * @param mv       Generated method visitor
+     */
+    static void modifyRegisterForIndirect(final int register, final MethodVisitor mv) {
+        if (register >= 0 && register <= 3) {
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(DUP2);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(FCONST_1);
+            mv.visitInsn(FSUB);
+            mv.visitInsn(FASTORE);
+        } else if (register >= 4 && register <= 6) {
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, register);
+            mv.visitInsn(DUP2);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(FCONST_1);
+            mv.visitInsn(FADD);
+            mv.visitInsn(FASTORE);
+        }
+    }
 }

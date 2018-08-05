@@ -92,6 +92,8 @@ public class CodeGenerator {
                     OPERATIONS_BUILDER.put(RCL(mem), MemoryGen.recallFromMemory(mem));
                     OPERATIONS_BUILDER.put(IGOTO(mem), ControlGen.indirectGoto(mem));
                     OPERATIONS_BUILDER.put(ICALL(mem), ControlGen.icall(mem));
+                    OPERATIONS_BUILDER.put(ISTO(mem), MemoryGen.istore(mem));
+                    OPERATIONS_BUILDER.put(IRCL(mem), MemoryGen.irecall(mem));
                 });
 
     }

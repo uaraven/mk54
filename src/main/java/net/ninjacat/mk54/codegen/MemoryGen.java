@@ -2,8 +2,8 @@ package net.ninjacat.mk54.codegen;
 
 import org.objectweb.asm.Opcodes;
 
-import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
-import static net.ninjacat.mk54.codegen.CodeGenUtil.REGISTER_X;
+import static net.ninjacat.mk54.codegen.CodeGenUtil.*;
+import static org.objectweb.asm.Opcodes.*;
 
 
 final class MemoryGen {
@@ -21,11 +21,11 @@ final class MemoryGen {
      */
     static OperationCodeGenerator storeToMemory(final int location) {
         return (mv, context) -> {
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(Opcodes.BIPUSH, location);
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, location);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
             mv.visitInsn(Opcodes.FASTORE);
         };
     }
@@ -38,12 +38,58 @@ final class MemoryGen {
      */
     static OperationCodeGenerator recallFromMemory(final int location) {
         return (mv, context) -> {
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(Opcodes.BIPUSH, location);
-            mv.visitInsn(Opcodes.FALOAD);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, location);
+            mv.visitInsn(FALOAD);
             mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        };
+    }
+
+    /**
+     * Produces function that generates code to store value from X to memory location by address in memory register
+     *
+     * @param location Memory register number, 0 to E
+     * @return Function that generates code for RECALL operation
+     */
+    static OperationCodeGenerator istore(final int location) {
+        return (mv, context) -> {
+            modifyRegisterForIndirect(location, mv);
+
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, location);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(F2I);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(FASTORE);
+        };
+    }
+
+    /**
+     * Produces function that generates code to retrieve value from memory location by address in memory register into X
+     *
+     * @param location Memory register number, 0 to E
+     * @return Function that generates code for RECALL operation
+     */
+    static OperationCodeGenerator irecall(final int location) {
+        return (mv, context) -> {
+            modifyRegisterForIndirect(location, mv);
+
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitIntInsn(BIPUSH, location);
+            mv.visitInsn(FALOAD);
+            mv.visitInsn(F2I);
+            mv.visitInsn(FALOAD);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
         };
     }
 }
