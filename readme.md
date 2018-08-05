@@ -5,21 +5,20 @@ Preface
 -------
 
 When I was a boy I had a dream. My dream was to own a programmable calculator.
-My estranged father had one and I loved to play with it when I was visiting.
-
-It was MK-54, a bit modernized version of even older programmable calculator named B3-34, released in 1980.
+My father had one, it was MK-54, a bit modernized version of even older programmable calculator named B3-34, released in 1980.
 
 ![mk-54](docs/mk-54.jpg) 
 
-That was as close to computer as average person could get in late 80s in the USSR.
+That was as close to computer as average person could get in late 80s in the USSR and I needed it.
+
+My dreams came true, I got a MK-52, which was probably the best of the series and it helped me with
+my math assignments during my 9th year. Soon enough I got a PC, but that strange beast 
+always remained in my memory.
 
 Trying to program it taught me several things: debugging by reading hex codes, reverse polish notation and
 importance of memory management. It also taught me how to write clever incomprehensible programs using all 98 bytes of 
 program memory.
 
-My dreams came true, I got a MK-52, which was probably the best of the series and it helped me with
-my math assignments during my 9th year. Soon enough I got a PC, but that strange beast 
-always remained in my memory.
 
 This project is my attempt to build a translator from MK-series binary code into java bytecode.
 
