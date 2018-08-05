@@ -414,6 +414,7 @@
     "keys": [
       "п0",
       "xп0",
+      "x->п0",
       "sto0"
     ],
     "desc": "Store value from X register to memory register 0"
@@ -423,6 +424,7 @@
     "keys": [
       "п1",
       "xп1",
+      "x->п1",
       "sto1"
     ],
     "desc": "Store value from X register to memory register 1"
@@ -432,6 +434,7 @@
     "keys": [
       "п2",
       "xп2",
+      "x->п2",
       "sto2"
     ],
     "desc": "Store value from X register to memory register 2"
@@ -441,6 +444,7 @@
     "keys": [
       "п3",
       "xп3",
+      "x->п3",
       "sto3"
     ],
     "desc": "Store value from X register to memory register 3"
@@ -450,6 +454,7 @@
     "keys": [
       "п4",
       "xп4",
+      "x->п4",
       "sto4"
     ],
     "desc": "Store value from X register to memory register 4"
@@ -459,6 +464,7 @@
     "keys": [
       "п5",
       "xп5",
+      "x->п5",
       "sto5"
     ],
     "desc": "Store value from X register to memory register 5"
@@ -468,6 +474,7 @@
     "keys": [
       "п6",
       "xп6",
+      "x->п6",
       "sto6"
     ],
     "desc": "Store value from X register to memory register 6"
@@ -477,6 +484,7 @@
     "keys": [
       "п7",
       "xп7",
+      "x->п7",
       "sto7"
     ],
     "desc": "Store value from X register to memory register 7"
@@ -486,6 +494,7 @@
     "keys": [
       "п8",
       "xп8",
+      "x->п8",
       "sto8"
     ],
     "desc": "Store value from X register to memory register 8"
@@ -495,6 +504,7 @@
     "keys": [
       "п9",
       "xп9",
+      "x->п9",
       "sto9"
     ],
     "desc": "Store value from X register to memory register 9"
@@ -504,6 +514,7 @@
     "keys": [
       "пa",
       "xпa",
+      "x->пa",
       "stoa"
     ],
     "desc": "Store value from X register to memory register A"
@@ -513,6 +524,7 @@
     "keys": [
       "пb",
       "xпb",
+      "x->пb",
       "stob"
     ],
     "desc": "Store value from X register to memory register B"
@@ -522,6 +534,7 @@
     "keys": [
       "пc",
       "xпc",
+      "x->пc",
       "stoc"
     ],
     "desc": "Store value from X register to memory register C"
@@ -531,6 +544,7 @@
     "keys": [
       "пd",
       "xпd",
+      "x->пd",
       "stod"
     ],
     "desc": "Store value from X register to memory register D"
@@ -540,6 +554,7 @@
     "keys": [
       "пe",
       "xпe",
+      "x->пe",
       "stoe"
     ],
     "desc": "Store value from X register to memory register E"

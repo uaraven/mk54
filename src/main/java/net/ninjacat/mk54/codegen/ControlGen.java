@@ -175,14 +175,7 @@ final class ControlGen {
      */
     static OperationCodeGenerator indirectGoto(final int register) {
         return (mv, context) -> {
-            modifyRegisterForIndirect(register, mv);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(BIPUSH, register);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(F2I);
-            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
+            loadRegisterToJump(register, mv);
             mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
         };
     }
@@ -230,30 +223,106 @@ final class ControlGen {
      * Returns generator for indirect subroutine call operation
      *
      * @param register Loop register
-     * @return Loop generating function
+     * @return Call generating function
      */
     static OperationCodeGenerator icall(final int register) {
         return (mv, context) -> {
-            modifyRegisterForIndirect(register, mv);
-            // save address from memory register into indirect jump address register
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
-            mv.visitIntInsn(BIPUSH, register);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(F2I);
-            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
 
-            // store return address
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, CALL_STACK, STACK_DESCRIPTOR);
-            mv.visitIntInsn(BIPUSH, context.getCurrentAddress() + 1);
-            mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_INTEGER, "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_UTIL_STACK, "push", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
-            mv.visitInsn(POP);
+            loadRegisterToJump(register, mv);
 
             // jump to trampoline
             mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
         };
+    }
+
+    /**
+     * Returns generator for indirect x != 0 jump
+     *
+     * @param register Loop register
+     * @return Code generating function
+     */
+    static OperationCodeGenerator ijnz(final int register) {
+        return (mv, context) -> generateIndirectJump(register, Opcodes.IFEQ, mv, context);
+        //            mv.visitFrame(F_SAME, 0, null, 0, null);
+        //            mv.visitInsn(NOP); // to not have two stack frames at same location
+    }
+
+    /**
+     * Returns generator for indirect x == 0 jump
+     *
+     * @param register Loop register
+     * @return Code generating function
+     */
+    static OperationCodeGenerator ijz(final int register) {
+        return (mv, context) -> generateIndirectJump(register, Opcodes.IFNE, mv, context);
+    }
+
+
+    /**
+     * Returns generator for indirect x >= 0 jump
+     *
+     * @param register Loop register
+     * @return Code generating function
+     */
+    static OperationCodeGenerator ijgez(final int register) {
+        return (mv, context) -> generateIndirectJump(register, Opcodes.IFLT, mv, context);
+    }
+
+
+    /**
+     * Returns generator for indirect x >= 0 jump
+     *
+     * @param register Loop register
+     * @return Code generating function
+     */
+    static OperationCodeGenerator ijltz(final int register) {
+        return (mv, context) -> generateIndirectJump(register, Opcodes.IFGE, mv, context);
+    }
+
+    /**
+     * Generates code for indirect cmp and jump operation
+     *
+     * @param register       Register that holds destination address
+     * @param cmpInstruction Byte code comparision operation
+     * @param mv             Generated method visitor
+     * @param context        Code generation context
+     */
+    private static void generateIndirectJump(final int register, final int cmpInstruction,
+                                             final MethodVisitor mv, final CodeGenContext context) {
+        final Label exitLabel = new Label();
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(Opcodes.FCONST_0);
+        mv.visitInsn(FCMPL);
+        mv.visitJumpInsn(cmpInstruction, exitLabel); // if x ?cmp? 0, exit
+
+        loadRegisterToJump(register, mv);
+
+        // jump to trampoline
+        mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
+
+        mv.visitLabel(exitLabel);
+    }
+
+
+    /**
+     * Prepares indirect jump by address in register.
+     * <p>
+     * Register value is modified according to its number before processing and then value of register is copied to
+     * indirect jump address register
+     *
+     * @param register Number of memory register 0..E
+     * @param mv       Visitor for a method that's being generated
+     */
+    private static void loadRegisterToJump(final int register, final MethodVisitor mv) {
+        modifyRegisterForIndirect(register, mv);
+        // save address from memory register into indirect jump address register
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+        mv.visitIntInsn(BIPUSH, register);
+        mv.visitInsn(FALOAD);
+        mv.visitInsn(F2I);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
     }
 }

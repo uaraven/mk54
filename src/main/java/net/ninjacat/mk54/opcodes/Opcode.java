@@ -52,6 +52,11 @@ public final class Opcode {
     public static final String FRAC = "35";
     public static final String MAX = "36";
 
+    public static final String AND = "37";
+    public static final String OR = "38";
+    public static final String XOR = "39";
+    public static final String NOT = "3A";
+
     public static final String RND = "3B";
 
     public static final String STOP = "50";
@@ -166,9 +171,7 @@ public final class Opcode {
         KEEP_STACK_BUILDER.add(EXP);
 
         IntStream.range(0, 10)
-                .forEach(digit -> {
-                    KEEP_STACK_BUILDER.add(DIGIT(digit));
-                });
+                .forEach(digit -> KEEP_STACK_BUILDER.add(DIGIT(digit)));
     }
 
     private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();

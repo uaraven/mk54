@@ -334,6 +334,33 @@ public class ControlGenTest {
         assertThat(x, is(5f));
     }
 
+    @Test
+    public void shouldPerformIndirectJNZ() throws Exception {
+        testIndirectConditionalJump(IJNZ(0), 0, 4, 0, 0.1f);
+        testIndirectConditionalJump(IJNZ(5), 5, 2, 0, 0.1f);
+        testIndirectConditionalJump(IJNZ(10), 10, 3, 0, 0.1f);
+    }
+
+    @Test
+    public void shouldPerformIndirectJZ() throws Exception {
+        testIndirectConditionalJump(IJZ(0), 0, 4, 0.1f, 0f);
+        testIndirectConditionalJump(IJZ(5), 5, 2, 0.2f, 0f);
+        testIndirectConditionalJump(IJZ(10), 10, 3, 0.3f, 0f);
+    }
+
+    @Test
+    public void shouldPerformIndirectJGEZ() throws Exception {
+        testIndirectConditionalJump(IJGEZ(0), 0, 4, -1f, 0f);
+        testIndirectConditionalJump(IJGEZ(5), 5, 2, -2f, 0.5f);
+        testIndirectConditionalJump(IJGEZ(10), 10, 3, -3f, 1f);
+    }
+
+    @Test
+    public void shouldPerformIndirectJLTZ() throws Exception {
+        testIndirectConditionalJump(IJLZ(0), 0, 4, 0f, -1f);
+        testIndirectConditionalJump(IJLZ(5), 5, 2, 1f, -0.5f);
+        testIndirectConditionalJump(IJLZ(10), 10, 3, 2f, -2f);
+    }
 
     @Test
     public void shouldExecuteLoop() throws Exception {
@@ -364,5 +391,30 @@ public class ControlGenTest {
 
         assertThat(counter, is(1f));
         assertThat(accum, is(4f));
+    }
+
+    private static void testIndirectConditionalJump(final String operation,
+                                                    final int memRegNo,
+                                                    final int memRegValue,
+                                                    final float Xvalue1,
+                                                    final float Xvalue2) throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                operation,
+                DIGIT(1),
+                STOP,
+                DIGIT(2),
+                STOP
+        ));
+
+        mk54.setX(Xvalue1);
+        mk54.setMem(memRegNo, memRegValue);
+        mk54.execute();
+        final float x1 = mk54.getX();
+        assertThat(x1, is(1f));
+
+        mk54.setX(Xvalue2);
+        mk54.execute();
+        final float x2 = mk54.getX();
+        assertThat(x2, is(2f));
     }
 }

@@ -82,9 +82,7 @@ public class CodeGenerator {
                 .put(LOOP3, ControlGen.loop(3));
 
         IntStream.range(0, 10)
-                .forEach(digit -> {
-                    OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit));
-                });
+                .forEach(digit -> OPERATIONS_BUILDER.put(DIGIT(digit), RegisterGen.digit(digit)));
 
         IntStream.rangeClosed(0, MEMORY_SIZE)
                 .forEach(mem -> {
@@ -94,6 +92,10 @@ public class CodeGenerator {
                     OPERATIONS_BUILDER.put(ICALL(mem), ControlGen.icall(mem));
                     OPERATIONS_BUILDER.put(ISTO(mem), MemoryGen.istore(mem));
                     OPERATIONS_BUILDER.put(IRCL(mem), MemoryGen.irecall(mem));
+                    OPERATIONS_BUILDER.put(IJNZ(mem), ControlGen.ijnz(mem));
+                    OPERATIONS_BUILDER.put(IJZ(mem), ControlGen.ijz(mem));
+                    OPERATIONS_BUILDER.put(IJGEZ(mem), ControlGen.ijgez(mem));
+                    OPERATIONS_BUILDER.put(IJLZ(mem), ControlGen.ijltz(mem));
                 });
 
     }
