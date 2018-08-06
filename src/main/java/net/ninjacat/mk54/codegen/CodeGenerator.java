@@ -28,6 +28,7 @@ public class CodeGenerator {
     private static final int MEMORY_SIZE = 15;
     private static final String ILLEGAL_STATE_EXCEPTION = "java/lang/IllegalStateException";
     static final String JAVA_LANG_INTEGER = "java/lang/Integer";
+    public static final String JAVA_LANG_STRING_BUILDER = "java/lang/StringBuilder";
 
     static {
         OPERATIONS_BUILDER
@@ -133,6 +134,8 @@ public class CodeGenerator {
 
         buildMkLabels(context);
 
+        ControlGen.jumpToStartPosition(executeMethod, context);
+
         String operation = operations.get(0);
         while (operation != null) {
             generateOperandAddressLabel(executeMethod, context);
@@ -217,7 +220,15 @@ public class CodeGenerator {
         mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitTypeInsn(NEW, ILLEGAL_STATE_EXCEPTION);
         mv.visitInsn(DUP);
-        mv.visitLdcInsn("Invalid jump operation");
+        mv.visitTypeInsn(NEW, JAVA_LANG_STRING_BUILDER);
+        mv.visitInsn(DUP);
+        mv.visitMethodInsn(INVOKESPECIAL, JAVA_LANG_STRING_BUILDER, "<init>", "()V", false);
+        mv.visitLdcInsn("Invalid jump to address: ");
+        mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_LANG_STRING_BUILDER, "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, ControlGen.INDIRECT_JUMP_ADDRESS, "I");
+        mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_LANG_STRING_BUILDER, "append", "(I)Ljava/lang/StringBuilder;", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, JAVA_LANG_STRING_BUILDER, "toString", "()Ljava/lang/String;", false);
         mv.visitMethodInsn(INVOKESPECIAL, ILLEGAL_STATE_EXCEPTION, "<init>", "(Ljava/lang/String;)V", false);
         mv.visitInsn(ATHROW);
     }
