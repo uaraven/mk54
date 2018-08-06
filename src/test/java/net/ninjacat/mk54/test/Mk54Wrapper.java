@@ -17,47 +17,47 @@ public class Mk54Wrapper {
         executeMethod.invoke(this.mk54);
     }
 
-    public float getX() throws Exception {
+    public double getX() throws Exception {
         return getRegister("x");
     }
 
-    private float getRegister(final String register) throws Exception {
+    private double getRegister(final String register) throws Exception {
         final Field x = this.mk54.getClass().getDeclaredField(register);
         x.setAccessible(true);
-        return x.getFloat(this.mk54);
+        return x.getDouble(this.mk54);
     }
 
-    public float getX1() throws Exception {
+    public double getX1() throws Exception {
         return getRegister("x1");
     }
 
-    public void setX1(final float value) throws Exception {
+    public void setX1(final double value) throws Exception {
         setRegister("x1", value);
     }
 
-    public float getY() throws Exception {
+    public double getY() throws Exception {
         return getRegister("y");
     }
 
-    public void setX(final float value) throws Exception {
+    public void setX(final double value) throws Exception {
         setRegister("x", value);
     }
 
-    public float getZ() throws Exception {
+    public double getZ() throws Exception {
         return getRegister("z");
     }
 
-    private void setRegister(final String register, final float value) throws Exception {
+    private void setRegister(final String register, final double value) throws Exception {
         final Field x = this.mk54.getClass().getDeclaredField(register);
         x.setAccessible(true);
-        x.setFloat(this.mk54, value);
+        x.setDouble(this.mk54, value);
     }
 
-    public float getT() throws Exception {
+    public double getT() throws Exception {
         return getRegister("t");
     }
 
-    public void setY(final float value) throws Exception {
+    public void setY(final double value) throws Exception {
         setRegister("y", value);
     }
 
@@ -86,25 +86,25 @@ public class Mk54Wrapper {
     }
 
 
-    public void setZ(final float value) throws Exception {
+    public void setZ(final double value) throws Exception {
         setRegister("z", value);
     }
 
-    public void setT(final float value) throws Exception {
+    public void setT(final double value) throws Exception {
         setRegister("t", value);
     }
 
 
-    public float getMem(final int location) throws Exception {
+    public double getMem(final int location) throws Exception {
         final Field mem = this.mk54.getClass().getDeclaredField("memory");
         mem.setAccessible(true);
-        return Array.getFloat(mem.get(this.mk54), location);
+        return Array.getDouble(mem.get(this.mk54), location);
     }
 
-    public void setMem(final int location, final float value) throws Exception {
+    public void setMem(final int location, final double value) throws Exception {
         final Field mem = this.mk54.getClass().getDeclaredField("memory");
         mem.setAccessible(true);
-        Array.setFloat(mem.get(this.mk54), location, value);
+        Array.setDouble(mem.get(this.mk54), location, value);
     }
 
     public void setStartAddress(final int address) throws Exception {

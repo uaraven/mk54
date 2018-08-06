@@ -22,11 +22,11 @@ final class MemoryGen {
     static OperationCodeGenerator storeToMemory(final int location) {
         return (mv, context) -> {
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, location);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.FASTORE);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+            mv.visitInsn(DASTORE);
         };
     }
 
@@ -40,10 +40,10 @@ final class MemoryGen {
         return (mv, context) -> {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, location);
-            mv.visitInsn(FALOAD);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(DALOAD);
+            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         };
     }
 
@@ -58,15 +58,15 @@ final class MemoryGen {
             modifyRegisterForIndirect(location, mv);
 
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, location);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(F2I);
+            mv.visitInsn(DALOAD);
+            mv.visitInsn(D2I);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(FASTORE);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+            mv.visitInsn(DASTORE);
         };
     }
 
@@ -82,14 +82,14 @@ final class MemoryGen {
 
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, location);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(F2I);
-            mv.visitInsn(FALOAD);
-            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitInsn(DALOAD);
+            mv.visitInsn(D2I);
+            mv.visitInsn(DALOAD);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         };
     }
 }

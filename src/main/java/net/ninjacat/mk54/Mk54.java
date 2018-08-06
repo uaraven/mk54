@@ -29,7 +29,7 @@ public class Mk54 {
     /**
      * Memory registers
      */
-    private final float[] memory;
+    private final double[] memory;
 
     /**
      * Switches between entering digits for mantissa or exponent
@@ -41,8 +41,7 @@ public class Mk54 {
     /**
      * Stack registers
      */
-    private float x, y, z, t;
-    private float x1;
+    private double x, y, z, t, x1;
     /**
      * rad-grad-deg switch
      */
@@ -51,7 +50,7 @@ public class Mk54 {
     /**
      * Helper variables for managing X register
      */
-    private float xMantissa;
+    private double xMantissa;
     private int xExponent;
     /**
      * If true, any new digit will first reset register X to zero
@@ -79,7 +78,7 @@ public class Mk54 {
     /**
      * Holds last generated random value
      */
-    private float lastRandom;
+    private double lastRandom;
     /**
      * Address in MK address space from which program execution will start
      */
@@ -92,7 +91,7 @@ public class Mk54 {
         this.z = 0;
         this.t = 0;
         this.x1 = 0;
-        this.memory = new float[15];
+        this.memory = new double[15];
         Arrays.fill(this.memory, 0f);
         this.resetX = true;
         this.pushStack = false;
@@ -101,23 +100,23 @@ public class Mk54 {
         this.startingAddress = 0;
     }
 
-    public float getX() {
+    public double getX() {
         return this.x;
     }
 
-    public float getY() {
+    public double getY() {
         return this.y;
     }
 
-    public float getZ() {
+    public double getZ() {
         return this.z;
     }
 
-    public float getT() {
+    public double getT() {
         return this.t;
     }
 
-    public float getX1() {
+    public double getX1() {
         return this.x1;
     }
 
@@ -159,7 +158,7 @@ public class Mk54 {
         final Iterator<String> argsIter = Arrays.stream(args).iterator();
         while (argsIter.hasNext()) {
             final String option = argsIter.next();
-            mk54.setRegister(option.substring(1).toLowerCase(), Float.parseFloat(argsIter.next()));
+            mk54.setRegister(option.substring(1).toLowerCase(), Double.parseDouble(argsIter.next()));
         }
         return true;
     }
@@ -182,7 +181,7 @@ public class Mk54 {
         System.out.println(" -h          - prints this message");
     }
 
-    private void setRegister(final String register, final float value) {
+    private void setRegister(final String register, final double value) {
         switch (register) {
             case "x":
                 this.x = value;
@@ -240,7 +239,7 @@ public class Mk54 {
         if (this.decimalFactor == 0) {
             this.xMantissa = this.xMantissa * 10f + digit;
         } else {
-            this.xMantissa += (float) digit / this.decimalFactor;
+            this.xMantissa += (double) digit / this.decimalFactor;
             this.decimalFactor *= 10;
         }
         makeXRegister();
@@ -258,7 +257,7 @@ public class Mk54 {
         if (this.xExponent != 0 && this.xMantissa == 0) {
             this.xMantissa = 1;
         }
-        this.x = (float) (this.xMantissa * Math.pow(10, this.xExponent));
+        this.x = this.xMantissa * Math.pow(10, this.xExponent);
     }
 
     /**
@@ -267,10 +266,10 @@ public class Mk54 {
      *
      * @return Digit in the 6th position of the X register or 0
      */
-    private float getSegment() {
+    private double getSegment() {
         final String registerString = new StringBuilder().append(this.x).reverse().toString().replaceAll("\\.", "");
         if (registerString.length() >= 6) {
-            return Float.valueOf(registerString.substring(6, 7));
+            return Double.valueOf(registerString.substring(6, 7));
         } else {
             return 0f;
         }
@@ -282,7 +281,7 @@ public class Mk54 {
      * @param mantissa Value of mantissa
      * @param exponent Exponent
      */
-    void setX(final float mantissa, final int exponent) {
+    void setX(final double mantissa, final int exponent) {
         this.xMantissa = mantissa;
         this.xExponent = exponent;
         makeXRegister();

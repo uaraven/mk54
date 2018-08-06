@@ -40,7 +40,7 @@ Implementation details
 ----------------------
 
 MK-series worked with decimal floating numbers represented as 8-digit mantissa and 2-digit power in base of 10. My goal
-is to generate self-contained `.class` file that can be run with JVM so mk54 will use Java `float` type for all 
+is to generate self-contained `.class` file that can be run with JVM so mk54 will use Java `double` type for all 
 calculations. This should not cause any problems with simple programs, but more sophisticated programs abusing number 
 overflow or relying on floating point number representation will fail.
 

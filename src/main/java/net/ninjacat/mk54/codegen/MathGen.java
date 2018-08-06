@@ -28,7 +28,7 @@ final class MathGen {
         return (mv, context) -> {
             saveX(mv, context);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, "radGradDeg", "I");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, "radGradDeg", "I");
 
             final Label rad = new Label();
             final Label grad = new Label();
@@ -42,40 +42,34 @@ final class MathGen {
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.F2D);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
-            mv.visitInsn(Opcodes.D2F);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitJumpInsn(Opcodes.GOTO, defaultBlock);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
+            mv.visitJumpInsn(GOTO, defaultBlock);
 
             // degrees
             mv.visitLabel(deg);
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.F2D);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "toRadians", "(D)D", false);
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
-            mv.visitInsn(Opcodes.D2F);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitJumpInsn(Opcodes.GOTO, defaultBlock);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
+            mv.visitJumpInsn(GOTO, defaultBlock);
 
             // grads
             mv.visitLabel(grad);
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.F2D);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
             mv.visitLdcInsn(Math.PI);
             mv.visitInsn(Opcodes.DMUL);
             mv.visitLdcInsn(200.0);
             mv.visitInsn(Opcodes.DDIV);
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
-            mv.visitInsn(Opcodes.D2F);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
 
             mv.visitLabel(defaultBlock);
             mv.visitFrame(F_SAME, 0, null, 0, null);
@@ -87,7 +81,7 @@ final class MathGen {
             saveX(mv, context);
 
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, "radGradDeg", "I");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, "radGradDeg", "I");
             final Label rad = new Label();
             final Label deg = new Label();
             final Label grad = new Label();
@@ -98,38 +92,32 @@ final class MathGen {
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.F2D);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
-            mv.visitInsn(Opcodes.D2F);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitJumpInsn(Opcodes.GOTO, defaultBranch);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
+            mv.visitJumpInsn(GOTO, defaultBranch);
 
             mv.visitLabel(deg);
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.F2D);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "toDegrees", "(D)D", false);
-            mv.visitInsn(Opcodes.D2F);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitJumpInsn(Opcodes.GOTO, defaultBranch);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
+            mv.visitJumpInsn(GOTO, defaultBranch);
 
             mv.visitLabel(grad);
             mv.visitFrame(F_SAME, 0, null, 0, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitLdcInsn(200.0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-            mv.visitInsn(Opcodes.F2D);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
             mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, function, "(D)D", false);
             mv.visitInsn(Opcodes.DMUL);
             mv.visitLdcInsn(Math.PI);
             mv.visitInsn(Opcodes.DDIV);
-            mv.visitInsn(Opcodes.D2F);
-            mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
 
             mv.visitLabel(defaultBranch);
             mv.visitFrame(F_SAME, 0, null, 0, null);
@@ -146,11 +134,9 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(F2D);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "log", "(D)D", false);
-        mv.visitInsn(D2F);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -163,11 +149,9 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(F2D);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "log10", "(D)D", false);
-        mv.visitInsn(D2F);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -181,11 +165,9 @@ final class MathGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(10.0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(F2D);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "pow", "(DD)D", false);
-        mv.visitInsn(D2F);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -199,11 +181,9 @@ final class MathGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(Math.E);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(F2D);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "pow", "(DD)D", false);
-        mv.visitInsn(D2F);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -216,11 +196,9 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(F2D);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "sqrt", "(D)D", false);
-        mv.visitInsn(D2F);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -233,10 +211,10 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(DUP);
-        mv.visitInsn(FMUL);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DUP2);
+        mv.visitInsn(DMUL);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -248,11 +226,11 @@ final class MathGen {
     static void inv(final MethodVisitor mv, final CodeGenContext context) {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(FCONST_1);
+        mv.visitInsn(DCONST_1);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FDIV);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DDIV);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -264,16 +242,13 @@ final class MathGen {
     static void xPowY(final MethodVisitor mv, final CodeGenContext context) {
         saveX(mv, context);
 
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.F2D);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitInsn(Opcodes.F2D);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
         mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, "pow", "(DD)D", false);
-        mv.visitInsn(Opcodes.D2F);
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
 
         stackDown(mv, context);
     }
@@ -293,8 +268,7 @@ final class MathGen {
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitLdcInsn(Math.PI);
-        mv.visitInsn(D2F);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -307,11 +281,11 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FADD);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DADD);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         stackDown(mv, context);
     }
 
@@ -325,11 +299,11 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FMUL);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DMUL);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         stackDown(mv, context);
     }
 
@@ -343,11 +317,11 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FDIV);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DDIV);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         stackDown(mv, context);
     }
 
@@ -361,11 +335,11 @@ final class MathGen {
         saveX(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FSUB);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DSUB);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         stackDown(mv, context);
     }
 
@@ -380,9 +354,9 @@ final class MathGen {
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "abs", "(F)F", false);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitMethodInsn(INVOKESTATIC, JAVA_LANG_MATH, "abs", "(D)D", false);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -395,38 +369,38 @@ final class MathGen {
         saveX(mv, context);
 
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FCONST_0);
-        mv.visitInsn(FCMPG);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPG);
         final Label positiveOrZeroBranch = new Label();
         mv.visitJumpInsn(IFGE, positiveOrZeroBranch);
 
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitLdcInsn(-1f);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitLdcInsn(-1.0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         final Label exit = new Label();
         mv.visitJumpInsn(GOTO, exit);
 
         mv.visitLabel(positiveOrZeroBranch);
-        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(FCONST_0);
-        mv.visitInsn(FCMPL);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         final Label zeroBranch = new Label();
         mv.visitJumpInsn(IFLE, zeroBranch);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(FCONST_1);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(DCONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitJumpInsn(GOTO, exit);
 
         mv.visitLabel(zeroBranch);
-        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(FCONST_0);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(DCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitLabel(exit);
-        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -440,12 +414,12 @@ final class MathGen {
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
 
-        mv.visitInsn(F2I);
-        mv.visitInsn(I2F);
+        mv.visitInsn(D2I);
+        mv.visitInsn(I2D);
 
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
 
@@ -460,15 +434,15 @@ final class MathGen {
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(F2I);
-        mv.visitInsn(I2F);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(D2I);
+        mv.visitInsn(I2D);
 
-        mv.visitInsn(FSUB);
+        mv.visitInsn(DSUB);
 
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -480,39 +454,39 @@ final class MathGen {
     static void max(final MethodVisitor mv, final CodeGenContext context) {
         saveX(mv, context);
 
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(Opcodes.FCMPL);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         final Label xzero = new Label();
         mv.visitJumpInsn(Opcodes.IFEQ, xzero);
 
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(Opcodes.FCMPL);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         final Label compare = new Label();
-        mv.visitJumpInsn(Opcodes.IFNE, compare);
+        mv.visitJumpInsn(IFNE, compare);
 
         mv.visitLabel(xzero);
-        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFrame(F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(DCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         final Label exit = new Label();
-        mv.visitJumpInsn(Opcodes.GOTO, exit);
+        mv.visitJumpInsn(GOTO, exit);
 
         mv.visitLabel(compare);
-        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, "max", "(FF)F", false);
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFrame(F_SAME, 0, null, 0, null);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
+        mv.visitMethodInsn(Opcodes.INVOKESTATIC, JAVA_LANG_MATH, "max", "(DD)D", false);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitLabel(exit);
-        mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -538,34 +512,34 @@ final class MathGen {
         saveX(mv, context);
 
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitLdcInsn(10f);
+        mv.visitLdcInsn(10.0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "D");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitInsn(FADD);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
+        mv.visitInsn(DADD);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKESPECIAL, CLASS_NAME, "getSegment", "()F", false);
-        mv.visitInsn(FADD);
-        mv.visitInsn(FMUL);
-        mv.visitLdcInsn(3.0f);
-        mv.visitInsn(FDIV);
-        mv.visitLdcInsn(0.404067f);
-        mv.visitInsn(FADD);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, LAST_RANDOM, "F");
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
-        mv.visitInsn(F2I);
-        mv.visitInsn(I2F);
-        mv.visitInsn(FSUB);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, LAST_RANDOM, "F");
+        mv.visitMethodInsn(INVOKESPECIAL, CLASS_NAME, "getSegment", "()D", false);
+        mv.visitInsn(DADD);
+        mv.visitInsn(DMUL);
+        mv.visitLdcInsn(3.0);
+        mv.visitInsn(DDIV);
+        mv.visitLdcInsn(0.404067);
+        mv.visitInsn(DADD);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, LAST_RANDOM, "D");
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "D");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "D");
+        mv.visitInsn(D2I);
+        mv.visitInsn(I2D);
+        mv.visitInsn(DSUB);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, LAST_RANDOM, "D");
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, LAST_RANDOM, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
 
