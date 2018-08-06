@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  * During bytecode generation new class will be created based on this class but with execute() method containing
  * actual bytecode generated from mk hex code.
  */
-@SuppressWarnings({"WeakerAccess", "unused", "FieldMayBeFinal", "FieldCanBeLocal", "MismatchedReadAndWriteOfArray", "SameParameterValue"})
+@SuppressWarnings({"WeakerAccess", "unused", "FieldMayBeFinal", "FieldCanBeLocal", "MismatchedReadAndWriteOfArray", "SameParameterValue", "MagicNumber"})
 public class Mk54 {
 
     public static final int RAD = 0;
@@ -79,6 +80,10 @@ public class Mk54 {
      * Holds last generated random value
      */
     private float lastRandom;
+    /**
+     * Address in MK address space from which program execution will start
+     */
+    private int startingAddress;
 
 
     public Mk54() {
@@ -93,6 +98,7 @@ public class Mk54 {
         this.pushStack = false;
         this.lastRandom = 0;
         this.callStack = new Stack<>();
+        this.startingAddress = 0;
     }
 
     public float getX() {
@@ -129,8 +135,82 @@ public class Mk54 {
     public static void main(final String[] args) throws Exception {
         final Mk54 mk54 = new Mk54();
 
+        try {
+            if (!parseArguments(args, mk54)) {
+                return;
+            }
+        } catch (final Exception ex) {
+            System.out.println(ex.getMessage());
+            help();
+            return;
+        }
+
         final Method execute = Mk54.class.getDeclaredMethod("execute");
         execute.invoke(mk54);
+
+        mk54.dumpRegisters();
+    }
+
+    private static boolean parseArguments(final String[] args, final Mk54 mk54) {
+        if (Arrays.stream(args).anyMatch("-h"::equalsIgnoreCase)) {
+            help();
+            return false;
+        }
+        final Iterator<String> argsIter = Arrays.stream(args).iterator();
+        while (argsIter.hasNext()) {
+            final String option = argsIter.next();
+            mk54.setRegister(option.substring(1).toLowerCase(), Float.parseFloat(argsIter.next()));
+        }
+        return true;
+    }
+
+    /**
+     * Prints help
+     */
+    private static void help() {
+        System.out.println("Usage:");
+        System.out.println("  java -jar mk54.jar [options]");
+        System.out.println();
+        System.out.println("Options:");
+        System.out.println(" -x VALUE    - sets value of X register");
+        System.out.println(" -y VALUE    - sets value of Y register");
+        System.out.println(" -z VALUE    - sets value of Z register");
+        System.out.println(" -t VALUE    - sets value of T register");
+        System.out.println(" -x1 VALUE   - sets value of X1 register");
+        System.out.println(" -M<r> VALUE - sets value of memory address <r>, where <r> is number from 0 to E");
+        System.out.println(" -s ADDRESS  - sets starting address for program execution");
+        System.out.println(" -h          - prints this message");
+    }
+
+    private void setRegister(final String register, final float value) {
+        switch (register) {
+            case "x":
+                this.x = value;
+                break;
+            case "x1":
+                this.x1 = value;
+                break;
+            case "y":
+                this.y = value;
+                break;
+            case "z":
+                this.z = value;
+                break;
+            case "t":
+                this.t = value;
+                break;
+            case "s":
+                if (value < 0 || value > 104) {
+                    throw new IllegalArgumentException("Invalid starting address, must be in 00..104 range");
+                }
+                this.startingAddress = (int) value;
+                break;
+            default:
+                if (register.startsWith("m")) {
+                    final int memReg = Integer.parseInt(register.substring(1));
+                    this.memory[memReg] = value;
+                }
+        }
     }
 
     /**
@@ -250,7 +330,6 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        x = memory[(int) memory[6]];
     }
 
 }
