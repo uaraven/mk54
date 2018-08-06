@@ -106,4 +106,10 @@ public class Mk54Wrapper {
         mem.setAccessible(true);
         Array.setFloat(mem.get(this.mk54), location, value);
     }
+
+    public void setStartAddress(final int address) throws Exception {
+        final Field mem = this.mk54.getClass().getDeclaredField("startingAddress");
+        mem.setAccessible(true);
+        mem.setInt(this.mk54, address);
+    }
 }

@@ -299,13 +299,15 @@ public class Mk54 {
     }
 
     private void dumpInternalState() {
-        System.out.println(String.format("    entryMode: %s", this.entryMode == MANTISSA ? "Mantissa" : "Exponent"));
-        System.out.println(String.format("decimalFactor: %d", this.decimalFactor));
-        System.out.println(String.format("       resetX: %s", Boolean.toString(this.resetX)));
-        System.out.println(String.format("    pushStack: %s", Boolean.toString(this.pushStack)));
-        System.out.println(String.format("    Ret stack: [%s]", this.callStack.stream()
+        System.out.println(String.format("      entryMode: %s", this.entryMode == MANTISSA ? "Mantissa" : "Exponent"));
+        System.out.println(String.format("  decimalFactor: %d", this.decimalFactor));
+        System.out.println(String.format("         resetX: %s", Boolean.toString(this.resetX)));
+        System.out.println(String.format("      pushStack: %s", Boolean.toString(this.pushStack)));
+        System.out.println(String.format("      Ret stack: [%s]", this.callStack.stream()
                 .map(Integer::toHexString)
                 .collect(Collectors.joining(" "))));
+        System.out.println(String.format("indirectAddress: %s", this.indirectJumpAddress));
+        System.out.println(String.format("startingAddress: %s", this.startingAddress));
     }
 
     void dumpRegisters() {
@@ -330,6 +332,7 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
+        throw new IllegalStateException("Invalid jump to address: " + indirectJumpAddress);
     }
 
 }

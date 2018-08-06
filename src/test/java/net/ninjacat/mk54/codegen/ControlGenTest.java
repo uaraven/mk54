@@ -370,6 +370,23 @@ public class ControlGenTest {
         testLoop(3);
     }
 
+    @Test
+    public void shouldStartFromNonZeroAddress() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(4),
+                DIGIT(0),
+                DIGIT(1),
+                DIGIT(0),
+                DIGIT(0),
+                STOP
+        ));
+
+        mk54.setStartAddress(2);
+        mk54.execute();
+        final float x = mk54.getX();
+        assertThat(x, is(100f));
+    }
+
     private static void testLoop(final int register) throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT(4),
