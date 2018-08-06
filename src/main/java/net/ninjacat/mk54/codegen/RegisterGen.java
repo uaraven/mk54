@@ -31,18 +31,18 @@ final class RegisterGen {
     static void pushStack(final MethodVisitor mv) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_T, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_T, "D");
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "D");
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "D");
     }
 
     /**
@@ -74,8 +74,8 @@ final class RegisterGen {
 
             // Clear X if resetX flag is set
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(FCONST_0);
-            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");
+            mv.visitInsn(DCONST_0);
+            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "D");
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(ICONST_0);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
@@ -151,8 +151,8 @@ final class RegisterGen {
     static void restoreX(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X1, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X1, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -184,14 +184,14 @@ final class RegisterGen {
      */
     static void clearX(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(FCONST_0);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "F");
+        mv.visitInsn(DCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "D");
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_0);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(FCONST_0);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitInsn(DCONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
     /**
@@ -203,12 +203,12 @@ final class RegisterGen {
     static void swapXy(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Y, "D");
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
 
@@ -221,28 +221,28 @@ final class RegisterGen {
     static void rotate(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X1, "F");
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X1, "D");
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "F");
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Y, "D");
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_X, "D");
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Z, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_Z, "D");
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Y, "D");
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_T, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_T, "D");
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_Z, "D");
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 0);
-        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X1, "F");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_T, "F");
+        mv.visitFieldInsn(Opcodes.GETFIELD, CLASS_NAME, REGISTER_X1, "D");
+        mv.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, REGISTER_T, "D");
     }
 
 }

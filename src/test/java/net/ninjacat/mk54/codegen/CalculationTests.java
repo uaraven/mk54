@@ -26,9 +26,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX1();
+        final double x = mk54.getX1();
 
-        assertThat(x, is(58f));
+        assertThat(x, is(58.0));
     }
 
 
@@ -44,9 +44,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(70f));
+        assertThat(x, is(70.0));
     }
 
 
@@ -64,13 +64,13 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float t = mk54.getT();
-        final float z = mk54.getZ();
-        final float y = mk54.getY();
+        final double t = mk54.getT();
+        final double z = mk54.getZ();
+        final double y = mk54.getY();
 
-        assertThat(t, is(1f));
-        assertThat(z, is(1f));
-        assertThat(y, is(2f));
+        assertThat(t, is(1.0));
+        assertThat(z, is(1.0));
+        assertThat(y, is(2.0));
     }
 
     @Test
@@ -83,9 +83,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(30f));
+        assertThat(x, is(30.0));
     }
 
     @Test
@@ -99,9 +99,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(10f));
+        assertThat(x, is(10.0));
     }
 
     @Test
@@ -116,9 +116,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(-5f));
+        assertThat(x, is(-5.0));
     }
 
 
@@ -132,9 +132,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(19.952621f));
+        assertThat(x, closeTo(19.952621, 1e-5));
     }
 
     @Test
@@ -147,9 +147,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(4.481689f));
+        assertThat(x, closeTo(4.481689, 1e-6));
     }
 
     @Test
@@ -163,9 +163,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(3f));
+        assertThat(x, is(3.0));
     }
 
     @Test
@@ -177,9 +177,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(2.9957323f));
+        assertThat(x, closeTo(2.9957323, 1e-6));
     }
 
     @Test
@@ -192,9 +192,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(0.47942555f));
+        assertThat(x, closeTo(0.47942555, 1e-7));
     }
 
     @Test
@@ -207,9 +207,9 @@ public class CalculationTests {
 
         mk54.setRadGradDeg(Mk54.DEG);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(0.64278764f));
+        assertThat(x, closeTo(0.64278764, 1e-6));
     }
 
     @Test
@@ -222,9 +222,9 @@ public class CalculationTests {
 
         mk54.setRadGradDeg(Mk54.GRAD);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(0.70710678118f));
+        assertThat(x, closeTo(0.70710678118, 1e-6));
     }
 
     @Test
@@ -244,9 +244,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, closeTo(0.5, 0.00001));
+        assertThat(x, closeTo(0.5, 0.00001));
     }
 
     @Test
@@ -267,9 +267,9 @@ public class CalculationTests {
 
         mk54.setRadGradDeg(Mk54.DEG);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, closeTo(40, 0.00001));
+        assertThat(x, closeTo(40, 0.00001));
     }
 
     @Test
@@ -290,9 +290,9 @@ public class CalculationTests {
 
         mk54.setRadGradDeg(Mk54.GRAD);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, closeTo(50, 0.00001));
+        assertThat(x, closeTo(50, 0.00001));
     }
 
     @Test
@@ -307,9 +307,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, is(closeTo(Math.PI, 0.0000001)));
+        assertThat(x, is(closeTo(Math.PI, 0.0000001)));
 
     }
 
@@ -322,9 +322,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, is(closeTo(5f, 0.0000001)));
+        assertThat(x, is(closeTo(5f, 0.0000001)));
     }
 
     @Test
@@ -335,9 +335,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, is(closeTo(25f, 0.0000001)));
+        assertThat(x, is(closeTo(25f, 0.0000001)));
     }
 
     @Test
@@ -348,9 +348,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, is(closeTo(0.5f, 0.0000001)));
+        assertThat(x, is(closeTo(0.5f, 0.0000001)));
     }
 
     @Test
@@ -363,9 +363,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat((double) x, is(closeTo(25f, 0.0000001)));
+        assertThat(x, is(closeTo(25f, 0.0000001)));
 
     }
 
@@ -392,11 +392,11 @@ public class CalculationTests {
 
         mk54.setX(-5);
         mk54.execute();
-        assertThat(mk54.getX(), is(5f));
+        assertThat(mk54.getX(), is(5.0));
 
         mk54.setX(12);
         mk54.execute();
-        assertThat(mk54.getX(), is(12f));
+        assertThat(mk54.getX(), is(12.0));
 
     }
 
@@ -409,15 +409,15 @@ public class CalculationTests {
 
         mk54.setX(-5);
         mk54.execute();
-        assertThat(mk54.getX(), is(-1f));
+        assertThat(mk54.getX(), is(-1.0));
 
         mk54.setX(12);
         mk54.execute();
-        assertThat(mk54.getX(), is(1f));
+        assertThat(mk54.getX(), is(1.0));
 
         mk54.setX(0);
         mk54.execute();
-        assertThat(mk54.getX(), is(0f));
+        assertThat(mk54.getX(), is(0.0));
     }
 
     @Test
@@ -428,11 +428,11 @@ public class CalculationTests {
 
         mk54.setX(6.432f);
         mk54.execute();
-        assertThat(mk54.getX(), is(6f));
+        assertThat(mk54.getX(), is(6.0));
 
         mk54.setX(-6.432f);
         mk54.execute();
-        assertThat(mk54.getX(), is(-6f));
+        assertThat(mk54.getX(), is(-6.0));
 
     }
 
@@ -442,13 +442,13 @@ public class CalculationTests {
                 FRAC
         ));
 
-        mk54.setX(6.432f);
+        mk54.setX(6.432);
         mk54.execute();
-        assertThat((double) mk54.getX(), closeTo(0.432f, 0.00001f));
+        assertThat(mk54.getX(), closeTo(0.432, 1e-6));
 
-        mk54.setX(-6.432f);
+        mk54.setX(-6.432);
         mk54.execute();
-        assertThat((double) mk54.getX(), closeTo(-0.432f, 0.00001));
+        assertThat(mk54.getX(), closeTo(-0.432, 1e-6));
 
     }
 
@@ -458,25 +458,25 @@ public class CalculationTests {
                 MAX
         ));
 
-        mk54.setX(6.432f);
+        mk54.setX(6.432);
         mk54.setY(-43);
         mk54.execute();
-        assertThat((double) mk54.getX(), closeTo(6.432f, 0.00001f));
+        assertThat(mk54.getX(), closeTo(6.432, 0.00001));
 
-        mk54.setX(-6.432f);
+        mk54.setX(-6.432);
         mk54.setY(3);
         mk54.execute();
-        assertThat((double) mk54.getX(), closeTo(3f, 0.00001));
+        assertThat(mk54.getX(), closeTo(3.0, 0.00001));
 
         mk54.setX(0);
         mk54.setY(3);
         mk54.execute();
-        assertThat(mk54.getX(), is(0f));
+        assertThat(mk54.getX(), is(0.0));
 
         mk54.setX(4);
         mk54.setY(0);
         mk54.execute();
-        assertThat(mk54.getX(), is(0f));
+        assertThat(mk54.getX(), is(0.0));
     }
 
     @Test
@@ -486,9 +486,9 @@ public class CalculationTests {
         ));
 
         mk54.execute();
-        assertThat(mk54.getX(), is(0.404067f));
+        assertThat(mk54.getX(), closeTo(0.404067, 1e-6));
 
         mk54.execute();
-        assertThat(mk54.getX(), is(0.750957F));
+        assertThat(mk54.getX(), closeTo(0.750957, 1e-6));
     }
 }

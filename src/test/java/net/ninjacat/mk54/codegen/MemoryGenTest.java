@@ -19,9 +19,9 @@ public class MemoryGenTest {
         ));
 
         mk54.execute();
-        final float m0 = mk54.getMem(0);
+        final double m0 = mk54.getMem(0);
 
-        assertThat(m0, is(1f));
+        assertThat(m0, is(1.0));
     }
 
     @Test
@@ -66,9 +66,9 @@ public class MemoryGenTest {
 
         mk54.execute();
         for (int i = 0; i < 15; i++) {
-            final float m = mk54.getMem(i);
+            final double m = mk54.getMem(i);
 
-            assertThat(String.format("Register %d should contain %d", i, i), m, is((float) i));
+            assertThat(String.format("Register %d should contain %d", i, i), m, is((double) i));
         }
     }
 
@@ -83,9 +83,9 @@ public class MemoryGenTest {
             mk54.setMem(i, i);
 
             mk54.execute();
-            final float x = mk54.getX();
+            final double x = mk54.getX();
 
-            assertThat(String.format("Register %d should contain %d", i, i), x, is((float) i));
+            assertThat(String.format("Register %d should contain %d", i, i), x, is((double) i));
         }
     }
 
@@ -100,11 +100,11 @@ public class MemoryGenTest {
 
         mk54.setMem(0, 2);
         mk54.execute();
-        final float m1 = mk54.getMem(1);
-        final float m2 = mk54.getMem(2);
+        final double m1 = mk54.getMem(1);
+        final double m2 = mk54.getMem(2);
 
-        assertThat(m1, is(54f));
-        assertThat(m2, is(0f));
+        assertThat(m1, is(54.0));
+        assertThat(m2, is(0.0));
     }
 
     @Test
@@ -118,11 +118,11 @@ public class MemoryGenTest {
 
         mk54.setMem(5, 2);
         mk54.execute();
-        final float m2 = mk54.getMem(2);
-        final float m3 = mk54.getMem(3);
+        final double m2 = mk54.getMem(2);
+        final double m3 = mk54.getMem(3);
 
-        assertThat(m3, is(54f));
-        assertThat(m2, is(0f));
+        assertThat(m3, is(54.0));
+        assertThat(m2, is(0.0));
     }
 
     @Test
@@ -136,9 +136,9 @@ public class MemoryGenTest {
 
         mk54.setMem(10, 2);
         mk54.execute();
-        final float m2 = mk54.getMem(2);
+        final double m2 = mk54.getMem(2);
 
-        assertThat(m2, is(54f));
+        assertThat(m2, is(54.0));
     }
 
     @Test
@@ -151,11 +151,11 @@ public class MemoryGenTest {
         mk54.setMem(1, 54f);
         mk54.setMem(0, 2);
         mk54.execute();
-        final float m0 = mk54.getMem(0);
-        final float x = mk54.getX();
+        final double m0 = mk54.getMem(0);
+        final double x = mk54.getX();
 
-        assertThat(m0, is(1f));
-        assertThat(x, is(54f));
+        assertThat(m0, is(1.0));
+        assertThat(x, is(54.0));
     }
 
     @Test
@@ -168,11 +168,11 @@ public class MemoryGenTest {
         mk54.setMem(5, 2);
         mk54.setMem(3, 54f);
         mk54.execute();
-        final float m2 = mk54.getMem(5);
-        final float x = mk54.getX();
+        final double m2 = mk54.getMem(5);
+        final double x = mk54.getX();
 
-        assertThat(x, is(54f));
-        assertThat(m2, is(3f));
+        assertThat(x, is(54.0));
+        assertThat(m2, is(3.0));
     }
 
     @Test
@@ -185,10 +185,10 @@ public class MemoryGenTest {
         mk54.setMem(10, 2);
         mk54.setMem(2, 54f);
         mk54.execute();
-        final float m2 = mk54.getMem(10);
-        final float x = mk54.getX();
+        final double m2 = mk54.getMem(10);
+        final double x = mk54.getX();
 
-        assertThat(m2, is(2f));
-        assertThat(x, is(54f));
+        assertThat(m2, is(2.0));
+        assertThat(x, is(54.0));
     }
 }

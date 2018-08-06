@@ -16,8 +16,8 @@ final class ControlGen {
     private static final String STACK_DESCRIPTOR = "Ljava/util/Stack;";
     private static final String JAVA_UTIL_STACK = "java/util/Stack";
     private static final String CALL_STACK = "callStack";
+    private static final String STARTING_ADDRESS = "startingAddress";
     static final String INDIRECT_JUMP_ADDRESS = "indirectJumpAddress";
-    public static final String STARTING_ADDRESS = "startingAddress";
 
     private ControlGen() {
     }
@@ -109,9 +109,9 @@ final class ControlGen {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(FCMPL);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         mv.visitJumpInsn(Opcodes.IFNE, targetLabel);
     }
 
@@ -125,9 +125,9 @@ final class ControlGen {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(FCMPL);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         mv.visitJumpInsn(Opcodes.IFEQ, targetLabel);
     }
 
@@ -141,9 +141,9 @@ final class ControlGen {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(FCMPL);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         mv.visitJumpInsn(Opcodes.IFLT, targetLabel);
     }
 
@@ -157,9 +157,9 @@ final class ControlGen {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(FCMPL);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         mv.visitJumpInsn(Opcodes.IFGE, targetLabel);
     }
 
@@ -189,23 +189,23 @@ final class ControlGen {
 
             // if memory[register] > 1
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, register);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FCMPL);
+            mv.visitInsn(DALOAD);
+            mv.visitInsn(DCONST_1);
+            mv.visitInsn(DCMPL);
             // stop loop if reached 1
             final Label stopLoop = new Label();
             mv.visitJumpInsn(IFLE, stopLoop);
             // decrement and then perform jump
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, register);
             mv.visitInsn(DUP2);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FSUB);
-            mv.visitInsn(FASTORE);
+            mv.visitInsn(DALOAD);
+            mv.visitInsn(DCONST_1);
+            mv.visitInsn(DSUB);
+            mv.visitInsn(DASTORE);
             // jump to loop address
             mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
             mv.visitJumpInsn(GOTO, targetLabel);
@@ -289,9 +289,9 @@ final class ControlGen {
                                              final MethodVisitor mv, final CodeGenContext context) {
         final Label exitLabel = new Label();
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitInsn(Opcodes.FCONST_0);
-        mv.visitInsn(FCMPL);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitInsn(DCONST_0);
+        mv.visitInsn(DCMPL);
         mv.visitJumpInsn(cmpInstruction, exitLabel); // if x ?cmp? 0, exit
 
         loadRegisterToJump(register, mv);
@@ -317,10 +317,10 @@ final class ControlGen {
         // save address from memory register into indirect jump address register
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
         mv.visitIntInsn(BIPUSH, register);
-        mv.visitInsn(FALOAD);
-        mv.visitInsn(F2I);
+        mv.visitInsn(DALOAD);
+        mv.visitInsn(D2I);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
     }
 

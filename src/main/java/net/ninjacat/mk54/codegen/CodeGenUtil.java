@@ -59,13 +59,13 @@ final class CodeGenUtil {
     static void stackDown(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "D");
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_T, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_T, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Z, "D");
     }
 
     /**
@@ -77,8 +77,8 @@ final class CodeGenUtil {
     static void saveX(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "F");
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X1, "F");
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X1, "D");
     }
 
     /**
@@ -144,22 +144,22 @@ final class CodeGenUtil {
     static void modifyRegisterForIndirect(final int register, final MethodVisitor mv) {
         if (register >= 0 && register <= 3) {
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, register);
             mv.visitInsn(DUP2);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FSUB);
-            mv.visitInsn(FASTORE);
+            mv.visitInsn(DALOAD);
+            mv.visitInsn(DCONST_1);
+            mv.visitInsn(DSUB);
+            mv.visitInsn(DASTORE);
         } else if (register >= 4 && register <= 6) {
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[F");
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
             mv.visitIntInsn(BIPUSH, register);
             mv.visitInsn(DUP2);
-            mv.visitInsn(FALOAD);
-            mv.visitInsn(FCONST_1);
-            mv.visitInsn(FADD);
-            mv.visitInsn(FASTORE);
+            mv.visitInsn(DALOAD);
+            mv.visitInsn(DCONST_1);
+            mv.visitInsn(DADD);
+            mv.visitInsn(DASTORE);
         }
     }
 }

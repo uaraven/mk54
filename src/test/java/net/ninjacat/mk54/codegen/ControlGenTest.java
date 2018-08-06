@@ -24,9 +24,9 @@ public class ControlGenTest {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(12f));
+        assertThat(x, is(12.0));
     }
 
     @Test
@@ -42,9 +42,9 @@ public class ControlGenTest {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(12f));
+        assertThat(x, is(12.0));
     }
 
     @Test
@@ -58,9 +58,9 @@ public class ControlGenTest {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(9f));
+        assertThat(x, is(9.0));
     }
 
     @Test
@@ -77,9 +77,9 @@ public class ControlGenTest {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(11f));
+        assertThat(x, is(11.0));
     }
 
     @Test
@@ -101,9 +101,9 @@ public class ControlGenTest {
         ));
 
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(12f));
+        assertThat(x, is(12.0));
     }
 
     @Test(expected = InvalidJumpTargetException.class)
@@ -129,16 +129,16 @@ public class ControlGenTest {
         mk54.setX(5);
         mk54.setResetX(true);
         mk54.execute();
-        float x = mk54.getX();
+        double x = mk54.getX();
 
-        assertThat("Should put 2 into X", x, is(2f));
+        assertThat("Should put 2 into X", x, is(2.0));
 
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
         x = mk54.getX();
 
-        assertThat("Should put 1 into X", x, is(1f));
+        assertThat("Should put 1 into X", x, is(1.0));
     }
 
     @Test
@@ -155,16 +155,16 @@ public class ControlGenTest {
         mk54.setX(5);
         mk54.setResetX(true);
         mk54.execute();
-        float x = mk54.getX();
+        double x = mk54.getX();
 
-        assertThat("Should put 1 into X", x, is(1f));
+        assertThat("Should put 1 into X", x, is(1.0));
 
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
         x = mk54.getX();
 
-        assertThat("Should put 2 into X", x, is(2f));
+        assertThat("Should put 2 into X", x, is(2.0));
     }
 
     @Test
@@ -181,23 +181,23 @@ public class ControlGenTest {
         mk54.setX(5);
         mk54.setResetX(true);
         mk54.execute();
-        float x = mk54.getX();
+        double x = mk54.getX();
 
-        assertThat("Should put 1 into X", x, is(1f));
+        assertThat("Should put 1 into X", x, is(1.0));
 
         mk54.setX(-5);
         mk54.setResetX(true);
         mk54.execute();
         x = mk54.getX();
 
-        assertThat("Should put 2 into X", x, is(2f));
+        assertThat("Should put 2 into X", x, is(2.0));
 
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
         x = mk54.getX();
 
-        assertThat("Should put 1 into X", x, is(1f));
+        assertThat("Should put 1 into X", x, is(1.0));
 
     }
 
@@ -215,23 +215,23 @@ public class ControlGenTest {
         mk54.setX(5);
         mk54.setResetX(true);
         mk54.execute();
-        float x = mk54.getX();
+        double x = mk54.getX();
 
-        assertThat("Should put 1 into X", x, is(1f));
+        assertThat("Should put 1 into X", x, is(1.0));
 
         mk54.setX(-5);
         mk54.setResetX(true);
         mk54.execute();
         x = mk54.getX();
 
-        assertThat("Should put 2 into X", x, is(2f));
+        assertThat("Should put 2 into X", x, is(2.0));
 
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
         x = mk54.getX();
 
-        assertThat("Should put 1 into X", x, is(1f));
+        assertThat("Should put 1 into X", x, is(1.0));
     }
 
     @Test
@@ -243,11 +243,11 @@ public class ControlGenTest {
                 STOP
         ));
 
-        mk54.setMem(0, 3);
+        mk54.setMem(0, 3.0);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(5f));
+        assertThat(x, is(5.0));
     }
 
     @Test
@@ -261,9 +261,9 @@ public class ControlGenTest {
 
         mk54.setMem(5, 2);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(4f));
+        assertThat(x, is(4.0));
     }
 
     @Test
@@ -276,11 +276,11 @@ public class ControlGenTest {
                 STOP
         ));
 
-        mk54.setMem(10, 3);
+        mk54.setMem(10, 3.0);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(5f));
+        assertThat(x, is(5.0));
     }
 
     @Test
@@ -295,9 +295,9 @@ public class ControlGenTest {
 
         mk54.setMem(0, 4);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(5f));
+        assertThat(x, is(5.0));
     }
 
     @Test
@@ -312,9 +312,9 @@ public class ControlGenTest {
 
         mk54.setMem(5, 2);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(5f));
+        assertThat(x, is(5.0));
     }
 
     @Test
@@ -329,37 +329,37 @@ public class ControlGenTest {
 
         mk54.setMem(10, 3);
         mk54.execute();
-        final float x = mk54.getX();
+        final double x = mk54.getX();
 
-        assertThat(x, is(5f));
+        assertThat(x, is(5.0));
     }
 
     @Test
     public void shouldPerformIndirectJNZ() throws Exception {
-        testIndirectConditionalJump(IJNZ(0), 0, 4, 0, 0.1f);
-        testIndirectConditionalJump(IJNZ(5), 5, 2, 0, 0.1f);
-        testIndirectConditionalJump(IJNZ(10), 10, 3, 0, 0.1f);
+        testIndirectConditionalJump(IJNZ(0), 0, 4, 0, 0.1);
+        testIndirectConditionalJump(IJNZ(5), 5, 2, 0, 0.1);
+        testIndirectConditionalJump(IJNZ(10), 10, 3, 0, 0.1);
     }
 
     @Test
     public void shouldPerformIndirectJZ() throws Exception {
-        testIndirectConditionalJump(IJZ(0), 0, 4, 0.1f, 0f);
-        testIndirectConditionalJump(IJZ(5), 5, 2, 0.2f, 0f);
-        testIndirectConditionalJump(IJZ(10), 10, 3, 0.3f, 0f);
+        testIndirectConditionalJump(IJZ(0), 0, 4, 0.1, 0);
+        testIndirectConditionalJump(IJZ(5), 5, 2, 0.2, 0);
+        testIndirectConditionalJump(IJZ(10), 10, 3, 0.3, 0);
     }
 
     @Test
     public void shouldPerformIndirectJGEZ() throws Exception {
-        testIndirectConditionalJump(IJGEZ(0), 0, 4, -1f, 0f);
-        testIndirectConditionalJump(IJGEZ(5), 5, 2, -2f, 0.5f);
-        testIndirectConditionalJump(IJGEZ(10), 10, 3, -3f, 1f);
+        testIndirectConditionalJump(IJGEZ(0), 0, 4, -1, 0);
+        testIndirectConditionalJump(IJGEZ(5), 5, 2, -2, 0.5);
+        testIndirectConditionalJump(IJGEZ(10), 10, 3, -3, 1);
     }
 
     @Test
     public void shouldPerformIndirectJLTZ() throws Exception {
-        testIndirectConditionalJump(IJLZ(0), 0, 4, 0f, -1f);
-        testIndirectConditionalJump(IJLZ(5), 5, 2, 1f, -0.5f);
-        testIndirectConditionalJump(IJLZ(10), 10, 3, 2f, -2f);
+        testIndirectConditionalJump(IJLZ(0), 0, 4, 0, -1);
+        testIndirectConditionalJump(IJLZ(5), 5, 2, 1, -0.5);
+        testIndirectConditionalJump(IJLZ(10), 10, 3, 2, -2);
     }
 
     @Test
@@ -383,8 +383,8 @@ public class ControlGenTest {
 
         mk54.setStartAddress(2);
         mk54.execute();
-        final float x = mk54.getX();
-        assertThat(x, is(100f));
+        final double x = mk54.getX();
+        assertThat(x, is(100.0));
     }
 
     private static void testLoop(final int register) throws Exception {
@@ -403,18 +403,18 @@ public class ControlGenTest {
         ));
 
         mk54.execute();
-        final float counter = mk54.getMem(register);
-        final float accum = mk54.getMem(5);
+        final double counter = mk54.getMem(register);
+        final double accum = mk54.getMem(5);
 
-        assertThat(counter, is(1f));
-        assertThat(accum, is(4f));
+        assertThat(counter, is(1.0));
+        assertThat(accum, is(4.0));
     }
 
     private static void testIndirectConditionalJump(final String operation,
                                                     final int memRegNo,
                                                     final int memRegValue,
-                                                    final float Xvalue1,
-                                                    final float Xvalue2) throws Exception {
+                                                    final double Xvalue1,
+                                                    final double Xvalue2) throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 operation,
                 DIGIT(1),
@@ -426,12 +426,12 @@ public class ControlGenTest {
         mk54.setX(Xvalue1);
         mk54.setMem(memRegNo, memRegValue);
         mk54.execute();
-        final float x1 = mk54.getX();
-        assertThat(x1, is(1f));
+        final double x1 = mk54.getX();
+        assertThat(x1, is(1.0));
 
         mk54.setX(Xvalue2);
         mk54.execute();
-        final float x2 = mk54.getX();
-        assertThat(x2, is(2f));
+        final double x2 = mk54.getX();
+        assertThat(x2, is(2.0));
     }
 }
