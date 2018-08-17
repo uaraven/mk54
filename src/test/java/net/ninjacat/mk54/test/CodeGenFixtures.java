@@ -4,6 +4,7 @@ import net.ninjacat.mk54.codegen.CodeGenerator;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public final class CodeGenFixtures {
         final byte[] classBytes = codeGenerator.compile(operations);
 
         // TODO: remove class writing out
-        try (final OutputStream os = new FileOutputStream("/tmp/Mk54.class")) {
+        try (final OutputStream os = new FileOutputStream(Files.createTempFile("Mk54", ".class").toFile())) {
             os.write(classBytes);
         }
 
