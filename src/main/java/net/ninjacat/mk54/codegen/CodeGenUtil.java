@@ -103,7 +103,7 @@ final class CodeGenUtil {
      * @param context Code generation context
      */
 
-    static void forcePushStack(final MethodVisitor mv, final CodeGenContext context) {
+    private static void forcePushStack(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "pushStack", "Z");

@@ -71,7 +71,7 @@ public class Mk54 {
      * Call stack for subroutine calls
      */
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private Stack<Integer> callStack;
+    private final Stack<Integer> callStack;
 
     /**
      * Holds last generated random value
@@ -321,12 +321,6 @@ public class Mk54 {
                 System.out.print("     ");
             }
         }
-    }
-
-    /**
-     * Test method for getting asmified code
-     */
-    private void testAsm() {
     }
 
 }

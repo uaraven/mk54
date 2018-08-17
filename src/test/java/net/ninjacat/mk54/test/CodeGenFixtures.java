@@ -4,8 +4,6 @@ import net.ninjacat.mk54.codegen.CodeGenerator;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public final class CodeGenFixtures {
     private CodeGenFixtures() {
@@ -26,6 +24,6 @@ public final class CodeGenFixtures {
     }
 
     public static String program(final String... operand) {
-        return Arrays.stream(operand).collect(Collectors.joining(" "));
+        return String.join(" ", operand);
     }
 }

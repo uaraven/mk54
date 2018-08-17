@@ -1,6 +1,6 @@
 package net.ninjacat.mk54.test;
 
-public class ByteArrayClassLoader extends ClassLoader {
+class ByteArrayClassLoader extends ClassLoader {
 
     private final byte[] classData;
 

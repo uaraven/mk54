@@ -2,6 +2,9 @@ package net.ninjacat.mk54;
 
 import com.beust.jcommander.Parameter;
 
+import java.nio.file.Paths;
+
+@SuppressWarnings({"unused", "FieldMayBeFinal", "FieldCanBeLocal"})
 class Settings {
 
     @Parameter(description = "<source file>", required = true)
@@ -28,6 +31,10 @@ class Settings {
             this.outputFile = stripFileExtension(this.programFile) + ".jar";
         }
         return this.outputFile;
+    }
+
+    String getSourceFileName() {
+        return Paths.get(this.programFile).getFileName().toString();
     }
 
     private static String stripFileExtension(final String fileName) {

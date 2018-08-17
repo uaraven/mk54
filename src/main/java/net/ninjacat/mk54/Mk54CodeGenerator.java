@@ -2,6 +2,7 @@ package net.ninjacat.mk54;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import com.google.common.base.Charsets;
 import net.ninjacat.mk54.codegen.CodeGenerator;
 import net.ninjacat.mk54.exceptions.UnknownCommandException;
 import net.ninjacat.mk54.opcodes.Opcodes;
@@ -20,12 +21,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Compiles MK-series (and B3-34) mnemonic programs into "binary" presentation.
+ * Compiles MK-series (and B3-34) mnemonic programs into executable Java JAR file
  */
 public class Mk54CodeGenerator {
 
     private static final Pattern ADDRESS = Pattern.compile("^(\\d{2}\\.).*");
-    private static final String VERSION = "0.1";
     private final Opcodes opcodes;
 
     Mk54CodeGenerator() {
@@ -80,18 +80,27 @@ public class Mk54CodeGenerator {
             System.out.println("Writing JAR file " + compilationSettings.getOutputFile());
         }
 
-        writeOutJar(classBytes, compilationSettings);
+        writeOutJar(classBytes, program, compilationSettings);
     }
 
-    private static void writeOutJar(final byte[] classBytes, final Settings compilationSettings) throws IOException {
+    private static void writeOutJar(final byte[] classBytes,
+                                    final String source,
+                                    final Settings compilationSettings) throws IOException {
         final Manifest manifest = new Manifest();
         manifest.getMainAttributes().put(new Attributes.Name("Manifest-Version"), "1.0");
         manifest.getMainAttributes().put(new Attributes.Name("Main-Class"), "net.ninjacat.mk54.Mk54");
         try (final JarOutputStream jarFile = new JarOutputStream(new FileOutputStream(compilationSettings.getOutputFile()), manifest)) {
-            final JarEntry jarEntry = new JarEntry("net/ninjacat/mk54/Mk54.class");
-            jarEntry.setTime(System.currentTimeMillis());
-            jarFile.putNextEntry(jarEntry);
+            final JarEntry classEntry = new JarEntry("net/ninjacat/mk54/Mk54.class");
+            final long time = System.currentTimeMillis();
+            classEntry.setTime(time);
+            jarFile.putNextEntry(classEntry);
             jarFile.write(classBytes);
+            jarFile.closeEntry();
+
+            final JarEntry srcEntry = new JarEntry(compilationSettings.getSourceFileName());
+            srcEntry.setTime(time);
+            jarFile.putNextEntry(srcEntry);
+            jarFile.write(source.getBytes(Charsets.UTF_8));
             jarFile.closeEntry();
         }
     }

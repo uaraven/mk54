@@ -27,8 +27,8 @@ public class CodeGenerator {
 
     private static final int MEMORY_SIZE = 15;
     private static final String ILLEGAL_STATE_EXCEPTION = "java/lang/IllegalStateException";
+    private static final String JAVA_LANG_STRING_BUILDER = "java/lang/StringBuilder";
     static final String JAVA_LANG_INTEGER = "java/lang/Integer";
-    public static final String JAVA_LANG_STRING_BUILDER = "java/lang/StringBuilder";
 
     static {
         OPERATIONS_BUILDER
@@ -103,15 +103,6 @@ public class CodeGenerator {
 
     private static final Map<String, OperationCodeGenerator> OPERATION_CODEGEN = OPERATIONS_BUILDER.build();
     private final boolean generateDebugCode;
-
-    /**
-     * Creates new instance of CodeGenerator
-     * <p>
-     * Will generate code without debug output
-     */
-    public CodeGenerator() {
-        this(false);
-    }
 
     /**
      * Creates new instance of CodeGenerator

@@ -5,7 +5,7 @@ class MkCompilationException extends RuntimeException {
         super(message);
     }
 
-    public MkCompilationException(final String message, final Throwable cause) {
+    MkCompilationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }
