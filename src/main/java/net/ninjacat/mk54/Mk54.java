@@ -1,7 +1,5 @@
 package net.ninjacat.mk54;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -219,7 +217,6 @@ public class Mk54 {
      *
      * @param digit new exponent testAsm
      */
-    @VisibleForTesting
     void exponentDigitEntry(final int digit) {
         final int sign = this.xExponent >= 0 ? 1 : -1;
         this.xExponent = sign * (Math.abs(this.xExponent) % 10 * 10 + digit);
@@ -229,7 +226,6 @@ public class Mk54 {
     /**
      * Changes exponent sign.
      */
-    @VisibleForTesting
     void negateExponent() {
         this.xExponent = -this.xExponent;
         makeXRegister();
@@ -331,7 +327,6 @@ public class Mk54 {
      * Test method for getting asmified code
      */
     private void testAsm() {
-        throw new IllegalStateException("Invalid jump to address: " + indirectJumpAddress);
     }
 
 }
