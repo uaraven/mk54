@@ -1536,105 +1536,135 @@
   {
     "code": "D0",
     "keys": [
-      "k п->x 0"
+      "k п->x 0",
+      "k п→х 0",
+      "k rcl 0"
     ],
     "desc": "Indirect memory read by address in register 0"
   },
   {
     "code": "D1",
     "keys": [
-      "k п->x 1"
+      "k п->x 1",
+      "k п→х 1",
+      "k rcl 1"
     ],
     "desc": "Indirect memory read by address in register 1"
   },
   {
     "code": "D2",
     "keys": [
-      "k п->x 2"
+      "k п->x 2",
+      "k п→х 2",
+      "k rcl 2"
     ],
     "desc": "Indirect memory read by address in register 2"
   },
   {
     "code": "D3",
     "keys": [
-      "k п->x 3"
+      "k п->x 3",
+      "k п→х 3",
+      "k rcl 3"
     ],
     "desc": "Indirect memory read by address in register 3"
   },
   {
     "code": "D4",
     "keys": [
-      "k п->x 4"
+      "k п->x 4",
+      "k п→х 4",
+      "k rcl 4"
     ],
     "desc": "Indirect memory read by address in register 4"
   },
   {
     "code": "D5",
     "keys": [
-      "k п->x 5"
+      "k п->x 5",
+      "k п→х 5",
+      "k rcl 5"
     ],
     "desc": "Indirect memory read by address in register 5"
   },
   {
     "code": "D6",
     "keys": [
-      "k п->x 6"
+      "k п->x 6",
+      "k п→х 6",
+      "k rcl 6"
     ],
     "desc": "Indirect memory read by address in register 6"
   },
   {
     "code": "D7",
     "keys": [
-      "k п->x 7"
+      "k п->x 7",
+      "k п→х 7",
+      "k rcl 7"
     ],
     "desc": "Indirect memory read by address in register 7"
   },
   {
     "code": "D8",
     "keys": [
-      "k п->x 8"
+      "k п->x 8",
+      "k п→х 8",
+      "k rcl 8"
     ],
     "desc": "Indirect memory read by address in register 8"
   },
   {
     "code": "D9",
     "keys": [
-      "k п->x 9"
+      "k п->x 9",
+      "k п→х 9",
+      "k rcl 9"
     ],
     "desc": "Indirect memory read by address in register 9"
   },
   {
     "code": "DA",
     "keys": [
-      "k п->x a"
+      "k п->x a",
+      "k п→х a",
+      "k rcl a"
     ],
     "desc": "Indirect memory read by address in register A"
   },
   {
     "code": "DB",
     "keys": [
-      "k п->x b"
+      "k п->x b",
+      "k п→х b",
+      "k rcl b"
     ],
     "desc": "Indirect memory read by address in register B"
   },
   {
     "code": "DC",
     "keys": [
-      "k п->x c"
+      "k п->x c",
+      "k п→х c",
+      "k rcl c"
     ],
     "desc": "Indirect memory read by address in register C"
   },
   {
     "code": "DD",
     "keys": [
-      "k п->x d"
+      "k п->x d",
+      "k п→х d",
+      "k rcl d"
     ],
     "desc": "Indirect memory read by address in register D"
   },
   {
     "code": "DE",
     "keys": [
-      "k п->x e"
+      "k п->x e",
+      "k п→х e",
+      "k rcl e"
     ],
     "desc": "Indirect memory read by address in register E"
   },

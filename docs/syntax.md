@@ -65,6 +65,19 @@ operation mnemonic by . (dot) character.
 
 `mk54` parser ignores addresses and only parses operation mnemonics. 
 
+Example of MK program:
+
+    00. 1
+    01. 2
+    02. В↑
+    03. 1
+    04. 2
+    05. +
+    06. П0
+    07. ПХ 0
+    08. F Вх
+    09. STOP
+
 
 Operations and mnemonics
 ------------------------
@@ -102,4 +115,50 @@ Parser ignores case and whitespace in command mnemonics, so Fвх and F ВХ wil
 | 1B                   | f arctg, f arctan, f atan| Calculate arctangent |
 | 1C                   | f sin     | Calculate sine |
 | 1D                   | f cos     | Calculate cosine |
-| 1E                   | f tg, f tan | Calculate tagent | 
+| 1E                   | f tg, f tan | Calculate tangent |
+| 20                   | f pi, f π | Puts value of π in X register |
+| 21                   | f √, f sqrt | Calculate square root of X |
+| 22                   | f x^2"    | Calculate square of the X register |
+| 23                   | f 1/x     | Calculate inverse of the X register |
+| 24                   | f x^y     | Calculate X to the power of Y |
+| 25                   | f ⟳, f r, f rot | Rotate stack. X -> T, Y -> X, Z -> Y, T -> Z |
+| 26                   | k m→g, k м→г, k m->g, k м->г | Convert minutes into degrees. Not supported yet |
+| 27                   | k -       | Program fault. Causes program to stop execution and display `Error` message |
+| 28                   | k +       | Program fault. Causes program to stop execution and display `Error` message |
+| 29                   | k /, k ÷  | Program fault. Causes program to stop execution and display `Error` message |
+| 2A                   | k ms→g, k мс→г, k ms->g, k мс->г | Convert minutes and seconds to degrees. Not supported yet|
+| 30                   | k g→ms, г→мс, g->ms, г->мс | Convert degrees to minutes and seconds. Not supported yet | 
+| 31                   | k abs     | Calculate absolute value of the X |
+| 32                   | k зн, k sign | Evaluate numbers sign. If value in X is greater then zero, 1 will be placed in X, if X < 0, then -1 one will be placed in X |
+| 33                   | k g→m, k г→м, k g->m, k г->м | Convert degrees to minutes. Not supported yet |
+| 34                   | k [x], k trunc | Stores integer part of the number into X |
+| 35                   | k {x}, k frac  | Stores fractional part of the number into X |
+| 36                   | k max     | Calculate maximal of register X and Y. Known bug in MK calculators treated zero as the largest number. This bug is replicated in compiled code |
+| 37                   | k and, k ∧ | Logical AND. Not implemented | 
+| 38                   | k or, k ∨ | Logical OR. Not implemented |
+| 39                   | k xor, k ⊕ | Logical XOR. Not implemented |
+| 3A                   | k not, k инв | Logical NOT. Not implemented | 
+| 3B                   | k rand, k сч | Generate random number in 0..1 interval. `mk54` uses algorithm used in MK calculators, not Java `Random`. Note that MK's PRNG is very poor |
+| 4*M*                 | пM, xпM, x->пM, stoM | Stores value from X into memory register M. M must be in 0..E range |
+| 50                   | с/п, r/s, stop | Start/stop program. Actually only `stop` is supported | 
+| 51                   | бп, goto | Unconditional jump. Next byte in program memory must contain address of the jump target |
+| 52                   | в/о, ret | Return from subroutine |
+| 53                   | пп, call | Call subroutine. Next byte in program memory must contain address of the subroutine |
+| 54                   | k nop, k ноп | No operation | 
+| 57                   | f x!=0, f x≠0, f x<>0 | Conditional goto when X is not equal to 0. Next byte contains address of the jump | 
+| 58                   | f l2 | Loop over value in memory register 2. See below for loop details |
+| 59                   | f x>=0, f x≥0 | Conditional goto when X is greater than or equal to 0. Next byte contains address of the jump |
+| 5A                   | f l3 | Loop over value in memory register 3. See below for loop details |
+| 5B                   | f l1 | Loop over value in memory register 1. See below for loop details |
+| 5C                   | f x<0 | Conditional goto when X is less than 0. Next byte contains address of the jump |
+| 5D                   | f l0 | Loop over value in memory register 0. See below for loop details |
+| 5E                   | f x=0, f x==0 |  Conditional goto when X is equal to 0. Next byte contains address of the jump |
+| 6*M*                   | ипM, пxM, rclM | Recalls value from memory register M into X. M must be in 0..E range |
+| 7*M*                   | k x!=0 M, k x<>0 M, k x≠0 M | Conditional indirect jump to address in memory register M when X is not equal to 0. Value in memory register M is modified prior to jump. See below for modification rules |
+| 8*M*                   | k goto M, k бп M | Goto address in memory register M. Value in memory register M is modified prior to jump. See below for modification rules | 
+| 9*M*                   | k x>=0 M, k x≥0 M | Conditional indirect jump to address in memory register M when X is greater than 0. Value in memory register M is modified prior to jump. See below for modification rules |
+| A*M*                   | k call M, k пп M | Call subroutine at address in memory register M. Value in memory register M is modified prior to jump. See below for modification rules |
+| B*M*                   | k sto M, k x->п M, k x→п M | Indirect memory write by address in register M. Value in memory register M is modified prior to jump. See below for modification rules |
+| C*M*                   | k x<0 M | Indirect conditional goto by address in memory register M when X is less than zero. Value in memory register M is modified prior to jump. See below for modification rules |
+| D*M*                   | k rcl M, k п->x M, k п→х M | Indirect memory read from address in register M. Value in memory register M is modified prior to jump. See below for modification rules |
+| E*M*                   | k x=0 M | Indirect conditional goto by address in memory register M when X is equal to zero. Value in memory register M is modified prior to jump. See below for modification rules |
