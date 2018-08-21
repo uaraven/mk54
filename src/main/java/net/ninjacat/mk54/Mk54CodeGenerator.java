@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -33,6 +34,9 @@ public class Mk54CodeGenerator {
     }
 
     public static void main(final String[] args) {
+
+        final String version = readVersion();
+        System.out.println(version);
 
         final Settings compilationSettings = new Settings();
         final JCommander jc = JCommander.newBuilder()
@@ -56,6 +60,18 @@ public class Mk54CodeGenerator {
             compiler.generateJar(compilationSettings);
         } catch (final Exception ex) {
             System.err.println("Failure: " + ex.getMessage());
+        }
+    }
+
+    private static String readVersion() {
+        try {
+            final Properties properties = new Properties();
+            properties.load(Mk54CodeGenerator.class.getResourceAsStream("/version.properties"));
+
+            return String.format("mk54 compiler v%s", properties.getProperty("version", "Unknown"));
+        } catch (final Exception ex) {
+            return
+                    "";
         }
     }
 

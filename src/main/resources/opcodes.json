@@ -152,7 +152,8 @@
       "↔",
       "x<->y",
       "<->",
-      "xy"
+      "xy",
+      "swap"
     ],
     "desc": "Swaps X and Y registers of main stack"
   },
@@ -187,20 +188,23 @@
   {
     "code": "19",
     "keys": [
-      "f arcsin"
+      "f arcsin",
+      "f asin"
     ]
   },
   {
     "code": "1A",
     "keys": [
-      "f arccos"
+      "f arccos",
+      "f acos"
     ]
   },
   {
     "code": "1B",
     "keys": [
       "f arctg",
-      "f arctan"
+      "f arctan",
+      "f atan"
     ],
     "desc": "Calculates inverse tangent function"
   },

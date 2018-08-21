@@ -1,48 +1,79 @@
 MK-54
 =====
 
-Preface
--------
-
-When I was a boy I had a dream. My dream was to own a programmable calculator.
-My father had one, it was MK-54, a bit modernized version of even older programmable calculator named B3-34, released in 1980.
-
-![mk-54](docs/mk-54.jpg) 
-
-That was as close to computer as average person could get in late 80s in the USSR and I needed it.
-
-My dreams came true, I got a MK-52, which was probably the best of the series and it helped me with
-my math assignments during my 9th year. Soon enough I got a PC, but that strange beast 
-always remained in my memory.
-
-Trying to program it taught me several things: debugging by reading hex codes, reverse polish notation and
-importance of memory management. It also taught me how to write clever incomprehensible programs using all 98 bytes of 
-program memory.
+`mk54` is a compiler for soviet-era MK-series programmable calculator programs. `mk54` translates MK programs \
+into JVM byte-code and produces executable JAR files.
 
 
-This project is my attempt to build a translator from MK-series binary code into java bytecode.
+**Note**. This project does not attempt to exactly recreate program execution of MK-series. Those calculators 
+were well-known for a variety of undocumented behaviors and outright bugs.
 
-Its main idea is to play with bytecode generation and to remember my youth :)
 
-Limitations
------------
+Usage
+-----
 
-I'm not going to support all the weird Еггогs and various undocumented behaviour. Only documented commands, sorry.
+You can download jar file from [releases](https://github.com/uaraven/mk54/releases) on github:
+    
+Latest release at this time is [version 0.1])https://github.com/uaraven/mk54/releases/download/v0.1/mk54-0.1.jar)
+
+To perform compilation execute
+
+    java -jar mk54-0.1.jar OPTIONS SOURCE
+
+Supported options:
+
+    -d --debug       - include debugging information into resulting code. Register and memory state
+                       will be dumped after each operation of MK program
+    -v --verbose     - more output during compilation
+    -o --output FILE - write resulting jar file to FILE
+    -h --help        - print this message
+    
+
+MK programs syntax
+------------------
+
+See [separate document](docs/syntax.md) for syntax reference.
+
+If you can read russian there are couple ([1](docs/mk52_doc/part1.pdf), [2](docs/mk52_doc/part2.pdf)) scans of original
+manual for MK-52.
+
+Executing compiled MK programs
+------------------------------
+
+See [document](docs/mk-execution.md) for instructions how to execute compiled programs.
+
+Differences from MK hardware
+----------------------------
+
+`mk54` compiler performs most direct translation of MK opcodes into JVM byte code. Only documented commands and 
+explicitly documented behaviour is supported. 
+
+MK programmable calculators supported numbers from `-9.9999999*10^99` to `9.9999999*10^99` with most of operations having
+error of `10^-6` to `3*10^-7`. JVM code uses [`double`](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) 
+to represent floating point values, so error margins and limits are different.
+
+Compiled programs are non-interactive, there is no way to stop execution, ask user to put some new values in registers
+and/or memory and continue from the next operation. Executing `С/П` operation will terminate running program.
+
+On MK calculator program which does not have `С/П` command will continue to run indefinitely until stopped manually. 
+JVM byte code always contains `return` as the last instruction in program.
+
+Currently two sets of operations are not implemented:
+
+  - degree conversions
+  - logical operations
+
+Degree conversions will be implemented soon, I am on the fence about implementing logical operations.
 
 In case you want real hardware-level emulator of calculators built with soviet 145-series chips see [here](http://www.emulator3000.org/c3.htm).
-
-It is possible to stop program execution using `С/П` command and request user to perform some actions, say enter new 
-parameter in X register or store something to memory register or change `rad-grad-deg` switch. As `mk54` is not an 
-emulator there will be no support for interactive mode. `С/П` command will terminate running program. 
 
 
 Implementation details
 ----------------------
 
-MK-series worked with decimal floating numbers represented as 8-digit mantissa and 2-digit power in base of 10. My goal
-is to generate self-contained `.class` file that can be run with JVM so mk54 will use Java `double` type for all 
-calculations. This should not cause any problems with simple programs, but more sophisticated programs abusing number 
-overflow or relying on floating point number representation will fail.
+MK-series worked with decimal floating numbers represented as 8-digit mantissa and 2-digit exponent with the base of 10. 
+`mk54` uses Java `double` type for all calculations. This should not cause any problems with simple programs, 
+but more sophisticated programs abusing number overflow or relying on floating point number representation will fail.
 
 [Hex code mapping](docs/hexcode.md) to MK-series 8-segment display symbols.
 
@@ -50,7 +81,4 @@ overflow or relying on floating point number representation will fail.
 
 Some details about Java [Byte code generation](docs/code_generation.md)
 
-Useful links
-------------
-
-[Links](docs/links.md) to documents that helped me.
+[Links](docs/links.md) to JVM spec and other documents.
