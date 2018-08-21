@@ -78,6 +78,7 @@ Example of MK program:
     08. F Вх
     09. STOP
 
+See also [here](mk-program-format.md).
 
 Operations and mnemonics
 ------------------------
@@ -105,7 +106,7 @@ Parser ignores case and whitespace in command mnemonics, so Fвх and F ВХ wil
 | 11                   | -         | Subtract X from Y, put result into X  |
 | 12                   | *, x      | Multiply X by Y, put result into X |
 | 13                   | /, ÷      | Divide Y by X, put result into X |
-| 14                   | ↔,x<->y,<->, xy, swap | Swaps values in registers X and Y |
+| 14                   | ↔, x<->y, <->, xy, swap | Swaps values in registers X and Y |
 | 15                   | f 10^x    | Calculate 10 to power X |
 | 16                   | f e^x     | Calculate `e` to power X |
 | 17                   | f lg      | Calculate decimal logarithm of X |
@@ -162,3 +163,26 @@ Parser ignores case and whitespace in command mnemonics, so Fвх and F ВХ wil
 | C*M*                   | k x<0 M | Indirect conditional goto by address in memory register M when X is less than zero. Value in memory register M is modified prior to jump. See below for modification rules |
 | D*M*                   | k rcl M, k п->x M, k п→х M | Indirect memory read from address in register M. Value in memory register M is modified prior to jump. See below for modification rules |
 | E*M*                   | k x=0 M | Indirect conditional goto by address in memory register M when X is equal to zero. Value in memory register M is modified prior to jump. See below for modification rules |
+
+
+### Register modification during indirect operations
+
+Operations which perform indirect access to memory register modify address in the register before executing operation.
+
+Depending on the memory register number following modifications are performed:
+
+  - M0..M3 - register value is decremented
+  - M4..M6 - register value is incremented
+  - M7..ME - register value is left unchanged
+  
+If any of the register contains floating point value, then fractional part is truncated. There are no boundary 
+checks performed, so if register contains invalid address, it will cause program termination with error.
+
+### Loops
+
+Loop commands decrement number in corresponding memory register by one and if it is not equal to zero jump to address
+in the next byte of program memory. After all loop iterations have completed, register will contain 1.
+
+MK series had undocumented feature, when loop counter register contained negative number or zero, first iteration will
+put -99999999 into counter and then loop will increment register until it reaches zero. JVM byte code does not replicate
+this behaviour, instead loop is immediately terminated.
