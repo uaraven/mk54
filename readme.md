@@ -14,7 +14,7 @@ Usage
 
 You can download jar file from [releases](https://github.com/uaraven/mk54/releases) on github:
     
-Latest release at this time is [version 0.1])https://github.com/uaraven/mk54/releases/download/v0.1/mk54-0.1.jar)
+Latest release at this time is [version 0.1](https://github.com/uaraven/mk54/releases/download/v0.1/mk54-0.1.jar)
 
 To perform compilation execute
 
