@@ -268,7 +268,7 @@ final class ControlGen {
 
 
     /**
-     * Returns generator for indirect x >= 0 jump
+     * Returns generator for indirect x < 0 jump
      *
      * @param register Loop register
      * @return Code generating function

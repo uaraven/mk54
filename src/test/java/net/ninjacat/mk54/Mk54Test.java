@@ -44,4 +44,19 @@ public class Mk54Test {
         assertThat(mk54.getX(), closeTo(-1.0e23, 1e8));
     }
 
+    @Test
+    public void shouldConvertMinDegSec2Deg() {
+        final Mk54 mk54 = new Mk54();
+        mk54.setX(20.3648, 0);
+        mk54.degMinSecToDegree();
+        assertThat(mk54.getX(), closeTo(20.613332, 1e-5));
+    }
+
+    @Test
+    public void shouldConvertDeg2DegMinSec() {
+        final Mk54 mk54 = new Mk54();
+        mk54.setX(20.613332, 0);
+        mk54.degreeToDegMinSec();
+        assertThat(mk54.getX(), closeTo(20.3648, 1e-5));
+    }
 }
