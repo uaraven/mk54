@@ -290,6 +290,21 @@ public class Mk54 {
         this.x = (int) this.x + min / 100 + sec / 10000 + zzz / 1000000;
     }
 
+    void degMinToDegree() {
+        final double degrees = (int) this.x;
+        final double fp = frac(this.x);
+        final double min = (int) (fp * 100);
+        final double zzz = (int) (frac(fp * 1000) * 100);
+        this.x = degrees + (min + zzz / 100) / 60;
+    }
+
+    void degreeToDegMin() {
+        double pr = frac(this.x);
+        final double min = (int) (pr * 60);
+        pr -= min / 60;
+        final double zzz = (int) (pr * 60000);
+        this.x = (int) this.x + min / 100 + zzz / 100000;
+    }
 
     private static double frac(final double d) {
         return d - (int) d;
@@ -347,4 +362,7 @@ public class Mk54 {
         }
     }
 
+    void asm() {
+        degMinSecToDegree();
+    }
 }

@@ -542,5 +542,28 @@ final class MathGen {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X, "D");
     }
 
+    static void degMinSecToDeg(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, CLASS_NAME, "degMinSecToDegree", "()V", false);
+    }
+
+    static void degToDegMinSec(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, CLASS_NAME, "degreeToDegMinSec", "()V", false);
+    }
+
+    static void degMinToDeg(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, CLASS_NAME, "degMinToDegree", "()V", false);
+    }
+
+    static void degToDegMin(final MethodVisitor mv, final CodeGenContext context) {
+        saveX(mv, context);
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, CLASS_NAME, "degreeToDegMin", "()V", false);
+    }
 
 }
