@@ -415,7 +415,7 @@ public class ControlGenTest {
                                                     final int memRegValue,
                                                     final double Xvalue1,
                                                     final double Xvalue2) throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 operation,
                 DIGIT(1),
                 STOP,
@@ -429,7 +429,15 @@ public class ControlGenTest {
         final double x1 = mk54.getX();
         assertThat(x1, is(1.0));
 
+        mk54 = getCompiledInstance(program(
+                operation,
+                DIGIT(1),
+                STOP,
+                DIGIT(2),
+                STOP
+        ));
         mk54.setX(Xvalue2);
+        mk54.setMem(memRegNo, memRegValue);
         mk54.execute();
         final double x2 = mk54.getX();
         assertThat(x2, is(2.0));

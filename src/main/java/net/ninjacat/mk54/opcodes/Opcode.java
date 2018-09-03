@@ -165,7 +165,6 @@ public final class Opcode {
     private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
 
     static {
-        KEEP_STACK_BUILDER.add(ENTER);
         KEEP_STACK_BUILDER.add(DECIMAL_POINT);
         KEEP_STACK_BUILDER.add(NEG);
         KEEP_STACK_BUILDER.add(EXP);
@@ -174,6 +173,9 @@ public final class Opcode {
                 .forEach(digit -> KEEP_STACK_BUILDER.add(DIGIT(digit)));
     }
 
+    /**
+     * List of operations which do not set 'pushStack' flag
+     */
     private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();
 
     /**

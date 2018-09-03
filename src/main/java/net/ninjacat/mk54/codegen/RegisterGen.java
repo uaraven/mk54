@@ -66,22 +66,22 @@ final class RegisterGen {
             mv.visitLabel(noPushStack);
             mv.visitFrame(F_SAME, 0, null, 0, null);
 
-            // check if we need to reset X before entering next digit
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
-            final Label noReset = new Label();
-            mv.visitJumpInsn(IFEQ, noReset);
-
-            // Clear X if resetX flag is set
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(DCONST_0);
-            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "D");
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitInsn(ICONST_0);
-            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
-
-            mv.visitLabel(noReset);
-            mv.visitFrame(F_SAME, 0, null, 0, null);
+//            // check if we need to reset X before entering next digit
+//            mv.visitVarInsn(ALOAD, 0);
+//            mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
+//            final Label noReset = new Label();
+//            mv.visitJumpInsn(IFEQ, noReset);
+//
+//            // Clear X if resetX flag is set
+//            mv.visitVarInsn(ALOAD, 0);
+//            mv.visitInsn(DCONST_0);
+//            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_MANTISSA, "D");
+//            mv.visitVarInsn(ALOAD, 0);
+//            mv.visitInsn(ICONST_0);
+//            mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
+//
+//            mv.visitLabel(noReset);
+//            mv.visitFrame(F_SAME, 0, null, 0, null);
 
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, CLASS_NAME, ENTRY_MODE, "I");

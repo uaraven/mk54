@@ -135,13 +135,30 @@ public class CodeGenerator {
         while (operation != null) {
             generateOperandAddressLabel(executeMethod, context);
             if (OPERATION_CODEGEN.containsKey(operation)) {
+
+                // pre-operation
                 if (this.generateDebugCode) {
-                    generateDump(executeMethod, context);
+                    generateDump(executeMethod, context, true);
                 }
+                CodeGenUtil.clearXIfRequired(executeMethod, context);
+
+                // operation
+                OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
+
+                //TODO: every control operation will skip post-op code
+                // that means:
+                //  - no post-op debug dump
+                //  - no reset x flag set. Need way to generate it differently
+
+                executeMethod.visitFrame(F_SAME, 0, null, 0, null);
+                // post-operation
                 if (shouldResetX(operation)) {
                     CodeGenUtil.prepareXForReset(executeMethod, context);
                 }
-                OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
+                if (this.generateDebugCode) {
+                    generateDump(executeMethod, context, false);
+                }
+
             } else {
                 throw new UnknownOperationException(operation);
             }
@@ -167,11 +184,15 @@ public class CodeGenerator {
      * @param mv      {@link MethodVisitor} for {@code Mk54.execute()} method
      * @param context Code generation context
      */
-    private static void generateDump(final MethodVisitor mv, final CodeGenContext context) {
+    private static void generateDump(final MethodVisitor mv, final CodeGenContext context, final boolean pre) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitIntInsn(BIPUSH, context.getCurrentAddress());
         mv.visitLdcInsn(context.getCurrentOperation());
-        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debug", "(ILjava/lang/String;)V", false);
+        if (pre) {
+            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debugPre", "(ILjava/lang/String;)V", false);
+        } else {
+            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debugPost", "(ILjava/lang/String;)V", false);
+        }
     }
 
     /**

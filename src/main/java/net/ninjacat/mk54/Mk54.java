@@ -91,7 +91,7 @@ public class Mk54 {
         this.x1 = 0;
         this.memory = new double[15];
         Arrays.fill(this.memory, 0f);
-        this.resetX = true;
+        this.resetX = false;
         this.pushStack = false;
         this.lastRandom = 0;
         this.callStack = new Stack<>();
@@ -322,8 +322,19 @@ public class Mk54 {
         makeXRegister();
     }
 
-    void debug(final int address, final String operation) {
-        System.out.println("------------------");
+    void debugPre(final int address, final String operation) {
+        System.out.println(String.format("---- Pre op %s ----", operation));
+        debug(address, operation);
+        System.out.println("---------------------");
+    }
+
+    void debugPost(final int address, final String operation) {
+        System.out.println(String.format("---- Post op %s ----", operation));
+        debug(address, operation);
+        System.out.println("======================");
+    }
+
+    private void debug(final int address, final String operation) {
         System.out.println(String.format("Addr: %X%X, Oper: %s", address / 10, address % 10, operation));
         System.out.println();
         dumpRegisters();

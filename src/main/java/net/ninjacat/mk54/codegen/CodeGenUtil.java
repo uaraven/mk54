@@ -1,6 +1,7 @@
 package net.ninjacat.mk54.codegen;
 
 import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -91,8 +92,6 @@ final class CodeGenUtil {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
-
-        forcePushStack(mv, context);
     }
 
     /**
@@ -133,6 +132,15 @@ final class CodeGenUtil {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, ENTRY_MODE, "I");
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
+
+        delayPushStack(mv, context);
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
     }
 
     /**
@@ -161,5 +169,18 @@ final class CodeGenUtil {
             mv.visitInsn(DADD);
             mv.visitInsn(DASTORE);
         }
+    }
+
+    static void clearXIfRequired(final MethodVisitor mv, final CodeGenContext context) {
+        final Label noReset = new Label();
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
+        mv.visitJumpInsn(IFEQ, noReset);
+
+        RegisterGen.clearX(mv, context);
+
+        mv.visitLabel(noReset);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

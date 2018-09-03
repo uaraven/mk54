@@ -2,7 +2,6 @@ package net.ninjacat.mk54;
 
 import net.ninjacat.mk54.test.CodeGenFixtures;
 import net.ninjacat.mk54.test.Mk54Wrapper;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.closeTo;
@@ -50,7 +49,6 @@ public class FunctionalTest {
     }
 
     @Test
-    @Ignore
     public void testQuadraticEquation() throws Exception {
         final Mk54Wrapper mk54 = compileResource("/functional/quadratic_eq.mk");
         mk54.setMem(10, 3);
