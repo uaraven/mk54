@@ -162,21 +162,43 @@ public final class Opcode {
             LOOP3
     );
 
+    /**
+     * Control operations
+     */
     private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
+
+    private static final ImmutableSet.Builder<String> RESETTING_OPS_BUILDER = ImmutableSet.builder();
 
     static {
         KEEP_STACK_BUILDER.add(DECIMAL_POINT);
         KEEP_STACK_BUILDER.add(NEG);
         KEEP_STACK_BUILDER.add(EXP);
+        KEEP_STACK_BUILDER.addAll(JUMP_OPS);
 
-        IntStream.range(0, 10)
-                .forEach(digit -> KEEP_STACK_BUILDER.add(DIGIT(digit)));
+        IntStream.range(0, 10).forEach(digit -> {
+            KEEP_STACK_BUILDER.add(DIGIT(digit));
+            RESETTING_OPS_BUILDER.add(DIGIT(digit));
+        });
+
+        IntStream.rangeClosed(0, 14).forEach(mem -> {
+            KEEP_STACK_BUILDER.add(IJNZ(mem));
+            KEEP_STACK_BUILDER.add(IJGEZ(mem));
+            KEEP_STACK_BUILDER.add(IJZ(mem));
+            KEEP_STACK_BUILDER.add(IJLZ(mem));
+            KEEP_STACK_BUILDER.add(IGOTO(mem));
+            KEEP_STACK_BUILDER.add(ICALL(mem));
+        });
     }
 
     /**
      * List of operations which do not set 'pushStack' flag
      */
     private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();
+
+    /**
+     * List of operations which will reset register X
+     */
+    private static final Set<String> RESETTING_OP = KEEP_STACK_BUILDER.build();
 
     /**
      * Checks if operation is a jump instruction, which contain address in the next byte
@@ -192,7 +214,11 @@ public final class Opcode {
      * @return true or false
      */
     public static boolean shouldResetX(final String code) {
-        return !KEEP_STACK.contains(code);
+        return !KEEP_STACK.contains(code) && !JUMP_OPS.contains(code);
+    }
+
+    public static boolean opResetsX(final String opCode) {
+        return RESETTING_OP.contains(opCode);
     }
 
     private Opcode() {

@@ -1,6 +1,7 @@
 package net.ninjacat.mk54.codegen;
 
 import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
+import net.ninjacat.mk54.opcodes.Opcode;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -86,13 +87,24 @@ final class CodeGenUtil {
      * Helper method called on all operations. Sets resetX flag to true
      *
      * @param mv      Generated method visitor
-     * @param context Code generation context
      */
-    static void prepareXForReset(final MethodVisitor mv, final CodeGenContext context) {
+    static void prepareXForReset(final MethodVisitor mv) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
     }
+
+    /**
+     * Helper method. Sets resetX flag to false
+     *
+     * @param mv Generated method visitor
+     */
+    static void doNotResetX(final MethodVisitor mv) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
+    }
+
 
     /**
      * Sets {@link net.ninjacat.mk54.Mk54#pushStack} flag, forcing pushing current register X up the stack
@@ -171,16 +183,18 @@ final class CodeGenUtil {
         }
     }
 
-    static void clearXIfRequired(final MethodVisitor mv, final CodeGenContext context) {
-        final Label noReset = new Label();
+    static void clearXIfRequired(final MethodVisitor mv, final CodeGenContext context, final String operation) {
+        if (Opcode.opResetsX(operation)) {
+            final Label noReset = new Label();
 
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
-        mv.visitJumpInsn(IFEQ, noReset);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
+            mv.visitJumpInsn(IFEQ, noReset);
 
-        RegisterGen.clearX(mv, context);
+            RegisterGen.clearX(mv, context);
 
-        mv.visitLabel(noReset);
-        mv.visitFrame(F_SAME, 0, null, 0, null);
+            mv.visitLabel(noReset);
+            mv.visitFrame(F_SAME, 0, null, 0, null);
+        }
     }
 }

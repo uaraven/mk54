@@ -125,7 +125,7 @@ public class CodeGenerator {
         executeMethod.visitLabel(startLabel);
 
         // Prepare context
-        final CodeGenContext context = new CodeGenContext(operations);
+        final CodeGenContext context = new CodeGenContext(operations, this.generateDebugCode);
 
         buildMkLabels(context);
 
@@ -138,27 +138,14 @@ public class CodeGenerator {
 
                 // pre-operation
                 if (this.generateDebugCode) {
-                    generateDump(executeMethod, context, true);
+                    context.generateDump(executeMethod);
                 }
-                CodeGenUtil.clearXIfRequired(executeMethod, context);
 
                 // operation
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
 
-                //TODO: every control operation will skip post-op code
-                // that means:
-                //  - no post-op debug dump
-                //  - no reset x flag set. Need way to generate it differently
-
                 executeMethod.visitFrame(F_SAME, 0, null, 0, null);
-                // post-operation
-                if (shouldResetX(operation)) {
-                    CodeGenUtil.prepareXForReset(executeMethod, context);
-                }
-                if (this.generateDebugCode) {
-                    generateDump(executeMethod, context, false);
-                }
-
+                context.generatePostOp(executeMethod);
             } else {
                 throw new UnknownOperationException(operation);
             }
@@ -168,6 +155,7 @@ public class CodeGenerator {
         final Label finalLabel = generateOperandAddressLabel(executeMethod, context);
         executeMethod.visitLabel(finalLabel);
         executeMethod.visitFrame(F_SAME, 0, null, 0, null);
+        context.generateDump(executeMethod);
         executeMethod.visitInsn(Opcodes.RETURN);
         generateTrampolineTable(executeMethod, context);
         executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
@@ -175,24 +163,6 @@ public class CodeGenerator {
         executeMethod.visitEnd();
 
         classWriter.visitEnd();
-    }
-
-    /**
-     * Generates call to {@link Mk54#debug(int, String)} which prints current address, operation code and state of
-     * registers and memory
-     *
-     * @param mv      {@link MethodVisitor} for {@code Mk54.execute()} method
-     * @param context Code generation context
-     */
-    private static void generateDump(final MethodVisitor mv, final CodeGenContext context, final boolean pre) {
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitIntInsn(BIPUSH, context.getCurrentAddress());
-        mv.visitLdcInsn(context.getCurrentOperation());
-        if (pre) {
-            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debugPre", "(ILjava/lang/String;)V", false);
-        } else {
-            mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debugPost", "(ILjava/lang/String;)V", false);
-        }
     }
 
     /**

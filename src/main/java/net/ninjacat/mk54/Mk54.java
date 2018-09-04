@@ -322,25 +322,15 @@ public class Mk54 {
         makeXRegister();
     }
 
-    void debugPre(final int address, final String operation) {
-        System.out.println(String.format("---- Pre op %s ----", operation));
-        debug(address, operation);
-        System.out.println("---------------------");
-    }
-
-    void debugPost(final int address, final String operation) {
-        System.out.println(String.format("---- Post op %s ----", operation));
-        debug(address, operation);
-        System.out.println("======================");
-    }
-
     private void debug(final int address, final String operation) {
+        System.out.println("----------------------");
         System.out.println(String.format("Addr: %X%X, Oper: %s", address / 10, address % 10, operation));
         System.out.println();
         dumpRegisters();
         System.out.println();
         dumpInternalState();
         System.out.println();
+        System.out.println("======================");
     }
 
     private void dumpInternalState() {
