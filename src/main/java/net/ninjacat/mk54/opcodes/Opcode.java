@@ -179,15 +179,6 @@ public final class Opcode {
             KEEP_STACK_BUILDER.add(DIGIT(digit));
             RESETTING_OPS_BUILDER.add(DIGIT(digit));
         });
-
-        IntStream.rangeClosed(0, 14).forEach(mem -> {
-            KEEP_STACK_BUILDER.add(IJNZ(mem));
-            KEEP_STACK_BUILDER.add(IJGEZ(mem));
-            KEEP_STACK_BUILDER.add(IJZ(mem));
-            KEEP_STACK_BUILDER.add(IJLZ(mem));
-            KEEP_STACK_BUILDER.add(IGOTO(mem));
-            KEEP_STACK_BUILDER.add(ICALL(mem));
-        });
     }
 
     /**
@@ -214,7 +205,7 @@ public final class Opcode {
      * @return true or false
      */
     public static boolean shouldResetX(final String code) {
-        return !KEEP_STACK.contains(code) && !JUMP_OPS.contains(code);
+        return !KEEP_STACK.contains(code);
     }
 
     public static boolean opResetsX(final String opCode) {

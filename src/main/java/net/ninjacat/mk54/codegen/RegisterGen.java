@@ -55,16 +55,16 @@ final class RegisterGen {
     static OperationCodeGenerator digit(final int digit) {
         return (mv, context) -> {
             // check if we need to push current value of x up the stack
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, "pushStack", "Z");
-            final Label noPushStack = new Label();
-            mv.visitJumpInsn(IFEQ, noPushStack);
+//            mv.visitVarInsn(ALOAD, 0);
+//            mv.visitFieldInsn(GETFIELD, CLASS_NAME, "pushStack", "Z");
+//            final Label noPushStack = new Label();
+//            mv.visitJumpInsn(IFEQ, noPushStack);
 
             // push it
-            pushStack(mv);
+//            pushStack(mv);
 
-            mv.visitLabel(noPushStack);
-            mv.visitFrame(F_SAME, 0, null, 0, null);
+//            mv.visitLabel(noPushStack);
+//            mv.visitFrame(F_SAME, 0, null, 0, null);
 
             // check if we need to reset X before entering next digit
             mv.visitVarInsn(ALOAD, 0);
@@ -72,6 +72,7 @@ final class RegisterGen {
             final Label noReset = new Label();
             mv.visitJumpInsn(IFEQ, noReset);
 
+            pushStack(mv);
             // Clear X if resetX flag is set
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(DCONST_0);
