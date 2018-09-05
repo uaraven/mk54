@@ -76,4 +76,26 @@ public class Mk54Test {
         assertThat(mk54.getX(), closeTo(60.36, 1e-3));
     }
 
+    @Test
+    public void shouldClearExponentInNumberEntryMode() {
+        final Mk54 mk54 = new Mk54();
+        mk54.setNumberEntryMode(true);
+        mk54.setX(60.6, 55);
+        mk54.clearExponent();
+        final double x = mk54.getX();
+
+        assertThat(x, is(60.6));
+    }
+
+    @Test
+    public void shouldClearExponentInCalculationMode() {
+        final Mk54 mk54 = new Mk54();
+        mk54.setNumberEntryMode(false);
+        mk54.setX(-60.6, 55);
+        mk54.clearExponent();
+        final double x = mk54.getX();
+
+        assertThat(x, is(-6.06));
+    }
+
 }

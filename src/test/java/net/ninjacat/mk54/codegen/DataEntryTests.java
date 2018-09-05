@@ -238,15 +238,16 @@ public class DataEntryTests {
     public void shouldClearExponent() throws Exception {
         final Mk54Wrapper mk54 = getCompiledInstance(program(
                 DIGIT(9),
-                SIN,
                 EXP,
                 DIGIT(9),
-                DIGIT(9)
+                ENTER,
+                EXP,
+                DIGIT(3)
         ));
 
         mk54.execute();
         final double x = mk54.getX();
 
-        assertThat(x, closeTo(4.1211835e99, 1e-6));
+        assertThat(x, closeTo(9000, 1e-6));
     }
 }

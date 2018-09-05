@@ -169,6 +169,7 @@ class CodeGenContext {
     public void generatePostOp(final MethodVisitor mv) {
         final String op = getCurrentOperation();
         if (shouldResetX(op)) {
+            CodeGenUtil.switchToCalculationMode(mv);
             CodeGenUtil.prepareXForReset(mv);
         } else {
             CodeGenUtil.doNotResetX(mv);

@@ -1,8 +1,6 @@
 package net.ninjacat.mk54.codegen;
 
 import net.ninjacat.mk54.exceptions.InvalidJumpTargetException;
-import net.ninjacat.mk54.opcodes.Opcode;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -83,6 +81,18 @@ final class CodeGenUtil {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X1, "D");
     }
 
+    static void switchToNumberMode(final MethodVisitor mv) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "numberEntryMode", "Z");
+    }
+
+    static void switchToCalculationMode(final MethodVisitor mv) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "numberEntryMode", "Z");
+    }
+
     /**
      * Helper method called on all operations. Sets resetX flag to true
      *
@@ -106,33 +116,23 @@ final class CodeGenUtil {
     }
 
 
-    /**
-     * Sets {@link net.ninjacat.mk54.Mk54#pushStack} flag, forcing pushing current register X up the stack
-     * when next digit or F Pi operation is processed
-     *
-     * @param mv      Generated method visitor
-     * @param context Code generation context
-     */
-
-    private static void forcePushStack(final MethodVisitor mv, final CodeGenContext context) {
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(ICONST_1);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "pushStack", "Z");
-    }
-
-    /**
-     * Clears {@link net.ninjacat.mk54.Mk54#pushStack} flag, preventing pushing current register X up the stack
-     * when next digit or F Pi operation is processed
-     *
-     * @param mv      Generated method visitor
-     * @param context Code generation context
-     */
-    static void delayPushStack(final MethodVisitor mv, final CodeGenContext context) {
+    static void forcePushStack(final MethodVisitor mv) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_0);
-        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "pushStack", "Z");
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "preventPushStack", "Z");
     }
 
+    /**
+     * Sets {@link net.ninjacat.mk54.Mk54#preventPushStack} flag, preventing pushing current register X up the stack
+     * when next digit is processed
+     *
+     * @param mv      Generated method visitor
+     */
+    static void delayPushStack(final MethodVisitor mv) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_1);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, "preventPushStack", "Z");
+    }
 
     /**
      * Switches digit entry mode to exponent
@@ -142,6 +142,9 @@ final class CodeGenUtil {
      */
     static void startExponent(final MethodVisitor mv, final CodeGenContext context) {
         mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "clearExponent", "()V", false);
+
+        mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_1);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, ENTRY_MODE, "I");
 
@@ -149,7 +152,6 @@ final class CodeGenUtil {
         mv.visitInsn(ICONST_0);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_X_EXPONENT, "I");
 
-        delayPushStack(mv, context);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ICONST_0);
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
@@ -183,18 +185,4 @@ final class CodeGenUtil {
         }
     }
 
-    static void clearXIfRequired(final MethodVisitor mv, final CodeGenContext context, final String operation) {
-        if (Opcode.opResetsX(operation)) {
-            final Label noReset = new Label();
-
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, CLASS_NAME, RESET_X, "Z");
-            mv.visitJumpInsn(IFEQ, noReset);
-
-            RegisterGen.clearX(mv, context);
-
-            mv.visitLabel(noReset);
-            mv.visitFrame(F_SAME, 0, null, 0, null);
-        }
-    }
 }

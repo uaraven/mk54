@@ -12,6 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
  */
 final class RegisterGen {
 
+    public static final String NUMBER_ENTRY_ENABLED = "preventPushStack";
+
     private RegisterGen() {
     }
 
@@ -22,13 +24,18 @@ final class RegisterGen {
      * @param context Code generation context
      */
     static void enterNumber(final MethodVisitor mv, final CodeGenContext context) {
+        forcePushStack(mv);
         pushStack(mv);
-
         prepareXForReset(mv);
-        delayPushStack(mv, context);
     }
 
     static void pushStack(final MethodVisitor mv) {
+        final Label noPushStack = new Label();
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, CLASS_NAME, NUMBER_ENTRY_ENABLED, "Z");
+        mv.visitJumpInsn(IFNE, noPushStack);
+
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_Z, "D");
@@ -43,6 +50,13 @@ final class RegisterGen {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, REGISTER_Y, "D");
+
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(PUTFIELD, CLASS_NAME, NUMBER_ENTRY_ENABLED, "Z");
+
+        mv.visitLabel(noPushStack);
+        mv.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     /**
@@ -54,17 +68,7 @@ final class RegisterGen {
      */
     static OperationCodeGenerator digit(final int digit) {
         return (mv, context) -> {
-            // check if we need to push current value of x up the stack
-//            mv.visitVarInsn(ALOAD, 0);
-//            mv.visitFieldInsn(GETFIELD, CLASS_NAME, "pushStack", "Z");
-//            final Label noPushStack = new Label();
-//            mv.visitJumpInsn(IFEQ, noPushStack);
-
-            // push it
-//            pushStack(mv);
-
-//            mv.visitLabel(noPushStack);
-//            mv.visitFrame(F_SAME, 0, null, 0, null);
+            switchToNumberMode(mv);
 
             // check if we need to reset X before entering next digit
             mv.visitVarInsn(ALOAD, 0);
@@ -73,6 +77,7 @@ final class RegisterGen {
             mv.visitJumpInsn(IFEQ, noReset);
 
             pushStack(mv);
+
             // Clear X if resetX flag is set
             mv.visitVarInsn(ALOAD, 0);
             mv.visitInsn(DCONST_0);
@@ -109,8 +114,6 @@ final class RegisterGen {
             mv.visitInsn(ICONST_0);
             mv.visitFieldInsn(PUTFIELD, CLASS_NAME, RESET_X, "Z");
 
-            // do not push stack
-            CodeGenUtil.delayPushStack(mv, context);
         };
     }
 

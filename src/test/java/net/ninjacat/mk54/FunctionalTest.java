@@ -58,7 +58,7 @@ public class FunctionalTest {
         mk54.execute();
 
         assertThat(mk54.getX(), is(-1.0));
-        assertThat(mk54.getMem(1), is(0.3333));
+        assertThat(mk54.getMem(1), closeTo(0.3333333, 1e-7));
     }
 
 

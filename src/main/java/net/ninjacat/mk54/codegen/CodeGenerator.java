@@ -145,6 +145,11 @@ public class CodeGenerator {
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
 
                 executeMethod.visitFrame(F_SAME, 0, null, 0, null);
+                if (ENTER.equals(operation)) {
+                    delayPushStack(executeMethod);
+                } else {
+                    forcePushStack(executeMethod);
+                }
                 context.generatePostOp(executeMethod);
             } else {
                 throw new UnknownOperationException(operation);
@@ -155,7 +160,9 @@ public class CodeGenerator {
         final Label finalLabel = generateOperandAddressLabel(executeMethod, context);
         executeMethod.visitLabel(finalLabel);
         executeMethod.visitFrame(F_SAME, 0, null, 0, null);
-        context.generateDump(executeMethod);
+        if (this.generateDebugCode) {
+            context.generateDump(executeMethod);
+        }
         executeMethod.visitInsn(Opcodes.RETURN);
         generateTrampolineTable(executeMethod, context);
         executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
