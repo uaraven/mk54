@@ -4,9 +4,8 @@ import net.ninjacat.mk54.codegen.CodeGenerator;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public final class CodeGenFixtures {
     private CodeGenFixtures() {
@@ -16,8 +15,10 @@ public final class CodeGenFixtures {
         final CodeGenerator codeGenerator = new CodeGenerator(true);
         final byte[] classBytes = codeGenerator.compile(operations);
 
+        final Path mk54Tmp = Paths.get(System.getProperty("java.io.tmpdir"), "Mk54.class");
+
         // TODO: remove class writing out
-        try (final OutputStream os = new FileOutputStream(Files.createTempFile("Mk54", ".class").toFile())) {
+        try (final OutputStream os = new FileOutputStream(mk54Tmp.toFile())) {
             os.write(classBytes);
         }
 

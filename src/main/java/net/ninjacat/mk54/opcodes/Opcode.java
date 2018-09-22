@@ -162,19 +162,25 @@ public final class Opcode {
             LOOP3
     );
 
-    private static final ImmutableSet.Builder<String> KEEP_STACK_BUILDER = ImmutableSet.builder();
+    /**
+     * Control operations
+     */
+    private static final ImmutableSet.Builder<String> NUMBER_ENTRY_BUILDER = ImmutableSet.builder();
 
     static {
-        KEEP_STACK_BUILDER.add(ENTER);
-        KEEP_STACK_BUILDER.add(DECIMAL_POINT);
-        KEEP_STACK_BUILDER.add(NEG);
-        KEEP_STACK_BUILDER.add(EXP);
+        NUMBER_ENTRY_BUILDER.add(DECIMAL_POINT);
+        NUMBER_ENTRY_BUILDER.add(NEG);
+        NUMBER_ENTRY_BUILDER.add(EXP);
 
-        IntStream.range(0, 10)
-                .forEach(digit -> KEEP_STACK_BUILDER.add(DIGIT(digit)));
+        IntStream.range(0, 10).forEach(digit -> {
+            NUMBER_ENTRY_BUILDER.add(DIGIT(digit));
+        });
     }
 
-    private static final Set<String> KEEP_STACK = KEEP_STACK_BUILDER.build();
+    /**
+     * List of operations which do not set 'pushStack' flag
+     */
+    private static final Set<String> NUMBER_ENTRY = NUMBER_ENTRY_BUILDER.build();
 
     /**
      * Checks if operation is a jump instruction, which contain address in the next byte
@@ -190,7 +196,7 @@ public final class Opcode {
      * @return true or false
      */
     public static boolean shouldResetX(final String code) {
-        return !KEEP_STACK.contains(code);
+        return !NUMBER_ENTRY.contains(code);
     }
 
     private Opcode() {
