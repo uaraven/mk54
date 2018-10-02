@@ -242,8 +242,12 @@ public class Mk54 {
     }
 
     void negateMantissa() {
-        this.xMantissa = -this.xMantissa;
-        makeXRegister();
+        if (this.resetX) {
+            this.x = -this.x;
+        } else {
+            this.xMantissa = -this.xMantissa;
+            makeXRegister();
+        }
     }
 
     /**
