@@ -1,5 +1,6 @@
 package net.ninjacat.mk54.codegen;
 
+import net.ninjacat.mk54.Mk54;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -7,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+
+import static net.ninjacat.mk54.codegen.CodeGenUtil.CLASS_NAME;
+import static net.ninjacat.mk54.opcodes.Opcode.shouldResetX;
+import static org.objectweb.asm.Opcodes.*;
 
 /**
  * Code generation context
@@ -20,18 +25,21 @@ class CodeGenContext {
 
     private final Label trampolineLabel;
     private final Map<Integer, Label> addressLabels;
+    private final boolean generateDebugCode;
     private int address;
 
     /**
      * Creates code generation context
      *
-     * @param operations List of MK operations
+     * @param operations        List of MK operations
+     * @param generateDebugCode
      */
-    CodeGenContext(final List<String> operations) {
+    CodeGenContext(final List<String> operations, final boolean generateDebugCode) {
         this.operations = operations;
         this.trampolineLabel = new Label();
         this.addressLabels = new HashMap<>();
         this.address = 0;
+        this.generateDebugCode = generateDebugCode;
     }
 
     List<String> getOperations() {
@@ -134,5 +142,37 @@ class CodeGenContext {
      */
     String getCurrentOperation() {
         return this.operations.get(this.address);
+    }
+
+    public boolean isGenerateDebugCode() {
+        return this.generateDebugCode;
+    }
+
+
+    /**
+     * Generates call to {@link Mk54#debug(int, String)} which prints current address, operation code and state of
+     * registers and memory
+     *
+     * @param mv {@link MethodVisitor} for {@code Mk54.execute()} method
+     */
+    public void generateDump(final MethodVisitor mv) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitIntInsn(BIPUSH, this.getCurrentAddress());
+        if (this.getCurrentAddress() >= this.operations.size()) {
+            mv.visitLdcInsn("POST-OP");
+        } else {
+            mv.visitLdcInsn(this.getCurrentOperation());
+        }
+        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debug", "(ILjava/lang/String;)V", false);
+    }
+
+    public void generatePostOp(final MethodVisitor mv) {
+        final String op = getCurrentOperation();
+        if (shouldResetX(op)) {
+            CodeGenUtil.switchToCalculationMode(mv);
+            CodeGenUtil.prepareXForReset(mv);
+        } else {
+            CodeGenUtil.doNotResetX(mv);
+        }
     }
 }

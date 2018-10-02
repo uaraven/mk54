@@ -60,7 +60,15 @@ public class Mk54 {
      * <p>
      * Stack should be pushed in the former case but not in the latter
      */
-    private boolean pushStack;
+    private boolean preventPushStack;
+
+    /**
+     * Set to true by any digit operation or EXP operation
+     * Cleared by any other operation
+     * While in number entry mode mantissa and exponent can be modified independently,
+     * in calculation mode register x is treated as a whole
+     */
+    private boolean numberEntryMode;
 
     /**
      * MK address - target of indirect jump
@@ -91,11 +99,12 @@ public class Mk54 {
         this.x1 = 0;
         this.memory = new double[15];
         Arrays.fill(this.memory, 0f);
-        this.resetX = true;
-        this.pushStack = false;
+        this.resetX = false;
+        this.preventPushStack = false;
         this.lastRandom = 0;
         this.callStack = new Stack<>();
         this.startingAddress = 0;
+        this.numberEntryMode = false;
     }
 
     public double getX() {
@@ -242,11 +251,24 @@ public class Mk54 {
     }
 
     void negateMantissa() {
-        if (this.resetX) {
-            this.x = -this.x;
-        } else {
+        if (this.numberEntryMode) {
             this.xMantissa = -this.xMantissa;
             makeXRegister();
+        } else {
+            this.x = -this.x;
+        }
+    }
+
+    void clearExponent() {
+        if (this.numberEntryMode) {
+            this.xExponent = 0;
+            makeXRegister();
+        } else {
+            final String[] xRepr = String.format("%8e", this.x).split("e");
+            this.xMantissa = Double.parseDouble(xRepr[0]);
+            this.xExponent = 0;
+            makeXRegister();
+            this.numberEntryMode = true;
         }
     }
 
@@ -326,21 +348,23 @@ public class Mk54 {
         makeXRegister();
     }
 
-    void debug(final int address, final String operation) {
-        System.out.println("------------------");
+    private void debug(final int address, final String operation) {
+        System.out.println("----------------------");
         System.out.println(String.format("Addr: %X%X, Oper: %s", address / 10, address % 10, operation));
         System.out.println();
         dumpRegisters();
         System.out.println();
         dumpInternalState();
         System.out.println();
+        System.out.println("======================");
     }
 
     private void dumpInternalState() {
         System.out.println(String.format("      entryMode: %s", this.entryMode == MANTISSA ? "Mantissa" : "Exponent"));
         System.out.println(String.format("  decimalFactor: %d", this.decimalFactor));
         System.out.println(String.format("         resetX: %s", Boolean.toString(this.resetX)));
-        System.out.println(String.format("      pushStack: %s", Boolean.toString(this.pushStack)));
+        System.out.println(String.format("    noPushStack: %s", Boolean.toString(this.preventPushStack)));
+        System.out.println(String.format("           mode: %s", this.numberEntryMode ? "number" : "calculation"));
         System.out.println(String.format("      Ret stack: [%s]", this.callStack.stream()
                 .map(Integer::toHexString)
                 .collect(Collectors.joining(" "))));
@@ -368,5 +392,9 @@ public class Mk54 {
 
     void asm() {
         degMinSecToDegree();
+    }
+
+    public void setNumberEntryMode(final boolean numberEntryMode) {
+        this.numberEntryMode = numberEntryMode;
     }
 }
