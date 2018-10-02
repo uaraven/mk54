@@ -38,6 +38,9 @@ final class MemoryGen {
      */
     static OperationCodeGenerator recallFromMemory(final int location) {
         return (mv, context) -> {
+
+            RegisterGen.pushStack(mv);
+
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, CLASS_NAME, MEMORY, "[D");
@@ -78,6 +81,8 @@ final class MemoryGen {
      */
     static OperationCodeGenerator irecall(final int location) {
         return (mv, context) -> {
+            RegisterGen.pushStack(mv);
+
             modifyRegisterForIndirect(location, mv);
 
             mv.visitVarInsn(ALOAD, 0);

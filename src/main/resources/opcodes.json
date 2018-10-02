@@ -419,7 +419,8 @@
       "п0",
       "xп0",
       "x->п0",
-      "sto0"
+      "sto0",
+      "x->m 0"
     ],
     "desc": "Store value from X register to memory register 0"
   },
@@ -429,7 +430,8 @@
       "п1",
       "xп1",
       "x->п1",
-      "sto1"
+      "sto1",
+      "x->m 1"
     ],
     "desc": "Store value from X register to memory register 1"
   },
@@ -439,7 +441,8 @@
       "п2",
       "xп2",
       "x->п2",
-      "sto2"
+      "sto2",
+      "x->m 2"
     ],
     "desc": "Store value from X register to memory register 2"
   },
@@ -449,7 +452,8 @@
       "п3",
       "xп3",
       "x->п3",
-      "sto3"
+      "sto3",
+      "x->m 3"
     ],
     "desc": "Store value from X register to memory register 3"
   },
@@ -459,7 +463,8 @@
       "п4",
       "xп4",
       "x->п4",
-      "sto4"
+      "sto4",
+      "x->m 4"
     ],
     "desc": "Store value from X register to memory register 4"
   },
@@ -469,7 +474,8 @@
       "п5",
       "xп5",
       "x->п5",
-      "sto5"
+      "sto5",
+      "x->m 5"
     ],
     "desc": "Store value from X register to memory register 5"
   },
@@ -479,7 +485,8 @@
       "п6",
       "xп6",
       "x->п6",
-      "sto6"
+      "sto6",
+      "x->m 6"
     ],
     "desc": "Store value from X register to memory register 6"
   },
@@ -489,7 +496,8 @@
       "п7",
       "xп7",
       "x->п7",
-      "sto7"
+      "sto7",
+      "x->m 7"
     ],
     "desc": "Store value from X register to memory register 7"
   },
@@ -499,7 +507,8 @@
       "п8",
       "xп8",
       "x->п8",
-      "sto8"
+      "sto8",
+      "x->m 8"
     ],
     "desc": "Store value from X register to memory register 8"
   },
@@ -509,7 +518,8 @@
       "п9",
       "xп9",
       "x->п9",
-      "sto9"
+      "sto9",
+      "x->m 9"
     ],
     "desc": "Store value from X register to memory register 9"
   },
@@ -519,7 +529,8 @@
       "пa",
       "xпa",
       "x->пa",
-      "stoa"
+      "stoa",
+      "x->m a"
     ],
     "desc": "Store value from X register to memory register A"
   },
@@ -529,7 +540,8 @@
       "пb",
       "xпb",
       "x->пb",
-      "stob"
+      "stob",
+      "x->m b"
     ],
     "desc": "Store value from X register to memory register B"
   },
@@ -539,7 +551,8 @@
       "пc",
       "xпc",
       "x->пc",
-      "stoc"
+      "stoc",
+      "x->m c"
     ],
     "desc": "Store value from X register to memory register C"
   },
@@ -549,7 +562,8 @@
       "пd",
       "xпd",
       "x->пd",
-      "stod"
+      "stod",
+      "x->m d"
     ],
     "desc": "Store value from X register to memory register D"
   },
@@ -559,7 +573,8 @@
       "пe",
       "xпe",
       "x->пe",
-      "stoe"
+      "stoe",
+      "x->m e"
     ],
     "desc": "Store value from X register to memory register E"
   },
@@ -668,7 +683,9 @@
     "keys": [
       "ип0",
       "пx0",
-      "rcl0"
+      "rcl0",
+      "m->x 0",
+      "п->x 0"
     ],
     "desc": "Read value from memory register 0 to X register"
   },
@@ -677,7 +694,9 @@
     "keys": [
       "ип1",
       "пx1",
-      "rcl1"
+      "rcl1",
+      "m->x 1",
+      "п->x 1"
     ],
     "desc": "Read value from memory register 1 to X register"
   },
@@ -686,7 +705,9 @@
     "keys": [
       "ип2",
       "пx2",
-      "rcl2"
+      "rcl2",
+      "m->x 2",
+      "п->x 2"
     ],
     "desc": "Read value from memory register 2 to X register"
   },
@@ -695,7 +716,9 @@
     "keys": [
       "ип3",
       "пx3",
-      "rcl3"
+      "rcl3",
+      "m->x 3",
+      "п->x 3"
     ],
     "desc": "Read value from memory register 3 to X register"
   },
@@ -704,7 +727,9 @@
     "keys": [
       "ип4",
       "пx4",
-      "rcl4"
+      "rcl4",
+      "m->x 4",
+      "п->x 4"
     ],
     "desc": "Read value from memory register 4 to X register"
   },
@@ -713,7 +738,9 @@
     "keys": [
       "ип5",
       "пx5",
-      "rcl5"
+      "rcl5",
+      "m->x 5",
+      "п->x 5"
     ],
     "desc": "Read value from memory register 5 to X register"
   },
@@ -722,7 +749,9 @@
     "keys": [
       "ип6",
       "пx6",
-      "rcl6"
+      "rcl6",
+      "m->x 6",
+      "п->x 6"
     ],
     "desc": "Read value from memory register 6 to X register"
   },
@@ -731,7 +760,9 @@
     "keys": [
       "ип7",
       "пx7",
-      "rcl7"
+      "rcl7",
+      "m->x 7",
+      "п->x 7"
     ],
     "desc": "Read value from memory register 7 to X register"
   },
@@ -740,7 +771,9 @@
     "keys": [
       "ип8",
       "пx8",
-      "rcl8"
+      "rcl8",
+      "m->x 8",
+      "п->x 8"
     ],
     "desc": "Read value from memory register 8 to X register"
   },
@@ -749,7 +782,9 @@
     "keys": [
       "ип9",
       "пx9",
-      "rcl9"
+      "rcl9",
+      "m->x 9",
+      "п->x 9"
     ],
     "desc": "Read value from memory register 9 to X register"
   },
@@ -758,7 +793,9 @@
     "keys": [
       "ипa",
       "пxa",
-      "rcla"
+      "rcla",
+      "m->x a",
+      "п->x a"
     ],
     "desc": "Read value from memory register A to X register"
   },
@@ -767,7 +804,9 @@
     "keys": [
       "ипb",
       "пxb",
-      "rclb"
+      "rclb",
+      "m->x b",
+      "п->x b"
     ],
     "desc": "Read value from memory register B to X register"
   },
@@ -776,7 +815,9 @@
     "keys": [
       "ипc",
       "пxc",
-      "rclc"
+      "rclc",
+      "m->x c",
+      "п->x c"
     ],
     "desc": "Read value from memory register C to X register"
   },
@@ -785,7 +826,9 @@
     "keys": [
       "ипd",
       "пxd",
-      "rcld"
+      "rcld",
+      "m->x d",
+      "п->x d"
     ],
     "desc": "Read value from memory register D to X register"
   },
@@ -794,7 +837,9 @@
     "keys": [
       "ипe",
       "пxe",
-      "rcle"
+      "rcle",
+      "m->x e",
+      "п->x e"
     ],
     "desc": "Read value from memory register E to X register"
   },

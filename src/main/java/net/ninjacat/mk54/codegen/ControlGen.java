@@ -52,6 +52,7 @@ final class ControlGen {
     static void gotoAddr(final MethodVisitor mv, final CodeGenContext context) {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
+        context.generatePostOp(mv);
         mv.visitJumpInsn(GOTO, targetLabel);
     }
 
@@ -65,6 +66,7 @@ final class ControlGen {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label subroutineLabel = context.getLabelForAddress(targetAddress);
         pushCurrentAddressToReturnStack(mv, context);
+        context.generatePostOp(mv);
         mv.visitJumpInsn(GOTO, subroutineLabel);
     }
 
@@ -96,6 +98,7 @@ final class ControlGen {
         mv.visitFieldInsn(PUTFIELD, CLASS_NAME, INDIRECT_JUMP_ADDRESS, "I");
         mv.visitLabel(exitLabel);
         mv.visitFrame(F_SAME, 0, null, 0, null);
+        context.generatePostOp(mv);
         mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
     }
 
@@ -108,6 +111,7 @@ final class ControlGen {
     static void jnz(final MethodVisitor mv, final CodeGenContext context) {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
+        context.generatePostOp(mv);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitInsn(DCONST_0);
@@ -124,6 +128,7 @@ final class ControlGen {
     static void jz(final MethodVisitor mv, final CodeGenContext context) {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
+        context.generatePostOp(mv);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitInsn(DCONST_0);
@@ -140,6 +145,7 @@ final class ControlGen {
     static void jltz(final MethodVisitor mv, final CodeGenContext context) {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
+        context.generatePostOp(mv);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitInsn(DCONST_0);
@@ -156,6 +162,7 @@ final class ControlGen {
     static void jgez(final MethodVisitor mv, final CodeGenContext context) {
         final int targetAddress = CodeGenUtil.parseAddress(context.nextOperation());
         final Label targetLabel = context.getLabelForAddress(targetAddress);
+        context.generatePostOp(mv);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, CLASS_NAME, REGISTER_X, "D");
         mv.visitInsn(DCONST_0);
@@ -172,6 +179,7 @@ final class ControlGen {
     static OperationCodeGenerator indirectGoto(final int register) {
         return (mv, context) -> {
             loadRegisterToJump(register, mv);
+            context.generatePostOp(mv);
             mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
         };
     }
@@ -208,6 +216,7 @@ final class ControlGen {
             mv.visitInsn(DASTORE);
             // jump to loop address
             mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            context.generatePostOp(mv);
             mv.visitJumpInsn(GOTO, targetLabel);
 
             mv.visitLabel(stopLoop);
@@ -228,6 +237,7 @@ final class ControlGen {
 
             pushCurrentAddressToReturnStack(mv, context);
 
+            context.generatePostOp(mv);
             // jump to trampoline
             mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
         };
@@ -268,7 +278,7 @@ final class ControlGen {
 
 
     /**
-     * Returns generator for indirect x >= 0 jump
+     * Returns generator for indirect x < 0 jump
      *
      * @param register Loop register
      * @return Code generating function
@@ -296,6 +306,7 @@ final class ControlGen {
 
         loadRegisterToJump(register, mv);
 
+        context.generatePostOp(mv);
         // jump to trampoline
         mv.visitJumpInsn(GOTO, context.getTrampolineLabel());
 

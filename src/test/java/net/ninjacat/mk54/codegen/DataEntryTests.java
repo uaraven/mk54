@@ -232,6 +232,22 @@ public class DataEntryTests {
         final double x = mk54.getX();
 
         assertThat(x, is(99999999e99));
+    }
 
+    @Test
+    public void shouldClearExponent() throws Exception {
+        final Mk54Wrapper mk54 = getCompiledInstance(program(
+                DIGIT(9),
+                EXP,
+                DIGIT(9),
+                ENTER,
+                EXP,
+                DIGIT(3)
+        ));
+
+        mk54.execute();
+        final double x = mk54.getX();
+
+        assertThat(x, closeTo(9000, 1e-6));
     }
 }

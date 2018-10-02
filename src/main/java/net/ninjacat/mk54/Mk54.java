@@ -60,7 +60,15 @@ public class Mk54 {
      * <p>
      * Stack should be pushed in the former case but not in the latter
      */
-    private boolean pushStack;
+    private boolean preventPushStack;
+
+    /**
+     * Set to true by any digit operation or EXP operation
+     * Cleared by any other operation
+     * While in number entry mode mantissa and exponent can be modified independently,
+     * in calculation mode register x is treated as a whole
+     */
+    private boolean numberEntryMode;
 
     /**
      * MK address - target of indirect jump
@@ -91,11 +99,12 @@ public class Mk54 {
         this.x1 = 0;
         this.memory = new double[15];
         Arrays.fill(this.memory, 0f);
-        this.resetX = true;
-        this.pushStack = false;
+        this.resetX = false;
+        this.preventPushStack = false;
         this.lastRandom = 0;
         this.callStack = new Stack<>();
         this.startingAddress = 0;
+        this.numberEntryMode = false;
     }
 
     public double getX() {
@@ -242,8 +251,25 @@ public class Mk54 {
     }
 
     void negateMantissa() {
-        this.xMantissa = -this.xMantissa;
-        makeXRegister();
+        if (this.numberEntryMode) {
+            this.xMantissa = -this.xMantissa;
+            makeXRegister();
+        } else {
+            this.x = -this.x;
+        }
+    }
+
+    void clearExponent() {
+        if (this.numberEntryMode) {
+            this.xExponent = 0;
+            makeXRegister();
+        } else {
+            final String[] xRepr = String.format("%8e", this.x).split("e");
+            this.xMantissa = Double.parseDouble(xRepr[0]);
+            this.xExponent = 0;
+            makeXRegister();
+            this.numberEntryMode = true;
+        }
     }
 
     /**
@@ -271,6 +297,45 @@ public class Mk54 {
         }
     }
 
+    void degMinSecToDegree() {
+        final double degrees = (int) this.x;
+        final double fp = frac(this.x);
+        final double min = (int) (fp * 100);
+        final double sec = (int) (frac(fp * 100) * 100);
+        final double zzz = (int) (frac(fp * 10000) * 100);
+        this.x = degrees + min / 60 + (sec + zzz / 100) / 3600;
+    }
+
+    void degreeToDegMinSec() {
+        double pr = frac(this.x);
+        final double min = (int) (pr * 60);
+        pr -= min / 60;
+        final double sec = (int) (pr * 3600);
+        pr -= sec / 3600;
+        final double zzz = (int) (pr * 360000);
+        this.x = (int) this.x + min / 100 + sec / 10000 + zzz / 1000000;
+    }
+
+    void degMinToDegree() {
+        final double degrees = (int) this.x;
+        final double fp = frac(this.x);
+        final double min = (int) (fp * 100);
+        final double zzz = (int) (frac(fp * 1000) * 100);
+        this.x = degrees + (min + zzz / 100) / 60;
+    }
+
+    void degreeToDegMin() {
+        double pr = frac(this.x);
+        final double min = (int) (pr * 60);
+        pr -= min / 60;
+        final double zzz = (int) (pr * 60000);
+        this.x = (int) this.x + min / 100 + zzz / 100000;
+    }
+
+    private static double frac(final double d) {
+        return d - (int) d;
+    }
+
     /**
      * Internal method to set register x
      *
@@ -283,21 +348,23 @@ public class Mk54 {
         makeXRegister();
     }
 
-    void debug(final int address, final String operation) {
-        System.out.println("------------------");
+    private void debug(final int address, final String operation) {
+        System.out.println("----------------------");
         System.out.println(String.format("Addr: %X%X, Oper: %s", address / 10, address % 10, operation));
         System.out.println();
         dumpRegisters();
         System.out.println();
         dumpInternalState();
         System.out.println();
+        System.out.println("======================");
     }
 
     private void dumpInternalState() {
         System.out.println(String.format("      entryMode: %s", this.entryMode == MANTISSA ? "Mantissa" : "Exponent"));
         System.out.println(String.format("  decimalFactor: %d", this.decimalFactor));
         System.out.println(String.format("         resetX: %s", Boolean.toString(this.resetX)));
-        System.out.println(String.format("      pushStack: %s", Boolean.toString(this.pushStack)));
+        System.out.println(String.format("    noPushStack: %s", Boolean.toString(this.preventPushStack)));
+        System.out.println(String.format("           mode: %s", this.numberEntryMode ? "number" : "calculation"));
         System.out.println(String.format("      Ret stack: [%s]", this.callStack.stream()
                 .map(Integer::toHexString)
                 .collect(Collectors.joining(" "))));
@@ -323,4 +390,11 @@ public class Mk54 {
         }
     }
 
+    void asm() {
+        degMinSecToDegree();
+    }
+
+    public void setNumberEntryMode(final boolean numberEntryMode) {
+        this.numberEntryMode = numberEntryMode;
+    }
 }
