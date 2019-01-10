@@ -386,7 +386,7 @@ public class CalculationTests {
 
     @Test
     public void shouldCalculateAbsoluteValue() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 ABS
         ));
 
@@ -394,6 +394,9 @@ public class CalculationTests {
         mk54.execute();
         assertThat(mk54.getX(), is(5.0));
 
+        mk54 = getCompiledInstance(program(
+                ABS
+        ));
         mk54.setX(12);
         mk54.execute();
         assertThat(mk54.getX(), is(12.0));
@@ -403,7 +406,7 @@ public class CalculationTests {
 
     @Test
     public void shouldDetermineSignOfX() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 SIGN
         ));
 
@@ -411,10 +414,16 @@ public class CalculationTests {
         mk54.execute();
         assertThat(mk54.getX(), is(-1.0));
 
+        mk54 = getCompiledInstance(program(
+                SIGN
+        ));
         mk54.setX(12);
         mk54.execute();
         assertThat(mk54.getX(), is(1.0));
 
+        mk54 = getCompiledInstance(program(
+                SIGN
+        ));
         mk54.setX(0);
         mk54.execute();
         assertThat(mk54.getX(), is(0.0));
@@ -422,7 +431,7 @@ public class CalculationTests {
 
     @Test
     public void shouldTruncateFractionalPart() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 TRUNC
         ));
 
@@ -430,6 +439,9 @@ public class CalculationTests {
         mk54.execute();
         assertThat(mk54.getX(), is(6.0));
 
+        mk54 = getCompiledInstance(program(
+                TRUNC
+        ));
         mk54.setX(-6.432f);
         mk54.execute();
         assertThat(mk54.getX(), is(-6.0));
@@ -438,7 +450,7 @@ public class CalculationTests {
 
     @Test
     public void shouldRemoveIntegerPart() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 FRAC
         ));
 
@@ -446,6 +458,9 @@ public class CalculationTests {
         mk54.execute();
         assertThat(mk54.getX(), closeTo(0.432, 1e-6));
 
+        mk54 = getCompiledInstance(program(
+                FRAC
+        ));
         mk54.setX(-6.432);
         mk54.execute();
         assertThat(mk54.getX(), closeTo(-0.432, 1e-6));
@@ -454,7 +469,7 @@ public class CalculationTests {
 
     @Test
     public void shouldFindMax() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 MAX
         ));
 
@@ -463,16 +478,25 @@ public class CalculationTests {
         mk54.execute();
         assertThat(mk54.getX(), closeTo(6.432, 0.00001));
 
+        mk54 = getCompiledInstance(program(
+                MAX
+        ));
         mk54.setX(-6.432);
         mk54.setY(3);
         mk54.execute();
         assertThat(mk54.getX(), closeTo(3.0, 0.00001));
 
+        mk54 = getCompiledInstance(program(
+                MAX
+        ));
         mk54.setX(0);
         mk54.setY(3);
         mk54.execute();
         assertThat(mk54.getX(), is(0.0));
 
+        mk54 = getCompiledInstance(program(
+                MAX
+        ));
         mk54.setX(4);
         mk54.setY(0);
         mk54.execute();

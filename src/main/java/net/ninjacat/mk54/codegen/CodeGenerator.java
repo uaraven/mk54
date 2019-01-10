@@ -68,6 +68,10 @@ public class CodeGenerator {
                 .put(FRAC, MathGen::frac)
                 .put(MAX, MathGen::max)
                 .put(RND, MathGen::rnd)
+                .put(DEG_TO_MIN, MathGen::degToDegMin)
+                .put(DEG_TO_MIN_SEC, MathGen::degToDegMinSec)
+                .put(MIN_TO_DEG, MathGen::degMinToDeg)
+                .put(MIN_SEC_TO_DEG, MathGen::degMinSecToDeg)
                 .put(STOP, ControlGen::startStop)
                 .put(Opcode.GOTO, ControlGen::gotoAddr)
                 .put(GOSUB, ControlGen::gosub)
@@ -121,7 +125,7 @@ public class CodeGenerator {
         executeMethod.visitLabel(startLabel);
 
         // Prepare context
-        final CodeGenContext context = new CodeGenContext(operations);
+        final CodeGenContext context = new CodeGenContext(operations, this.generateDebugCode);
 
         buildMkLabels(context);
 
@@ -131,13 +135,22 @@ public class CodeGenerator {
         while (operation != null) {
             generateOperandAddressLabel(executeMethod, context);
             if (OPERATION_CODEGEN.containsKey(operation)) {
+
+                // pre-operation
                 if (this.generateDebugCode) {
-                    generateDump(executeMethod, context);
+                    context.generateDump(executeMethod);
                 }
-                if (shouldResetX(operation)) {
-                    CodeGenUtil.prepareXForReset(executeMethod, context);
-                }
+
+                // operation
                 OPERATION_CODEGEN.get(operation).generate(executeMethod, context);
+
+                executeMethod.visitFrame(F_SAME, 0, null, 0, null);
+                if (ENTER.equals(operation)) {
+                    delayPushStack(executeMethod);
+                } else {
+                    forcePushStack(executeMethod);
+                }
+                context.generatePostOp(executeMethod);
             } else {
                 throw new UnknownOperationException(operation);
             }
@@ -147,6 +160,9 @@ public class CodeGenerator {
         final Label finalLabel = generateOperandAddressLabel(executeMethod, context);
         executeMethod.visitLabel(finalLabel);
         executeMethod.visitFrame(F_SAME, 0, null, 0, null);
+        if (this.generateDebugCode) {
+            context.generateDump(executeMethod);
+        }
         executeMethod.visitInsn(Opcodes.RETURN);
         generateTrampolineTable(executeMethod, context);
         executeMethod.visitLocalVariable("this", CLASS_DESCRIPTOR, null, startLabel, finalLabel, 0);
@@ -154,20 +170,6 @@ public class CodeGenerator {
         executeMethod.visitEnd();
 
         classWriter.visitEnd();
-    }
-
-    /**
-     * Generates call to {@link Mk54#debug(int, String)} which prints current address, operation code and state of
-     * registers and memory
-     *
-     * @param mv      {@link MethodVisitor} for {@code Mk54.execute()} method
-     * @param context Code generation context
-     */
-    private static void generateDump(final MethodVisitor mv, final CodeGenContext context) {
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitIntInsn(BIPUSH, context.getCurrentAddress());
-        mv.visitLdcInsn(context.getCurrentOperation());
-        mv.visitMethodInsn(INVOKEVIRTUAL, CLASS_NAME, "debug", "(ILjava/lang/String;)V", false);
     }
 
     /**

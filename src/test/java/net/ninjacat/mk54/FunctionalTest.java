@@ -48,6 +48,20 @@ public class FunctionalTest {
         assertThat(mk54.getMem(10), is(12.0));
     }
 
+    @Test
+    public void testQuadraticEquation() throws Exception {
+        final Mk54Wrapper mk54 = compileResource("/functional/quadratic_eq.mk");
+        mk54.setMem(10, 3);
+        mk54.setMem(11, 2);
+        mk54.setMem(12, -1);
+
+        mk54.execute();
+
+        assertThat(mk54.getX(), is(-1.0));
+        assertThat(mk54.getMem(1), closeTo(0.3333333, 1e-7));
+    }
+
+
     private static Mk54Wrapper compileResource(final String resource) throws Exception {
         final String program = Resources.loadProgram(resource);
         final String mk54Code = new Mk54CodeGenerator().compile(program);

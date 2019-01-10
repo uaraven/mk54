@@ -117,7 +117,7 @@ public class ControlGenTest {
 
     @Test
     public void shouldCorrectlyHandleJNZ() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        Mk54Wrapper mk54 = getCompiledInstance(program(
                 JNZ,
                 "04",
                 DIGIT(1),
@@ -133,6 +133,14 @@ public class ControlGenTest {
 
         assertThat("Should put 2 into X", x, is(2.0));
 
+        mk54 = getCompiledInstance(program(
+                JNZ,
+                "04",
+                DIGIT(1),
+                STOP,
+                DIGIT(2),
+                STOP
+        ));
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
@@ -143,14 +151,15 @@ public class ControlGenTest {
 
     @Test
     public void shouldCorrectlyHandleJZ() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        final String program = program(
                 JZ,
                 "04",
                 DIGIT(1),
                 STOP,
                 DIGIT(2),
                 STOP
-        ));
+        );
+        Mk54Wrapper mk54 = getCompiledInstance(program);
 
         mk54.setX(5);
         mk54.setResetX(true);
@@ -159,6 +168,7 @@ public class ControlGenTest {
 
         assertThat("Should put 1 into X", x, is(1.0));
 
+        mk54 = getCompiledInstance(program);
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
@@ -169,14 +179,15 @@ public class ControlGenTest {
 
     @Test
     public void shouldCorrectlyHandleJLTZ() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        final String program = program(
                 JLTZ,
                 "04",
                 DIGIT(1),
                 STOP,
                 DIGIT(2),
                 STOP
-        ));
+        );
+        Mk54Wrapper mk54 = getCompiledInstance(program);
 
         mk54.setX(5);
         mk54.setResetX(true);
@@ -185,6 +196,7 @@ public class ControlGenTest {
 
         assertThat("Should put 1 into X", x, is(1.0));
 
+        mk54 = getCompiledInstance(program);
         mk54.setX(-5);
         mk54.setResetX(true);
         mk54.execute();
@@ -192,6 +204,7 @@ public class ControlGenTest {
 
         assertThat("Should put 2 into X", x, is(2.0));
 
+        mk54 = getCompiledInstance(program);
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
@@ -203,14 +216,15 @@ public class ControlGenTest {
 
     @Test
     public void shouldCorrectlyHandleJGEZ() throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        final String program = program(
                 JGEZ,
                 "04",
                 DIGIT(2),
                 STOP,
                 DIGIT(1),
                 STOP
-        ));
+        );
+        Mk54Wrapper mk54 = getCompiledInstance(program);
 
         mk54.setX(5);
         mk54.setResetX(true);
@@ -219,6 +233,7 @@ public class ControlGenTest {
 
         assertThat("Should put 1 into X", x, is(1.0));
 
+        mk54 = getCompiledInstance(program);
         mk54.setX(-5);
         mk54.setResetX(true);
         mk54.execute();
@@ -226,6 +241,8 @@ public class ControlGenTest {
 
         assertThat("Should put 2 into X", x, is(2.0));
 
+
+        mk54 = getCompiledInstance(program);
         mk54.setX(0);
         mk54.setResetX(true);
         mk54.execute();
@@ -415,13 +432,14 @@ public class ControlGenTest {
                                                     final int memRegValue,
                                                     final double Xvalue1,
                                                     final double Xvalue2) throws Exception {
-        final Mk54Wrapper mk54 = getCompiledInstance(program(
+        final String program = program(
                 operation,
                 DIGIT(1),
                 STOP,
                 DIGIT(2),
                 STOP
-        ));
+        );
+        Mk54Wrapper mk54 = getCompiledInstance(program);
 
         mk54.setX(Xvalue1);
         mk54.setMem(memRegNo, memRegValue);
@@ -429,7 +447,9 @@ public class ControlGenTest {
         final double x1 = mk54.getX();
         assertThat(x1, is(1.0));
 
+        mk54 = getCompiledInstance(program);
         mk54.setX(Xvalue2);
+        mk54.setMem(memRegNo, memRegValue);
         mk54.execute();
         final double x2 = mk54.getX();
         assertThat(x2, is(2.0));
