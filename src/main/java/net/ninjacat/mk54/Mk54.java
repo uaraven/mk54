@@ -379,7 +379,7 @@ public class Mk54 {
             realMant = mantissa;
 
             // normalize
-            while(realMant > 1.0) {
+            while(realMant >= 1.0) {
                 mantissa >>= 1;
                 realMant /= 2.0;
                 exponent++;
