@@ -283,6 +283,51 @@ public class Mk54 {
         makeXRegister();
     }
 
+    /**
+     * Splits X register into mantissa and exponent
+     */
+    void splitX()
+    {
+        final double value = this.x;
+        long bits = Double.doubleToLongBits(value);
+        double realMant;
+
+        // Test for NaN, infinity, and zero.
+        if (Double.isNaN(this.x) || value + value == value || Double.isInfinite(value)) {
+            this.xExponent = 0;
+            this.xMantissa = value;
+        } else {
+            boolean neg = (bits < 0);
+            int exponent = (int)((bits >> 52) & 0x7ffL);
+            long mantissa = bits & 0xfffffffffffffL;
+
+            if(exponent == 0) {
+                exponent++;
+            } else {
+                mantissa |= (1L << 52);
+            }
+
+            // bias the exponent - actually biased by 1023.
+            // we are treating the mantissa as m.0 instead of 0.m
+            //  so subtract another 52.
+            exponent -= 1075;
+            realMant = mantissa;
+
+            // normalize
+            while(realMant > 1.0) {
+                mantissa >>= 1;
+                realMant /= 2.0;
+                exponent++;
+            }
+            if(neg) {
+                realMant *= -1;
+            }
+
+            this.xExponent = exponent;
+            this.xMantissa = realMant;
+        }
+    }
+
     void debug(final int address, final String operation) {
         System.out.println("------------------");
         System.out.println(String.format("Addr: %X%X, Oper: %s", address / 10, address % 10, operation));
